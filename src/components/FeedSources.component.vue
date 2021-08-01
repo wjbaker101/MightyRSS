@@ -40,7 +40,10 @@ export default defineComponent({
             if (articles.value === null)
                 return null;
 
-            return [ ...new Set(articles.value.map(x => x.source)) ];
+            const sources = [ ...new Set(articles.value.map(x => x.source)) ];
+
+            return sources
+                .sort((a, b) => a.title.localeCompare(b.title));
         });
 
         const newFeedSource = ref<string>('');
