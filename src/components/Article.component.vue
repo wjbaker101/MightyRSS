@@ -4,7 +4,7 @@
         <article>
             <h3>{{ article.title }}</h3>
             <p class="published-at">
-                <span>{{  }}</span>
+                <span>{{ article.source.title }} &mdash; </span>
                 <small>{{ displayPublishedAt }}</small>
             </p>
         </article>
@@ -18,7 +18,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import { UseRss } from '@/use/Rss.use';
 
 import { FeedArticle } from '@/types/FeedArticle.type';
-import { FeedSource } from '@/types/FeedSource.type';
 
 export default defineComponent({
     name: 'ArticleComponent',
@@ -31,8 +30,6 @@ export default defineComponent({
     },
 
     setup(props) {
-        const useRss = UseRss();
-
         const getFormattedDate = function (date: Dayjs) {
             const now = dayjs();
 
