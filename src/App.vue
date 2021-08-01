@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted } from 'vue';
 
 import ArticleComponent from '@/components/Article.component.vue';
 import FeedSourcesComponent from '@/components/FeedSources.component.vue';
@@ -47,7 +47,7 @@ export default defineComponent({
         const useLoginToken = UseLoginToken();
         const useRss = UseRss();
 
-        const articles = ref<Array<FeedArticle> | null>(null);
+        const articles = useRss.articles;
 
         const articlesToday = computed<Array<FeedArticle> | null>(() => {
             if (articles.value === null)
@@ -86,21 +86,11 @@ export default defineComponent({
                 return;
 
             articles.value = feed
-                .flatMap(x => x.articles)
                 .sort((a, b) => {
                     if (a.publishedAt.isBefore(b.publishedAt)) return 1;
                     if (a.publishedAt.isAfter(b.publishedAt)) return -1;
                     return 0;
                 });
-
-            useRss.sources.value = feed.map(x => ({
-                reference: x.reference,
-                title: x.title,
-                description: x.description,
-                rssUrl: x.rssUrl,
-                websiteUrl: x.websiteUrl,
-                articles: [],
-            }))
         });
 
         return {

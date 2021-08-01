@@ -16,12 +16,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import FeedSourceComponent from '@/components/FeedSource.component.vue';
 
 import { feedService } from '@/service/Feed.service';
 import { UseRss } from '@/use/Rss.use';
+import { FeedSource } from '@/types/FeedSource.type';
 
 export default defineComponent({
     name: 'FeedSourcesComponent',
@@ -33,7 +34,14 @@ export default defineComponent({
     setup() {
         const useRss = UseRss();
 
-        const feedSources = useRss.sources;
+        const articles = useRss.articles;
+
+        const feedSources = computed<Array<FeedSource> | null>(() => {
+            if (articles.value === null)
+                return null;
+
+            return [ ...new Set(articles.value.map(x => x.source)) ];
+        });
 
         const newFeedSource = ref<string>('');
 
@@ -49,7 +57,9 @@ export default defineComponent({
                 if (addFeedSourceResult instanceof Error)
                     return;
 
-                useRss.sources.value?.push(addFeedSourceResult);
+                for (const article of addFeedSourceResult) {
+                    useRss.articles.value?.push(article);
+                }
             },
         }
     },
