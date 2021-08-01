@@ -4,16 +4,19 @@
             <img class="swords-branding" width="48" height="48" src="@/assets/swords.svg">
             <span class="branding-text">Mighty RSS</span>
         </h1>
-        <main class="articles-container">
-            <div v-if="articlesToday !== null">
+        <div v-if="articles === null">
+            Loading...
+        </div>
+        <main v-else class="articles-container">
+            <div v-if="articlesToday !== null && articlesToday.length > 0">
                 <h2>Today</h2>
                 <ArticleComponent :key="article.reference" v-for="article in articlesToday" :article="article" />
             </div>
-            <div v-if="articlesYesterday !== null">
+            <div v-else-if="articlesYesterday !== null && articlesYesterday.length > 0">
                 <h2>Yesterday</h2>
                 <ArticleComponent :key="article.reference" v-for="article in articlesYesterday" :article="article" />
             </div>
-            <div v-if="articlesPrevious !== null">
+            <div v-else-if="articlesPrevious !== null && articlesPrevious.length > 0">
                 <h2>Previous</h2>
                 <ArticleComponent :key="article.reference" v-for="article in articlesPrevious" :article="article" />
             </div>
@@ -94,6 +97,7 @@ export default defineComponent({
         });
 
         return {
+            articles,
             articlesToday,
             articlesYesterday,
             articlesPrevious,
