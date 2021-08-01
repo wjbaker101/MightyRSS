@@ -1,7 +1,7 @@
 <template>
     <div class="feed-source-component">
         <a :href="source.websiteUrl" rel="noopener noreferrer" target="_blank">
-            {{ source.description }}
+            {{ source.title }}
         </a>
     </div>
 </template>

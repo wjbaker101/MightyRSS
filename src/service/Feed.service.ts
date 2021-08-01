@@ -15,6 +15,7 @@ class FeedService {
 
         return getFeedResponse.sources.map(source => ({
             reference: source.reference,
+            title: source.title,
             description: source.description,
             rssUrl: source.rssUrl,
             websiteUrl: source.websiteUrl,
@@ -23,7 +24,7 @@ class FeedService {
                 title: article.title,
                 summary: article.summary,
                 author: article.author,
-                publishedAt: dayjs(article.publishedAt),
+                publishedAt: dayjs(article.publishedAt ?? article.publishedAtAsString),
             })),
         }));
     }
@@ -36,6 +37,7 @@ class FeedService {
 
         return {
             reference: addFeedSourceResponse.reference,
+            title: addFeedSourceResponse.title,
             description: addFeedSourceResponse.description,
             rssUrl: addFeedSourceResponse.rssUrl,
             websiteUrl: addFeedSourceResponse.websiteUrl,
@@ -44,7 +46,7 @@ class FeedService {
                 title: x.title,
                 summary: x.summary,
                 author: x.author,
-                publishedAt: dayjs(x.publishedAt),
+                publishedAt: dayjs(x.publishedAt ?? x.publishedAtAsString),
             })),
         };
     }

@@ -95,6 +95,7 @@ export default defineComponent({
 
             useRss.sources.value = feed.map(x => ({
                 reference: x.reference,
+                title: x.title,
                 description: x.description,
                 rssUrl: x.rssUrl,
                 websiteUrl: x.websiteUrl,

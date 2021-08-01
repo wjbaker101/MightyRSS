@@ -4,6 +4,7 @@ export interface GetFeedResponse {
 
 export interface FeedSource {
     reference: string;
+    title: string;
     description: string;
     rssUrl: string;
     websiteUrl: string;
@@ -16,4 +17,5 @@ export interface FeedArticle {
     summary: string;
     author: string;
     publishedAt: string;
+    publishedAtAsString: string;
 }
