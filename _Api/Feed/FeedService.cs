@@ -2,7 +2,6 @@
 using MightyRSS.Data.Records;
 using MightyRSS.Data.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace MightyRSS._Api.Feed
@@ -88,81 +87,65 @@ namespace MightyRSS._Api.Feed
 
         public GetFeedResponse GetFeed(UserRecord user)
         {
+            UpdateFeedSources(user);
+
             var feedSources = _userDataFeedSourceRepository.GetFeedSources(user);
 
-            var responseFeedSources = new List<GetFeedResponse.FeedSource>(feedSources.Count);
-            foreach (var feedSource in feedSources)
+            return new GetFeedResponse
             {
-                if (DateTime.Now - feedSource.ArticlesUpdatedAt > _feedRefreshPeriod)
+                Sources = feedSources.ConvertAll(source => new GetFeedResponse.FeedSource
                 {
-                    var feedReaderResult = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
-
-                    var updatedFeedSource = new FeedSourceRecord
-                    {
-                        Id = feedSource.Id,
-                        Reference = feedReaderResult.Reference,
-                        Title = feedReaderResult.Title,
-                        Description = feedReaderResult.Description,
-                        RssUrl = feedReaderResult.RssUrl,
-                        WebsiteUrl = feedReaderResult.WebsiteUrl,
-                        Articles = feedReaderResult.Articles.ConvertAll(x => new FeedSourceArticleJsonb
-                        {
-                            Url = x.Url,
-                            Title = x.Title,
-                            Summary = x.Summary,
-                            PublishedAt = x.PublishedAt,
-                            PublishedAtAsString = x.PublishedAtAsString,
-                            Author = x.Author
-                        }),
-                        ArticlesUpdatedAt = DateTime.Now.ToLocalTime()
-                    };
-
-                    _feedSourceRepository.Update(updatedFeedSource);
-
-                    responseFeedSources.Add(new GetFeedResponse.FeedSource
-                    {
-                        Reference = updatedFeedSource.Reference,
-                        Title = updatedFeedSource.Title,
-                        Description = updatedFeedSource.Description,
-                        RssUrl = updatedFeedSource.RssUrl,
-                        WebsiteUrl = updatedFeedSource.WebsiteUrl,
-                        Articles = updatedFeedSource.Articles.ConvertAll(article => new GetFeedResponse.FeedArticle
-                        {
-                            Url = article.Url,
-                            Title = article.Title,
-                            Summary = article.Summary,
-                            PublishedAt = article.PublishedAt,
-                            PublishedAtAsString = article.PublishedAtAsString,
-                            Author = article.Author
-                        })
-                    });
-
-                    continue;
-                }
-
-                responseFeedSources.Add(new GetFeedResponse.FeedSource
-                {
-                    Reference = feedSource.Reference,
-                    Title = feedSource.Title,
-                    Description = feedSource.Description,
-                    RssUrl = feedSource.RssUrl,
-                    WebsiteUrl = feedSource.WebsiteUrl,
-                    Articles = feedSource.Articles.ConvertAll(article => new GetFeedResponse.FeedArticle
+                    Reference = source.Reference,
+                    Title = source.Title,
+                    Description = source.Description,
+                    RssUrl = source.RssUrl,
+                    WebsiteUrl = source.WebsiteUrl,
+                    Articles = source.Articles.ConvertAll(article => new GetFeedResponse.FeedArticle
                     {
                         Url = article.Url,
                         Title = article.Title,
                         Summary = article.Summary,
+                        Author = article.Author,
                         PublishedAt = article.PublishedAt,
-                        PublishedAtAsString = article.PublishedAtAsString,
-                        Author = article.Author
+                        PublishedAtAsString = article.PublishedAtAsString
                     })
-                });
-            }
-
-            return new GetFeedResponse
-            {
-                Sources = responseFeedSources
+                })
             };
+        }
+
+        private void UpdateFeedSources(UserRecord user)
+        {
+            var feedSources = _userDataFeedSourceRepository
+                .GetFeedSources(user)
+                .Where(x => x.ArticlesUpdatedAt + _feedRefreshPeriod > DateTime.Now);
+
+            foreach (var feedSource in feedSources)
+                UpdateFeedSource(feedSource);
+        }
+
+        private void UpdateFeedSource(FeedSourceRecord feedSource)
+        {
+            var feed = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
+
+            _feedSourceRepository.Update(new FeedSourceRecord
+            {
+                Id = feedSource.Id,
+                Reference = feed.Reference,
+                Title = feed.Title,
+                Description = feed.Description,
+                RssUrl = feed.RssUrl,
+                WebsiteUrl = feed.WebsiteUrl,
+                Articles = feed.Articles.ConvertAll(x => new FeedSourceArticleJsonb
+                {
+                    Url = x.Url,
+                    Title = x.Title,
+                    Summary = x.Summary,
+                    PublishedAt = x.PublishedAt,
+                    PublishedAtAsString = x.PublishedAtAsString,
+                    Author = x.Author
+                }),
+                ArticlesUpdatedAt = DateTime.Now.ToLocalTime()
+            });
         }
 
         public void DeleteFeedSource(UserRecord user, Guid reference)
