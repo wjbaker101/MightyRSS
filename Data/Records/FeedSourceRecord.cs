@@ -9,6 +9,7 @@ namespace MightyRSS.Data.Records
     {
         public virtual int Id { get; init; }
         public virtual Guid Reference { get; init; }
+        public virtual string Title { get; init; }
         public virtual string Description { get; init; }
         public virtual string RssUrl { get; init; }
         public virtual string WebsiteUrl { get; init; }
@@ -24,6 +25,7 @@ namespace MightyRSS.Data.Records
             Table("source");
             Id(x => x.Id, "id").GeneratedBy.SequenceIdentity("source_id_seq");
             Map(x => x.Reference, "reference");
+            Map(x => x.Title, "title");
             Map(x => x.Description, "description");
             Map(x => x.RssUrl, "rss_url");
             Map(x => x.WebsiteUrl, "website_url");

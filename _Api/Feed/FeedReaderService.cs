@@ -22,6 +22,7 @@ namespace MightyRSS._Api.Feed
             return new FeedReaderResult
             {
                 Reference = reference ?? Guid.NewGuid(),
+                Title = feed.Title,
                 Description = feed.Description,
                 RssUrl = url,
                 WebsiteUrl = feed.Link,

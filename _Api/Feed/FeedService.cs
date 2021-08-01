@@ -42,6 +42,7 @@ namespace MightyRSS._Api.Feed
                 feedSource = _feedSourceRepository.Save(new FeedSourceRecord
                 {
                     Reference = feedReaderResult.Reference,
+                    Title = feedReaderResult.Title,
                     Description = feedReaderResult.Description,
                     RssUrl = feedReaderResult.RssUrl,
                     WebsiteUrl = feedReaderResult.WebsiteUrl,
@@ -68,6 +69,7 @@ namespace MightyRSS._Api.Feed
             return new AddFeedSourceResponse
             {
                 Reference = feedSource.Reference,
+                Title = feedSource.Title,
                 Description = feedSource.Description,
                 RssUrl = feedSource.RssUrl,
                 WebsiteUrl = feedSource.WebsiteUrl,
@@ -96,10 +98,11 @@ namespace MightyRSS._Api.Feed
                     var updatedFeedSource = new FeedSourceRecord
                     {
                         Id = feedSource.Id,
-                        Reference = feedSource.Reference,
-                        Description = feedSource.Description,
-                        RssUrl = feedSource.RssUrl,
-                        WebsiteUrl = feedSource.WebsiteUrl,
+                        Reference = feedReaderResult.Reference,
+                        Title = feedReaderResult.Title,
+                        Description = feedReaderResult.Description,
+                        RssUrl = feedReaderResult.RssUrl,
+                        WebsiteUrl = feedReaderResult.WebsiteUrl,
                         Articles = feedReaderResult.Articles.ConvertAll(x => new FeedSourceArticleJsonb
                         {
                             Url = x.Url,
@@ -116,6 +119,7 @@ namespace MightyRSS._Api.Feed
                     responseFeedSources.Add(new GetFeedResponse.FeedSource
                     {
                         Reference = updatedFeedSource.Reference,
+                        Title = updatedFeedSource.Title,
                         Description = updatedFeedSource.Description,
                         RssUrl = updatedFeedSource.RssUrl,
                         WebsiteUrl = updatedFeedSource.WebsiteUrl,
@@ -135,6 +139,7 @@ namespace MightyRSS._Api.Feed
                 responseFeedSources.Add(new GetFeedResponse.FeedSource
                 {
                     Reference = feedSource.Reference,
+                    Title = feedSource.Title,
                     Description = feedSource.Description,
                     RssUrl = feedSource.RssUrl,
                     WebsiteUrl = feedSource.WebsiteUrl,

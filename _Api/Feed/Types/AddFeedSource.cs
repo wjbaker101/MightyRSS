@@ -11,6 +11,7 @@ namespace MightyRSS._Api.Feed.Types
     public sealed class AddFeedSourceResponse
     {
         public Guid Reference { get; init; }
+        public string Title { get; init; }
         public string Description { get; init; }
         public string RssUrl { get; init; }
         public string WebsiteUrl { get; init; }
