@@ -6,7 +6,7 @@
                 <span class="branding-text">Mighty RSS</span>
             </span>
         </h1>
-        <div v-if="articles === null">
+        <div v-if="displayArticles === null">
             Loading...
         </div>
         <main v-else class="articles-container">
@@ -21,6 +21,9 @@
             <div v-else-if="articlesPrevious !== null && articlesPrevious.length > 0">
                 <h2>Previous</h2>
                 <ArticleComponent :key="article.reference" v-for="article in articlesPrevious" :article="article" />
+                <div class="text-centered" v-if="!isArticlesExpanded">
+                    <button @click="expandArticles">Show More</button>
+                </div>
             </div>
         </main>
     </div>
@@ -28,7 +31,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import dayjs from 'dayjs';
 
 import ArticleComponent from '@/components/Article.component.vue';
 import FeedSourcesComponent from '@/components/FeedSources.component.vue';
@@ -53,26 +57,43 @@ export default defineComponent({
         const useRss = UseRss();
 
         const articles = useRss.articles;
+        const isArticlesExpanded = ref<boolean>(false);
 
-        const articlesToday = computed<Array<FeedArticle> | null>(() => {
+        const displayArticles = computed<Array<FeedArticle> | null>(() => {
             if (articles.value === null)
                 return null;
 
-            return articles.value.filter(x => x.publishedAt.isToday());
+            const twoMonthsAgo = dayjs().subtract(2, 'months');
+
+            return articles.value
+                .filter(x => isArticlesExpanded.value || (!isArticlesExpanded.value && x.publishedAt.isAfter(twoMonthsAgo)))
+                .sort((a, b) => {
+                    if (a.publishedAt.isBefore(b.publishedAt)) return 1;
+                    if (a.publishedAt.isAfter(b.publishedAt)) return -1;
+                    return 0;
+                });
+        });
+
+        const articlesToday = computed<Array<FeedArticle> | null>(() => {
+            if (displayArticles.value === null)
+                return null;
+
+            return displayArticles.value.filter(x => x.publishedAt.isToday());
         });
 
         const articlesYesterday = computed<Array<FeedArticle> | null>(() => {
-            if (articles.value === null)
+            if (displayArticles.value === null)
                 return null;
 
-            return articles.value.filter(x => x.publishedAt.isYesterday());
+            return displayArticles.value.filter(x => x.publishedAt.isYesterday());
         });
 
         const articlesPrevious = computed<Array<FeedArticle> | null>(() => {
-            if (articles.value === null)
+            if (displayArticles.value === null)
                 return null;
 
-            return articles.value.filter(x => !x.publishedAt.isToday() && !x.publishedAt.isYesterday());
+            return displayArticles.value
+                .filter(x => !x.publishedAt.isToday() && !x.publishedAt.isYesterday());
         });
 
         const refreshFeed = async function () {
@@ -92,12 +113,7 @@ export default defineComponent({
             if (feed instanceof Error)
                 return;
 
-            articles.value = feed
-                .sort((a, b) => {
-                    if (a.publishedAt.isBefore(b.publishedAt)) return 1;
-                    if (a.publishedAt.isAfter(b.publishedAt)) return -1;
-                    return 0;
-                });
+            articles.value = feed;
         };
 
         onMounted(async () => {
@@ -105,12 +121,17 @@ export default defineComponent({
         });
 
         return {
-            articles,
+            displayArticles,
             articlesToday,
             articlesYesterday,
             articlesPrevious,
+            isArticlesExpanded,
 
             refreshFeed,
+
+            expandArticles() {
+                isArticlesExpanded.value = true;
+            },
         }
     },
 });
