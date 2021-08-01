@@ -19,6 +19,7 @@ namespace MightyRSS._Api.Feed.Types
             public string Summary { get; init; }
             public string Author { get; init; }
             public DateTime? PublishedAt { get; init; }
+            public string PublishedAtAsString { get; init; }
         }
     }
 }

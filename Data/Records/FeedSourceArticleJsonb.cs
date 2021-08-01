@@ -9,5 +9,6 @@ namespace MightyRSS.Data.Records
         public string Summary { get; init; }
         public string Author { get; init; }
         public DateTime? PublishedAt { get; init; }
+        public string PublishedAtAsString { get; init; }
     }
 }

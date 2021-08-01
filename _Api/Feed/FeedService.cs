@@ -53,6 +53,7 @@ namespace MightyRSS._Api.Feed
                             Title = x.Title,
                             Summary = x.Summary,
                             PublishedAt = x.PublishedAt,
+                            PublishedAtAsString = x.PublishedAtAsString,
                             Author = x.Author
                         })
                         .ToList(),
@@ -79,7 +80,8 @@ namespace MightyRSS._Api.Feed
                     Title = x.Title,
                     Summary = x.Summary,
                     Author = x.Author,
-                    PublishedAt = x.PublishedAt
+                    PublishedAt = x.PublishedAt,
+                    PublishedAtAsString = x.PublishedAtAsString
                 })
             };
         }
@@ -109,6 +111,7 @@ namespace MightyRSS._Api.Feed
                             Title = x.Title,
                             Summary = x.Summary,
                             PublishedAt = x.PublishedAt,
+                            PublishedAtAsString = x.PublishedAtAsString,
                             Author = x.Author
                         }),
                         ArticlesUpdatedAt = DateTime.Now.ToLocalTime()
@@ -129,6 +132,7 @@ namespace MightyRSS._Api.Feed
                             Title = article.Title,
                             Summary = article.Summary,
                             PublishedAt = article.PublishedAt,
+                            PublishedAtAsString = article.PublishedAtAsString,
                             Author = article.Author
                         })
                     });
@@ -149,6 +153,7 @@ namespace MightyRSS._Api.Feed
                         Title = article.Title,
                         Summary = article.Summary,
                         PublishedAt = article.PublishedAt,
+                        PublishedAtAsString = article.PublishedAtAsString,
                         Author = article.Author
                     })
                 });

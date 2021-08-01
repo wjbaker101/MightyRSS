@@ -33,7 +33,8 @@ namespace MightyRSS._Api.Feed
                         Title = x.Title,
                         Summary = x.Description,
                         Author = x.Author,
-                        PublishedAt = x.PublishingDate
+                        PublishedAt = x.PublishingDate,
+                        PublishedAtAsString = x.PublishingDateString
                     })
                     .ToList()
             };
