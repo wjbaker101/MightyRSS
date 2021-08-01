@@ -1,8 +1,10 @@
 <template>
     <div class="content-width">
         <h1 class="text-centered">
-            <img class="swords-branding" width="48" height="48" src="@/assets/swords.svg">
-            <span class="branding-text">Mighty RSS</span>
+            <span class="mighty-rss-title" @click="refreshFeed">
+                <img class="swords-branding" width="48" height="48" src="@/assets/swords.svg">
+                <span class="branding-text">Mighty RSS</span>
+            </span>
         </h1>
         <div v-if="articles === null">
             Loading...
@@ -73,7 +75,7 @@ export default defineComponent({
             return articles.value.filter(x => !x.publishedAt.isToday() && !x.publishedAt.isYesterday());
         });
 
-        onMounted(async () => {
+        const refreshFeed = async function () {
             const logInResponse = await authService.logIn({
                 username: 'TestUsername',
                 password: 'TestPassword',
@@ -83,6 +85,8 @@ export default defineComponent({
                 return;
 
             useLoginToken.loginToken.value = logInResponse;
+
+            articles.value = null;
 
             const feed = await feedService.getFeed();
             if (feed instanceof Error)
@@ -94,6 +98,10 @@ export default defineComponent({
                     if (a.publishedAt.isAfter(b.publishedAt)) return -1;
                     return 0;
                 });
+        };
+
+        onMounted(async () => {
+            await refreshFeed();
         });
 
         return {
@@ -101,6 +109,8 @@ export default defineComponent({
             articlesToday,
             articlesYesterday,
             articlesPrevious,
+
+            refreshFeed,
         }
     },
 });
@@ -178,6 +188,11 @@ button {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.mighty-rss-title {
+    cursor: pointer;
+    user-select: none;
 }
 
 .swords-branding,
