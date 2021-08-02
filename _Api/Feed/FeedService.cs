@@ -1,4 +1,5 @@
-﻿using MightyRSS._Api.Feed.Types;
+﻿using Microsoft.Extensions.Options;
+using MightyRSS._Api.Feed.Types;
 using MightyRSS.Data.Records;
 using MightyRSS.Data.Repositories;
 using System;
@@ -15,13 +16,14 @@ namespace MightyRSS._Api.Feed
 
     public sealed class FeedService: IFeedService
     {
-        private readonly TimeSpan _feedRefreshPeriod = TimeSpan.FromSeconds(20);
-
         private readonly IFeedSourceRepository _feedSourceRepository;
         private readonly IFeedReaderService _feedReaderService;
         private readonly IUserDataFeedSourceRepository _userDataFeedSourceRepository;
 
+        private readonly TimeSpan _feedRefreshPeriod;
+
         public FeedService(
+            IOptions<FeedSettings> feedSettings,
             IFeedSourceRepository feedSourceRepository,
             IFeedReaderService feedReaderService,
             IUserDataFeedSourceRepository userDataFeedSourceRepository)
@@ -29,6 +31,8 @@ namespace MightyRSS._Api.Feed
             _feedSourceRepository = feedSourceRepository;
             _feedReaderService = feedReaderService;
             _userDataFeedSourceRepository = userDataFeedSourceRepository;
+
+            _feedRefreshPeriod = TimeSpan.FromSeconds(feedSettings.Value.RefreshPeriod);
         }
 
         public AddFeedSourceResponse AddFeedSource(UserRecord user, AddFeedSourceRequest request)

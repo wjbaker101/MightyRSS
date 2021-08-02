@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MightyRSS._Api.Auth;
 using MightyRSS._Api.Feed;
+using MightyRSS._Api.Feed.Types;
 using MightyRSS.Auth;
 using MightyRSS.Data;
 using MightyRSS.Data.Repositories;
@@ -22,6 +23,8 @@ namespace MightyRSS
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<FeedSettings>(Configuration.GetSection("Feed"));
+
             services.AddScoped<IRequestContext, RequestContext>();
             services.AddScoped<Authorisation>();
             services.AddSingleton<IJwtHelper, JwtHelper>();
