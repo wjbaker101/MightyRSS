@@ -115,12 +115,15 @@ namespace MightyRSS._Api.Feed
 
         private void UpdateFeedSources(UserRecord user)
         {
-            var feedSources = _userDataFeedSourceRepository
-                .GetFeedSources(user)
-                .Where(x => x.ArticlesUpdatedAt + _feedRefreshPeriod > DateTime.Now);
+            var feedSources = _userDataFeedSourceRepository.GetFeedSources(user);
 
             foreach (var feedSource in feedSources)
+            {
+                if (feedSource.ArticlesUpdatedAt + _feedRefreshPeriod > DateTime.Now)
+                    continue;
+
                 UpdateFeedSource(feedSource);
+            }
         }
 
         private void UpdateFeedSource(FeedSourceRecord feedSource)
