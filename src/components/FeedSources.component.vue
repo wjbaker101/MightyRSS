@@ -71,7 +71,8 @@ export default defineComponent({
 
 <style lang="scss">
 .feed-sources-component {
-    width: 350px;
+    width: 650px;
+    max-width: 100%;
     position: fixed;
     bottom: 0;
     left: 1rem;
