@@ -45,6 +45,15 @@ class FeedApi {
             return responseHelper.handleError(error);
         }
     }
+
+    async deleteFeedSource(reference: string): Promise<void | Error> {
+        try {
+            await this.api.delete<AddFeedSourceResponse>(`/source/${reference}`);
+        }
+        catch (error) {
+            return responseHelper.handleError(error);
+        }
+    }
 }
 
 export const feedApi = new FeedApi();

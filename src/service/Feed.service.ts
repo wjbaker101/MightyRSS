@@ -47,6 +47,13 @@ class FeedService {
             },
         }));
     }
+
+    async deleteFeedSource(reference: string): Promise<void | Error> {
+        const deleteFeedSourceResponse = await feedApi.deleteFeedSource(reference);
+
+        if (deleteFeedSourceResponse instanceof Error)
+            return deleteFeedSourceResponse;
+    }
 }
 
 export const feedService = new FeedService();
