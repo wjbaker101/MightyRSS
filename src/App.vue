@@ -10,18 +10,21 @@
             Loading...
         </div>
         <main v-else class="articles-container">
-            <div v-if="articlesToday !== null && articlesToday.length > 0">
+            <div v-if="articlesToday !== null">
                 <h2>Today</h2>
                 <ArticleComponent :key="article.reference" v-for="article in articlesToday" :article="article" />
             </div>
-            <div v-else-if="articlesYesterday !== null && articlesYesterday.length > 0">
+            <div v-if="articlesToday.length === 0">
+                <p>Nothing for today!</p>
+            </div>
+            <div v-if="articlesYesterday !== null && articlesYesterday.length > 0">
                 <h2>Yesterday</h2>
                 <ArticleComponent :key="article.reference" v-for="article in articlesYesterday" :article="article" />
             </div>
-            <div v-else-if="articlesPrevious !== null && articlesPrevious.length > 0">
+            <div v-if="articlesPrevious !== null && articlesPrevious.length > 0">
                 <h2>Previous</h2>
                 <ArticleComponent :key="article.reference" v-for="article in articlesPrevious" :article="article" />
-                <div class="text-centered" v-if="!isArticlesExpanded">
+                <div class="expand-articles-container text-centered" v-if="!isArticlesExpanded">
                     <button @click="expandArticles">Show More</button>
                 </div>
             </div>
@@ -194,11 +197,22 @@ input[type=text] {
 
 button {
     padding: 0.5rem 1rem;
-    background-color: #fff;
-    border: 0;
+    background-color: #777;
+    background:
+        url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAD1BMVEXg4ODe3t7Z2dnh4eHMzMwfFvLJAAAABXRSTlMpHxQzCglRi48AAAInSURBVHheTZOBjR0xCEQfpgEgDRiUAji5g+u/qNzoS0lmJe9KDwyDvbytmXj4WlhO+9rdSAqwDIe3sFbXN2NzKE77e0/rspyAfu9MJxXvR+APlA8JpydJfzxp7VzrirTpimpI8lMIC+C/zPlRc8L3H2mAmOFcmwBrHAjss1n1hySbgFY4jSSrpgw+PYZ6NaRMhxI5AOGIyOcic/F15bSxONeQ2IAzfZrjCyqj7bG7CZYzE8ffYzEVhuTrumHTFuaAXQvgrfpfc5tL6pu6xluAC5TbqDYDE+Ai1gB+RDIH68AcIGuuv63vS9QkWeGG1JmAW8dmZoAFhyJJlVM6W7+M91DXv0kkhwTqFwqTQBdAI7KJzYq3D0BLAYL0X+cZRqUI+EJyREBDutUksams0oTD3873PTPBf6qL+WO+sUh4bxsdvNP48bW5uoB6toEaMG0IdvEHPBS7ZwKbexo2AIwdrmMB1sqQwNdgiKX4EHhITpKfAkjCAI5X08laKgYCha6GJcID/BW6DifIbd4SBISQBauc7EzeAxzucpxhMT8zk/rZTIR1HMuwgGnqgpfIW3jyLj91txpjAJ5leQE2SbF2qRaJtU4RqACZILN41syFcr1cJOwCPMMSKEgWsT7XRdiMd6JaR3XGsZnrhgSU07pAM8BMQKGVGt/8ITr/FFlG5K1Ny9dGKd4qXP0FD5EFi6PZkEEFMq1I8Qs1ndUwQIbIBQiwCdRg8gfxVEji4SgRmgAAAABJRU5ErkJggg==)
+        #777;
+    border: 2px solid #666;
+    outline: 1px solid #777;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
     border-radius: 0.5rem;
     font: inherit;
     cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        border-color: #222;
+    }
 }
 
 .text-centered {
@@ -249,5 +263,9 @@ button {
     .flex-auto {
         flex: 0 0 auto;
     }
+}
+
+.expand-articles-container {
+    padding: 2rem 0;
 }
 </style>
