@@ -1,4 +1,4 @@
-﻿namespace MightyRSS._Api.Feed.Types
+﻿namespace MightyRSS.Settings
 {
     public sealed class FeedSettings
     {

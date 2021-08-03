@@ -2,6 +2,7 @@
 using MightyRSS._Api.Feed.Types;
 using MightyRSS.Data.Records;
 using MightyRSS.Data.Repositories;
+using MightyRSS.Settings;
 using System;
 using System.Linq;
 

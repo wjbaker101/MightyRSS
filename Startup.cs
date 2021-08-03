@@ -5,16 +5,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MightyRSS._Api.Auth;
 using MightyRSS._Api.Feed;
-using MightyRSS._Api.Feed.Types;
 using MightyRSS.Auth;
 using MightyRSS.Data;
 using MightyRSS.Data.Repositories;
+using MightyRSS.Settings;
 
 namespace MightyRSS
 {
     public sealed class Startup
     {
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
 
         public Startup(IConfiguration configuration)
         {
@@ -23,6 +23,7 @@ namespace MightyRSS
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<DatabaseSettings>(Configuration.GetSection("Database"));
             services.Configure<FeedSettings>(Configuration.GetSection("Feed"));
 
             services.AddScoped<IRequestContext, RequestContext>();
@@ -45,10 +46,25 @@ namespace MightyRSS
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                configurationBuilder
+                    .AddJsonFile("appsettings.Development.json")
+                    .AddJsonFile("appsettings.Development.Secrets.json");
             }
+            else
+            {
+                configurationBuilder
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile("appsettings.Secrets.json");
+            }
+
+            Configuration = configurationBuilder.Build();
 
             app.UseHttpsRedirection();
             app.UseRouting();
