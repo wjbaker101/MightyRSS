@@ -1,5 +1,7 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using Microsoft.Extensions.Options;
+using MightyRSS.Settings;
 using NHibernate;
 
 namespace MightyRSS.Data
@@ -13,20 +15,20 @@ namespace MightyRSS.Data
     {
         public ISessionFactory SessionFactory { get; }
 
-        public ApiDatabase()
+        public ApiDatabase(IOptions<DatabaseSettings> databaseSettings)
         {
-            SessionFactory = CreateSessionFactory();
+            SessionFactory = CreateSessionFactory(databaseSettings.Value);
         }
 
-        private ISessionFactory CreateSessionFactory()
+        private ISessionFactory CreateSessionFactory(DatabaseSettings databaseSettings)
         {
             return Fluently.Configure()
-                .Database(PostgreSQLConfiguration.Standard.ConnectionString(c =>
-                    c.Host("localhost")
-                        .Port(5432)
-                        .Database("mighty_rss")
-                        .Username("postgres")
-                        .Password("password")))
+                .Database(PostgreSQLConfiguration.Standard.ConnectionString(c => c
+                    .Host(databaseSettings.Host)
+                    .Port(databaseSettings.Port)
+                    .Database(databaseSettings.Database)
+                    .Username(databaseSettings.Username)
+                    .Password(databaseSettings.Password)))
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Program>())
                 .BuildSessionFactory();
         }
