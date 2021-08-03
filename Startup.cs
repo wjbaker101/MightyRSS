@@ -14,11 +14,17 @@ namespace MightyRSS
 {
     public sealed class Startup
     {
-        public IConfiguration Configuration { get; set; }
+        public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            var appSettingsBaseFileName = env.IsDevelopment() ? "appsettings.Development" : "appsettings";
+
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile($"{appSettingsBaseFileName}.json")
+                .AddJsonFile($"{appSettingsBaseFileName}.Secrets.json")
+                .Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -46,34 +52,14 @@ namespace MightyRSS
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath);
-
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-
-                configurationBuilder
-                    .AddJsonFile("appsettings.Development.json")
-                    .AddJsonFile("appsettings.Development.Secrets.json");
-            }
-            else
-            {
-                configurationBuilder
-                    .AddJsonFile("appsettings.json")
-                    .AddJsonFile("appsettings.Secrets.json");
-            }
-
-            Configuration = configurationBuilder.Build();
 
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
