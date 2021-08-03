@@ -1,4 +1,5 @@
 <template>
+    <AsideComponent />
     <div class="content-width">
         <h1 class="text-centered">
             <span class="mighty-rss-title" @click="refreshFeed">
@@ -30,15 +31,14 @@
             </div>
         </main>
     </div>
-    <FeedSourcesComponent />
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import dayjs from 'dayjs';
 
+import AsideComponent from '@/components/aside/Aside.component.vue';
 import ArticleComponent from '@/components/Article.component.vue';
-import FeedSourcesComponent from '@/components/FeedSources.component.vue';
 
 import { authService } from '@/service/Auth.service';
 import { feedService } from '@/service/Feed.service';
@@ -51,8 +51,8 @@ export default defineComponent({
     name: 'App',
 
     components: {
+        AsideComponent,
         ArticleComponent,
-        FeedSourcesComponent,
     },
 
     setup() {
@@ -258,6 +258,10 @@ button {
 
     & > * {
         flex: 1;
+    }
+
+    &.flex-vertical {
+        align-items: center;
     }
 
     .flex-auto {
