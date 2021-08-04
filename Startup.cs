@@ -48,6 +48,11 @@ namespace MightyRSS
             services.AddSingleton<IFeedService, FeedService>();
 
             services.AddControllers();
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "wwwroot";
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,6 +63,14 @@ namespace MightyRSS
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "wwwroot";
+            });
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
