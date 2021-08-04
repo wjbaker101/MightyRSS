@@ -42,6 +42,8 @@ namespace MightyRSS._Api.Feed
             if (feedSource == null)
             {
                 var feedReaderResult = _feedReaderService.Read(request.Url, null);
+                if (feedReaderResult == null)
+                    return null;
 
                 feedSource = _feedSourceRepository.Save(new FeedSourceRecord
                 {

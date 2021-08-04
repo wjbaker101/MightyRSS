@@ -21,6 +21,8 @@ namespace MightyRSS._Api.Feed
         public IActionResult AddFeedSource([FromServices] IRequestContext requestContext, [FromBody] AddFeedSourceRequest request)
         {
             var feedSource = _feedService.AddFeedSource(requestContext.User, request);
+            if (feedSource == null)
+                return BadRequest();
 
             return Created(feedSource.Reference.ToString(), feedSource);
         }
