@@ -51,12 +51,19 @@ export default defineComponent({
 .feed-source-component {
     padding: 0.25rem 0.5rem;
 
+    &:hover {
+        .delete-feed {
+            opacity: 1;
+        }
+    }
+
     .delete-feed {
         margin: -0.25rem -0.5rem;
         padding: 0.25rem 0.5rem;
         cursor: pointer;
         border-radius: 0.25rem;
         color: #888;
+        opacity: 0;
         transition: all 0.2s;
 
         &:hover {
