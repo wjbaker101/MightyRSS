@@ -7,6 +7,7 @@ namespace MightyRSS.Data.Records
         public virtual int Id { get; init; }
         public virtual UserRecord User { get; init; }
         public virtual FeedSourceRecord FeedSource { get; init; }
+        public virtual string Collection { get; init; }
     }
 
     public sealed class UserDataFeedSourceRecordMap : ClassMap<UserDataFeedSourceRecord>
@@ -18,6 +19,7 @@ namespace MightyRSS.Data.Records
             Id(x => x.Id, "id").GeneratedBy.SequenceIdentity("feed_source_id_seq");
             References(x => x.User, "user_id");
             References(x => x.FeedSource, "feed_source_id");
+            Map(x => x.Collection, "collection");
         }
     }
 }
