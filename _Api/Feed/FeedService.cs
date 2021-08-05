@@ -102,12 +102,13 @@ namespace MightyRSS._Api.Feed
             {
                 Sources = feedSources.ConvertAll(source => new GetFeedResponse.FeedSource
                 {
-                    Reference = source.Reference,
-                    Title = source.Title,
-                    Description = source.Description,
-                    RssUrl = source.RssUrl,
-                    WebsiteUrl = source.WebsiteUrl,
-                    Articles = source.Articles.ConvertAll(article => new GetFeedResponse.FeedArticle
+                    Reference = source.FeedSource.Reference,
+                    Title = source.FeedSource.Title,
+                    Description = source.FeedSource.Description,
+                    RssUrl = source.FeedSource.RssUrl,
+                    WebsiteUrl = source.FeedSource.WebsiteUrl,
+                    Collection = source.Collection,
+                    Articles = source.FeedSource.Articles.ConvertAll(article => new GetFeedResponse.FeedArticle
                     {
                         Url = article.Url,
                         Title = article.Title,
@@ -126,10 +127,10 @@ namespace MightyRSS._Api.Feed
 
             foreach (var feedSource in feedSources)
             {
-                if (feedSource.ArticlesUpdatedAt + _feedRefreshPeriod > DateTime.Now)
+                if (feedSource.FeedSource.ArticlesUpdatedAt + _feedRefreshPeriod > DateTime.Now)
                     continue;
 
-                UpdateFeedSource(feedSource);
+                UpdateFeedSource(feedSource.FeedSource);
             }
         }
 

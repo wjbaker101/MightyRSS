@@ -1,6 +1,6 @@
-﻿using System;
-using MightyRSS.Data.Records;
+﻿using MightyRSS.Data.Records;
 using NHibernate.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace MightyRSS.Data.Repositories
     public interface IUserDataFeedSourceRepository
     {
         UserDataFeedSourceRecord GetByUserAndFeedSourceReference(UserRecord user, Guid feedSourceReference);
-        List<FeedSourceRecord> GetFeedSources(UserRecord user);
+        List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user);
         UserDataFeedSourceRecord Save(UserDataFeedSourceRecord userDataFeedSource);
         void Delete(UserDataFeedSourceRecord userDataFeedSource);
     }
@@ -38,7 +38,7 @@ namespace MightyRSS.Data.Repositories
             return userDataFeedSource;
         }
 
-        public List<FeedSourceRecord> GetFeedSources(UserRecord user)
+        public List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user)
         {
             using var session = _database.SessionFactory.OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
@@ -47,7 +47,6 @@ namespace MightyRSS.Data.Repositories
                 .Query<UserDataFeedSourceRecord>()
                 .Fetch(x => x.FeedSource)
                 .Where(x => x.User == user)
-                .Select(x => x.FeedSource)
                 .ToList();
 
             transaction.Commit();
