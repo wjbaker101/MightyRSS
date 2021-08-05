@@ -1,7 +1,7 @@
 <template>
     <aside class="aside-component flex flex-vertical">
         <div>
-            <div class="flex flex-vertical">
+            <div class="flex flex-bottom">
                 <h2 class="flex-auto">Feeds</h2>
                 <div class="feeds-count" v-if="feeds !== null">
                     <small>({{ feeds.length }})</small>

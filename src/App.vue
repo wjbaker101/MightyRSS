@@ -276,6 +276,10 @@ section + section {
         align-items: center;
     }
 
+    &.flex-bottom {
+        align-items: baseline;
+    }
+
     .flex-auto {
         flex: 0 0 auto;
     }
