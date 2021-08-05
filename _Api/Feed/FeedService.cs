@@ -53,7 +53,7 @@ namespace MightyRSS._Api.Feed
                     RssUrl = feedReaderResult.RssUrl,
                     WebsiteUrl = feedReaderResult.WebsiteUrl,
                     Articles = feedReaderResult.Articles
-                        .Select(x => new FeedSourceArticleJsonb
+                        .Select(x => new FeedSourceRecord.Article
                         {
                             Url = x.Url,
                             Title = x.Title,
@@ -145,7 +145,7 @@ namespace MightyRSS._Api.Feed
                 Description = feed.Description,
                 RssUrl = feed.RssUrl,
                 WebsiteUrl = feed.WebsiteUrl,
-                Articles = feed.Articles.ConvertAll(x => new FeedSourceArticleJsonb
+                Articles = feed.Articles.ConvertAll(x => new FeedSourceRecord.Article
                 {
                     Url = x.Url,
                     Title = x.Title,
