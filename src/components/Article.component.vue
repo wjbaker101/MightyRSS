@@ -64,6 +64,10 @@ export default defineComponent({
     color: inherit;
     text-decoration: none;
 
+    &:visited {
+        color: #666;
+    }
+
     .sword-indicator {
         position: absolute;
         left: -1rem;
