@@ -1,5 +1,5 @@
 <template>
-    <div class="side-modal-content-component" :class="{ 'is-open': isOpen }">
+    <div class="side-modal-content-component parchment-background" :class="{ 'is-open': isOpen }">
         <div class="flex">
             <div></div>
             <div class="cross-button flex-auto" @click="$emit('close')">
@@ -56,7 +56,6 @@ export default defineComponent({
     left: 0;
     opacity: 0;
     pointer-events: none;
-    background-color: #fff;
     border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
     transform: translate(100%, -50%);
@@ -78,7 +77,6 @@ export default defineComponent({
     .cross-button {
         margin: -1rem;
         padding: 1rem;
-        color: #ccc;
         cursor: pointer;
         border-bottom-left-radius: 0.25rem;
         line-height: 0;
