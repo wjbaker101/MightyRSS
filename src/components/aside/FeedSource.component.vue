@@ -1,5 +1,5 @@
 <template>
-    <div class="feed-source-component flex">
+    <div class="feed-source-component flex flex-vertical">
         <div>
             <a :href="source.websiteUrl" rel="noopener noreferrer" target="_blank">
                 {{ source.title }}
@@ -49,7 +49,7 @@ export default defineComponent({
 
 <style lang="scss">
 .feed-source-component {
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0;
 
     &:hover {
         .delete-feed {
@@ -58,8 +58,7 @@ export default defineComponent({
     }
 
     .delete-feed {
-        margin: -0.25rem -0.5rem;
-        padding: 0.25rem 0.5rem;
+        padding: 0 0.5rem;
         cursor: pointer;
         border-radius: 0.25rem;
         color: #888;
