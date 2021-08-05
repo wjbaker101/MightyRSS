@@ -14,16 +14,22 @@ class FeedService {
             return getFeedResponse;
 
         return getFeedResponse.sources.map(source => source.articles
-            .map(article => (<FeedArticle>{
+            .map(article => ({
                 url: article.url,
-                source: source,
                 title: article.title,
                 summary: article.summary,
                 author: article.author,
                 publishedAt: dayjs(article.publishedAt ?? article.publishedAtAsString),
-            }))
-        )
-        .flat();
+                source: {
+                    reference: source.reference,
+                    title: source.title,
+                    description: source.description,
+                    rssUrl: source.rssUrl,
+                    websiteUrl: source.websiteUrl,
+                    collection: source.collection,
+                },
+            })))
+            .flat();
     }
 
     async addFeedSource(request: AddFeedSourceRequest): Promise<Array<FeedArticle> | Error> {
@@ -44,6 +50,7 @@ class FeedService {
                 description: addFeedSourceResponse.description,
                 rssUrl: addFeedSourceResponse.rssUrl,
                 websiteUrl: addFeedSourceResponse.websiteUrl,
+                collection: addFeedSourceResponse.collection,
             },
         }));
     }

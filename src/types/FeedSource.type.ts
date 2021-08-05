@@ -4,4 +4,5 @@ export interface FeedSource {
     description: string;
     rssUrl: string;
     websiteUrl: string;
+    collection: string | null;
 }

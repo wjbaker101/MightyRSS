@@ -8,6 +8,7 @@ export interface AddFeedSourceResponse {
     description: string;
     rssUrl: string;
     websiteUrl: string;
+    collection: string;
     articles: Array<FeedArticle>;
 }
 
