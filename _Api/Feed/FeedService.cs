@@ -67,10 +67,11 @@ namespace MightyRSS._Api.Feed
                 });
             }
 
-            _userDataFeedSourceRepository.Save(new UserDataFeedSourceRecord
+            var userDataFeedSource = _userDataFeedSourceRepository.Save(new UserDataFeedSourceRecord
             {
                 User = user,
-                FeedSource = feedSource
+                FeedSource = feedSource,
+                Collection = null
             });
 
             return new AddFeedSourceResponse
@@ -80,6 +81,7 @@ namespace MightyRSS._Api.Feed
                 Description = feedSource.Description,
                 RssUrl = feedSource.RssUrl,
                 WebsiteUrl = feedSource.WebsiteUrl,
+                Collection = userDataFeedSource.Collection,
                 Articles = feedSource.Articles.ConvertAll(x => new AddFeedSourceResponse.FeedArticle
                 {
                     Url = x.Url,

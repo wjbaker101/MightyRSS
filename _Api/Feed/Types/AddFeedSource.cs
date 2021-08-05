@@ -15,6 +15,7 @@ namespace MightyRSS._Api.Feed.Types
         public string Description { get; init; }
         public string RssUrl { get; init; }
         public string WebsiteUrl { get; init; }
+        public string Collection { get; init; }
         public List<FeedArticle> Articles { get; init; }
 
         public sealed class FeedArticle
