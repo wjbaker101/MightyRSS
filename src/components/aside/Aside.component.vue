@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import FeedSourceComponent from '@/components/aside/FeedSource.component.vue';
 import UserMessageComponent from '@/components/UserMessage.component.vue';
@@ -37,7 +37,6 @@ import UserMessageComponent from '@/components/UserMessage.component.vue';
 import { UseRss } from '@/use/Rss.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 
-import { FeedSource } from '@/types/FeedSource.type';
 import { feedService } from '@/service/Feed.service';
 
 export default defineComponent({
@@ -52,20 +51,10 @@ export default defineComponent({
         const useRss = UseRss();
         const useUserMessage = UseUserMessage();
 
-        const articles = useRss.articles;
+        const feeds = useRss.feeds;
 
         const newFeed = ref<string>('');
         const newFeedUserMessage = ref<string>('');
-
-        const feeds = computed<Array<FeedSource> | null>(() => {
-            if (articles.value === null)
-                return null;
-
-            const sources = [ ...new Set(articles.value.map(x => x.source)) ];
-
-            return sources
-                .sort((a, b) => a.title.localeCompare(b.title));
-        });
 
         return {
             feeds,
