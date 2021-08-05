@@ -77,6 +77,8 @@ export default defineComponent({
                 }
 
                 useRss.articles.value = useRss.articles.value?.concat(addFeedResponse) ?? null;
+
+                newFeed.value = '';
             },
         }
     },
