@@ -1,11 +1,16 @@
 <template>
     <aside class="aside-component flex flex-vertical">
         <div>
-            <h2>Feeds</h2>
+            <div class="flex flex-vertical">
+                <h2 class="flex-auto">Feeds</h2>
+                <div class="feeds-count" v-if="feeds !== null">
+                    <small>({{ feeds.length }})</small>
+                </div>
+            </div>
             <section>
                 <FeedSourceComponent
                     :key="source.reference"
-                    v-for="source in feedSources"
+                    v-for="source in feeds"
                     :source="source"
                 />
             </section>
@@ -52,7 +57,7 @@ export default defineComponent({
         const newFeed = ref<string>('');
         const newFeedUserMessage = ref<string>('');
 
-        const feedSources = computed<Array<FeedSource> | null>(() => {
+        const feeds = computed<Array<FeedSource> | null>(() => {
             if (articles.value === null)
                 return null;
 
@@ -63,7 +68,7 @@ export default defineComponent({
         });
 
         return {
-            feedSources,
+            feeds,
             newFeed,
             newFeedUserMessage,
 
@@ -100,7 +105,11 @@ export default defineComponent({
     bottom: 0;
 
     h2 {
-        margin-top: 0;
+        margin: 0;
+    }
+
+    .feeds-count {
+        margin-left: 0.5rem;
     }
 }
 </style>
