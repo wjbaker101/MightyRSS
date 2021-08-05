@@ -51,6 +51,14 @@ export default defineComponent({
 .feed-source-component {
     padding: 0.25rem 0;
 
+    &:first-child {
+        padding-top: 0;
+    }
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+
     &:hover {
         .delete-feed {
             opacity: 1;
