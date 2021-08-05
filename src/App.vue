@@ -32,6 +32,7 @@
         </main>
     </div>
     <SideModalComponent />
+    <OpenManageFeedsComponent />
 </template>
 
 <script lang="ts">
@@ -41,6 +42,7 @@ import dayjs from 'dayjs';
 import AsideComponent from '@/components/aside/Aside.component.vue';
 import ArticleComponent from '@/components/Article.component.vue';
 import SideModalComponent from '@/components/modal/SideModal.component.vue';
+import OpenManageFeedsComponent from '@/components/OpenManageFeeds.component.vue';
 
 import { authService } from '@/service/Auth.service';
 import { feedService } from '@/service/Feed.service';
@@ -56,6 +58,7 @@ export default defineComponent({
         AsideComponent,
         ArticleComponent,
         SideModalComponent,
+        OpenManageFeedsComponent,
     },
 
     setup() {
