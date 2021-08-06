@@ -7,7 +7,8 @@
                 <span class="branding-text">Mighty RSS</span>
             </span>
         </h1>
-        <ArticlesFeedComponent />
+        <LoginComponent v-if="loginToken === null" @login="onLogin" />
+        <ArticlesFeedComponent v-else />
     </div>
     <SideModalComponent />
     <OpenManageFeedsComponent />
@@ -19,11 +20,11 @@ import { defineComponent, onMounted } from 'vue';
 import AsideComponent from '@/components/aside/Aside.component.vue';
 import ArticlesFeedComponent from '@/components/articles/ArticlesFeed.component.vue';
 import SideModalComponent from '@/components/modal/SideModal.component.vue';
+import LoginComponent from '@/components/login/Login.component.vue';
 import OpenManageFeedsComponent from '@/components/OpenManageFeeds.component.vue';
 
-import { authService } from '@/service/Auth.service';
-import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseRss } from '@/use/Rss.use';
+import { UseLoginToken } from './use/LoginToken.use';
 
 export default defineComponent({
     name: 'App',
@@ -32,34 +33,28 @@ export default defineComponent({
         AsideComponent,
         ArticlesFeedComponent,
         SideModalComponent,
+        LoginComponent,
         OpenManageFeedsComponent,
     },
 
     setup() {
-        const useLoginToken = UseLoginToken();
         const useRss = UseRss();
+        const useLoginToken = UseLoginToken();
 
         const loadFeed = useRss.load;
-
-        const login = async function () {
-            const logInResponse = await authService.logIn({
-                username: 'TestUsername',
-                password: 'TestPassword',
-            });
-
-            if (logInResponse instanceof Error)
-                return;
-
-            useLoginToken.loginToken.value = logInResponse;
-        };
+        const loginToken = useLoginToken.loginToken;
 
         onMounted(async () => {
-            await login();
             await loadFeed();
         });
 
         return {
             loadFeed,
+            loginToken,
+
+            async onLogin() {
+                await loadFeed();
+            },
         }
     },
 });
@@ -107,7 +102,7 @@ a {
     }
 }
 
-input[type=text] {
+input {
     width: 100%;
     padding: 0.5rem 1rem;
     background-color: #eace9a;
