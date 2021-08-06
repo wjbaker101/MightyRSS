@@ -1,5 +1,8 @@
 import { authApi } from '@/api/auth/Auth.api';
 
+import { CacheKey, cacheService } from '@/service/Cache.service';
+import { UseLoginToken } from '@/use/LoginToken.use';
+
 import { LogInRequest } from '@/api/auth/types/LogIn.type';
 
 class AuthService {
@@ -11,6 +14,12 @@ class AuthService {
             return logInResponse;
 
         return logInResponse.jwtToken;
+    }
+
+    async loadCache() {
+        const cachedLoginToken = await cacheService.get<string>(CacheKey.LOGIN_TOKEN);
+        if (cachedLoginToken !== null)
+            UseLoginToken().loginToken.value = cachedLoginToken;
     }
 }
 

@@ -24,6 +24,7 @@ import { defineComponent, ref } from 'vue';
 import UserMessageComponent from '@/components/UserMessage.component.vue';
 
 import { authService } from '@/service/Auth.service';
+import { cacheService, CacheKey } from '@/service/Cache.service';
 import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 
@@ -63,7 +64,9 @@ export default defineComponent({
                     return;
                 }
 
-                useLoginToken.loginToken.value = logInResponse;
+                loginToken.value = logInResponse;
+
+                await cacheService.set(CacheKey.LOGIN_TOKEN, loginToken.value);
 
                 emit('login');
             },

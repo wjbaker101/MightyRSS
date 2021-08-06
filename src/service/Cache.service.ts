@@ -35,3 +35,7 @@ class CacheService {
 }
 
 export const cacheService = new CacheService();
+
+export const CacheKey = {
+    LOGIN_TOKEN: 'LOGIN_TOKEN',
+};

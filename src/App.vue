@@ -23,8 +23,9 @@ import SideModalComponent from '@/components/modal/SideModal.component.vue';
 import LoginComponent from '@/components/login/Login.component.vue';
 import OpenManageFeedsComponent from '@/components/OpenManageFeeds.component.vue';
 
+import { authService } from '@/service/Auth.service';
 import { UseRss } from '@/use/Rss.use';
-import { UseLoginToken } from './use/LoginToken.use';
+import { UseLoginToken } from '@/use/LoginToken.use';
 
 export default defineComponent({
     name: 'App',
@@ -45,6 +46,7 @@ export default defineComponent({
         const loginToken = useLoginToken.loginToken;
 
         onMounted(async () => {
+            await authService.loadCache();
             await loadFeed();
         });
 
