@@ -3,14 +3,14 @@
         <div>
             <section class="flex flex-bottom">
                 <h2 class="flex-auto">Feeds</h2>
-                <div class="feeds-count" v-if="feeds !== null">
-                    <small>({{ feeds.length }})</small>
+                <div class="feeds-count" v-if="feedsForDisplay !== null">
+                    <small>({{ feedsForDisplay.length }})</small>
                 </div>
             </section>
             <section>
                 <FeedSourceComponent
                     :key="feed.reference"
-                    v-for="feed in feeds"
+                    v-for="feed in feedsForDisplay"
                     :source="feed"
                 />
             </section>
@@ -19,11 +19,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import FeedSourceComponent from '@/components/aside/FeedSource.component.vue';
 
 import { UseRss } from '@/use/Rss.use';
+
+import { FeedSource } from '@/types/FeedSource.type';
 
 export default defineComponent({
     name: 'AsideComponent',
@@ -37,8 +39,16 @@ export default defineComponent({
 
         const feeds = useRss.feeds;
 
+        const feedsForDisplay = computed<Array<FeedSource> | null>(() => {
+            if (feeds.value === null)
+                return null;
+
+            return feeds.value
+                .sort((a, b) => a.title.localeCompare(b.title));
+        });
+
         return {
-            feeds,
+            feedsForDisplay,
         }
     },
 });

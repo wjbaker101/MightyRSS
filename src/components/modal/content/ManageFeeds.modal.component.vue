@@ -57,7 +57,10 @@ export default defineComponent({
 
             const value: Record<string, Array<FeedSource>> = {};
 
-            for (const feed of feeds.value) {
+            const feedsForDisplay = feeds.value
+                .sort((a, b) => a.title.localeCompare(b.title));
+
+            for (const feed of feedsForDisplay) {
                 const collection = feed.collection ?? 'mighty-rss-no-collection';
 
                 if (collection in value) {
