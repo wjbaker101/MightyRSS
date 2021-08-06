@@ -98,6 +98,7 @@ export default defineComponent({
         });
 
         return {
+            isArticlesExpanded,
             articlesForDisplay,
             articlesToday,
             articlesYesterday,
