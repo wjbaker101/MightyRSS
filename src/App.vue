@@ -2,61 +2,35 @@
     <AsideComponent />
     <div class="content-width">
         <h1 class="text-centered">
-            <span class="mighty-rss-title" @click="refreshFeed">
+            <span class="mighty-rss-title" @click="loadFeed">
                 <img class="swords-branding" width="48" height="48" src="@/assets/swords.svg">
                 <span class="branding-text">Mighty RSS</span>
             </span>
         </h1>
-        <div v-if="displayArticles === null">
-            Loading...
-        </div>
-        <main v-else class="articles-container">
-            <div v-if="articlesToday !== null">
-                <h2>Today</h2>
-                <ArticleComponent :key="article.reference" v-for="article in articlesToday" :article="article" />
-            </div>
-            <div v-if="articlesToday.length === 0">
-                <p>Nothing for today!</p>
-            </div>
-            <div v-if="articlesYesterday !== null && articlesYesterday.length > 0">
-                <h2>Yesterday</h2>
-                <ArticleComponent :key="article.reference" v-for="article in articlesYesterday" :article="article" />
-            </div>
-            <div v-if="articlesPrevious !== null && articlesPrevious.length > 0">
-                <h2>Previous</h2>
-                <ArticleComponent :key="article.reference" v-for="article in articlesPrevious" :article="article" />
-                <div class="expand-articles-container text-centered" v-if="!isArticlesExpanded">
-                    <button @click="expandArticles">Show More</button>
-                </div>
-            </div>
-        </main>
+        <ArticlesFeedComponent />
     </div>
     <SideModalComponent />
     <OpenManageFeedsComponent />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
-import dayjs from 'dayjs';
+import { defineComponent, onMounted } from 'vue';
 
 import AsideComponent from '@/components/aside/Aside.component.vue';
-import ArticleComponent from '@/components/Article.component.vue';
+import ArticlesFeedComponent from '@/components/articles/ArticlesFeed.component.vue';
 import SideModalComponent from '@/components/modal/SideModal.component.vue';
 import OpenManageFeedsComponent from '@/components/OpenManageFeeds.component.vue';
 
 import { authService } from '@/service/Auth.service';
-import { feedService } from '@/service/Feed.service';
 import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseRss } from '@/use/Rss.use';
-
-import { FeedArticle } from '@/types/FeedArticle.type';
 
 export default defineComponent({
     name: 'App',
 
     components: {
         AsideComponent,
-        ArticleComponent,
+        ArticlesFeedComponent,
         SideModalComponent,
         OpenManageFeedsComponent,
     },
@@ -65,47 +39,9 @@ export default defineComponent({
         const useLoginToken = UseLoginToken();
         const useRss = UseRss();
 
-        const articles = useRss.articles;
-        const isArticlesExpanded = ref<boolean>(false);
+        const loadFeed = useRss.load;
 
-        const displayArticles = computed<Array<FeedArticle> | null>(() => {
-            if (articles.value === null)
-                return null;
-
-            const twoMonthsAgo = dayjs().subtract(2, 'months');
-
-            return articles.value
-                .filter(x => isArticlesExpanded.value || (!isArticlesExpanded.value && x.publishedAt.isAfter(twoMonthsAgo)))
-                .sort((a, b) => {
-                    if (a.publishedAt.isBefore(b.publishedAt)) return 1;
-                    if (a.publishedAt.isAfter(b.publishedAt)) return -1;
-                    return 0;
-                });
-        });
-
-        const articlesToday = computed<Array<FeedArticle> | null>(() => {
-            if (displayArticles.value === null)
-                return null;
-
-            return displayArticles.value.filter(x => x.publishedAt.isToday());
-        });
-
-        const articlesYesterday = computed<Array<FeedArticle> | null>(() => {
-            if (displayArticles.value === null)
-                return null;
-
-            return displayArticles.value.filter(x => x.publishedAt.isYesterday());
-        });
-
-        const articlesPrevious = computed<Array<FeedArticle> | null>(() => {
-            if (displayArticles.value === null)
-                return null;
-
-            return displayArticles.value
-                .filter(x => !x.publishedAt.isToday() && !x.publishedAt.isYesterday());
-        });
-
-        const refreshFeed = async function () {
+        const login = async function () {
             const logInResponse = await authService.logIn({
                 username: 'TestUsername',
                 password: 'TestPassword',
@@ -115,32 +51,15 @@ export default defineComponent({
                 return;
 
             useLoginToken.loginToken.value = logInResponse;
-
-            articles.value = null;
-
-            const feed = await feedService.getFeed();
-            if (feed instanceof Error)
-                return;
-
-            articles.value = feed;
         };
 
         onMounted(async () => {
-            await refreshFeed();
+            await login();
+            await loadFeed();
         });
 
         return {
-            displayArticles,
-            articlesToday,
-            articlesYesterday,
-            articlesPrevious,
-            isArticlesExpanded,
-
-            refreshFeed,
-
-            expandArticles() {
-                isArticlesExpanded.value = true;
-            },
+            loadFeed,
         }
     },
 });
@@ -250,12 +169,6 @@ section + section {
     margin-right: 1rem;
 }
 
-.articles-container {
-    h2 {
-        margin: 2.5rem 0;
-    }
-}
-
 .flex {
     display: flex;
 
@@ -282,10 +195,6 @@ section + section {
     .flex-auto {
         flex: 0 0 auto;
     }
-}
-
-.expand-articles-container {
-    padding: 2rem 0;
 }
 
 .parchment-background {

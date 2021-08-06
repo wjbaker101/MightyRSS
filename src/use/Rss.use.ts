@@ -1,5 +1,7 @@
 import { ref, watch } from 'vue';
 
+import { feedService } from '@/service/Feed.service';
+
 import { FeedArticle } from '@/types/FeedArticle.type';
 import { FeedSource } from '@/types/FeedSource.type';
 
@@ -27,5 +29,15 @@ export function UseRss() {
     return {
         articles,
         feeds,
+
+        async load(): Promise<void | Error> {
+            articles.value = null;
+
+            const getFeedResponse = await feedService.getFeed();
+            if (getFeedResponse instanceof Error)
+                return getFeedResponse;
+
+            articles.value = getFeedResponse;
+        },
     }
 }
