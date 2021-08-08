@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MightyRSS._Api.Feed.Types;
 using MightyRSS.Data.Records;
-using MightyRSS.Data.Repositories;
 using MightyRSS.Data.UoW;
 using MightyRSS.Settings;
 using System;
@@ -20,37 +19,33 @@ namespace MightyRSS._Api.Feed
     public sealed class FeedService: IFeedService
     {
         private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWorkFactory;
-        private readonly IFeedSourceRepository _feedSourceRepository;
         private readonly IFeedReaderService _feedReaderService;
-        private readonly IUserDataFeedSourceRepository _userDataFeedSourceRepository;
 
         private readonly TimeSpan _feedRefreshPeriod;
 
         public FeedService(
             IOptions<FeedSettings> feedSettings,
             IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWorkFactory,
-            IFeedSourceRepository feedSourceRepository,
-            IFeedReaderService feedReaderService,
-            IUserDataFeedSourceRepository userDataFeedSourceRepository)
+            IFeedReaderService feedReaderService)
         {
             _mightyUnitOfWorkFactory = mightyUnitOfWorkFactory;
-            _feedSourceRepository = feedSourceRepository;
             _feedReaderService = feedReaderService;
-            _userDataFeedSourceRepository = userDataFeedSourceRepository;
 
             _feedRefreshPeriod = TimeSpan.FromSeconds(feedSettings.Value.RefreshPeriod);
         }
 
         public AddFeedSourceResponse AddFeedSource(UserRecord user, AddFeedSourceRequest request)
         {
-            var feedSource = _feedSourceRepository.GetByRssUrl(request.Url);
+            var unitOfWork = _mightyUnitOfWorkFactory.Create();
+
+            var feedSource = unitOfWork.FeedSources.GetByRssUrl(request.Url);
             if (feedSource == null)
             {
                 var feedReaderResult = _feedReaderService.Read(request.Url, null);
                 if (feedReaderResult == null)
                     return null;
 
-                feedSource = _feedSourceRepository.Save(new FeedSourceRecord
+                feedSource = new FeedSourceRecord
                 {
                     Reference = feedReaderResult.Reference,
                     Title = feedReaderResult.Title,
@@ -69,15 +64,21 @@ namespace MightyRSS._Api.Feed
                         })
                         .ToList(),
                     ArticlesUpdatedAt = DateTime.Now.ToLocalTime()
-                });
+                };
+
+                unitOfWork.FeedSources.Save(feedSource);
             }
 
-            var userDataFeedSource = _userDataFeedSourceRepository.Save(new UserDataFeedSourceRecord
+            var userFeedSource = new UserDataFeedSourceRecord
             {
                 User = user,
                 FeedSource = feedSource,
                 Collection = null
-            });
+            };
+
+            unitOfWork.UserFeedSources.Save(userFeedSource);
+
+            unitOfWork.Commit();
 
             return new AddFeedSourceResponse
             {
@@ -86,7 +87,7 @@ namespace MightyRSS._Api.Feed
                 Description = feedSource.Description,
                 RssUrl = feedSource.RssUrl,
                 WebsiteUrl = feedSource.WebsiteUrl,
-                Collection = userDataFeedSource.Collection,
+                Collection = userFeedSource.Collection,
                 Articles = feedSource.Articles.ConvertAll(x => new AddFeedSourceResponse.FeedArticle
                 {
                     Url = x.Url,
@@ -101,9 +102,13 @@ namespace MightyRSS._Api.Feed
 
         public GetFeedResponse GetFeed(UserRecord user)
         {
-            UpdateFeedSources(user);
+            var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
-            var feedSources = _userDataFeedSourceRepository.GetFeedSources(user);
+            UpdateFeedSources(unitOfWork, user);
+
+            var feedSources = unitOfWork.UserFeedSources.GetFeedSources(user);
+
+            unitOfWork.Commit();
 
             return new GetFeedResponse
             {
@@ -128,44 +133,41 @@ namespace MightyRSS._Api.Feed
             };
         }
 
-        private void UpdateFeedSources(UserRecord user)
+        private void UpdateFeedSources(IMightyUnitOfWork unitOfWork, UserRecord user)
         {
-            var feedSources = _userDataFeedSourceRepository.GetFeedSources(user);
+            var feedSources = unitOfWork.UserFeedSources.GetFeedSources(user);
 
             foreach (var feedSource in feedSources)
             {
                 if (feedSource.FeedSource.ArticlesUpdatedAt + _feedRefreshPeriod > DateTime.Now)
                     continue;
 
-                UpdateFeedSource(feedSource.FeedSource);
+                UpdateFeedSource(unitOfWork, feedSource.FeedSource);
             }
         }
 
-        private void UpdateFeedSource(FeedSourceRecord feedSource)
+        private void UpdateFeedSource(IMightyUnitOfWork unitOfWork, FeedSourceRecord feedSource)
         {
             var feed = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
             if (feed == null)
                 return;
 
-            _feedSourceRepository.Update(new FeedSourceRecord
+            feedSource.Title = feed.Title;
+            feedSource.Description = feed.Description;
+            feedSource.RssUrl = feed.RssUrl;
+            feedSource.WebsiteUrl = feed.WebsiteUrl;
+            feedSource.Articles = feed.Articles.ConvertAll(x => new FeedSourceRecord.Article
             {
-                Id = feedSource.Id,
-                Reference = feed.Reference,
-                Title = feed.Title,
-                Description = feed.Description,
-                RssUrl = feed.RssUrl,
-                WebsiteUrl = feed.WebsiteUrl,
-                Articles = feed.Articles.ConvertAll(x => new FeedSourceRecord.Article
-                {
-                    Url = x.Url,
-                    Title = x.Title,
-                    Summary = x.Summary,
-                    PublishedAt = x.PublishedAt,
-                    PublishedAtAsString = x.PublishedAtAsString,
-                    Author = x.Author
-                }),
-                ArticlesUpdatedAt = DateTime.Now.ToLocalTime()
+                Url = x.Url,
+                Title = x.Title,
+                Summary = x.Summary,
+                PublishedAt = x.PublishedAt,
+                PublishedAtAsString = x.PublishedAtAsString,
+                Author = x.Author
             });
+            feedSource.ArticlesUpdatedAt = DateTime.Now.ToLocalTime();
+
+            unitOfWork.FeedSources.Update(feedSource);
         }
 
         public void DeleteFeedSource(UserRecord user, Guid reference)
