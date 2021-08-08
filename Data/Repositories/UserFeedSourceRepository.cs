@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using WJBCommon.Lib.Data;
 
 namespace MightyRSS.Data.Repositories
 {
@@ -26,7 +27,7 @@ namespace MightyRSS.Data.Repositories
 
         public UserDataFeedSourceRecord GetByUserAndFeedSourceReference(UserRecord user, Guid feedSourceReference)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             var userDataFeedSource = session
@@ -40,7 +41,7 @@ namespace MightyRSS.Data.Repositories
 
         public List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             var feedSources = session
@@ -56,7 +57,7 @@ namespace MightyRSS.Data.Repositories
 
         public UserDataFeedSourceRecord Save(UserDataFeedSourceRecord userDataFeedSource)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             session.Save(userDataFeedSource);
@@ -68,7 +69,7 @@ namespace MightyRSS.Data.Repositories
 
         public void Delete(UserDataFeedSourceRecord userDataFeedSource)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             session.Delete(userDataFeedSource);

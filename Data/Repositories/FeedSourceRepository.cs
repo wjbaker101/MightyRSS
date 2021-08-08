@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Linq;
+using WJBCommon.Lib.Data;
 
 namespace MightyRSS.Data.Repositories
 {
@@ -24,7 +25,7 @@ namespace MightyRSS.Data.Repositories
 
         public FeedSourceRecord GetByReference(Guid reference)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             var feedSource = session
@@ -38,7 +39,7 @@ namespace MightyRSS.Data.Repositories
 
         public FeedSourceRecord GetByRssUrl(string url)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             var feedSource = session
@@ -52,7 +53,7 @@ namespace MightyRSS.Data.Repositories
 
         public FeedSourceRecord Save(FeedSourceRecord feedSource)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             session.Save(feedSource);
@@ -64,7 +65,7 @@ namespace MightyRSS.Data.Repositories
 
         public FeedSourceRecord Update(FeedSourceRecord feedSource)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             session.Update(feedSource);

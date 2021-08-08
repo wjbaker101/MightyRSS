@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Linq;
+using WJBCommon.Lib.Data;
 
 namespace MightyRSS.Data.Repositories
 {
@@ -23,7 +24,7 @@ namespace MightyRSS.Data.Repositories
 
         public UserRecord GetByReference(Guid reference)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             var user = session
@@ -37,7 +38,7 @@ namespace MightyRSS.Data.Repositories
 
         public UserRecord GetByUsername(string username)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             var user = session
@@ -51,7 +52,7 @@ namespace MightyRSS.Data.Repositories
 
         public UserRecord Save(UserRecord user)
         {
-            using var session = _database.SessionFactory.OpenSession();
+            using var session = _database.SessionFactory().OpenSession();
             using var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
 
             session.Save(user);

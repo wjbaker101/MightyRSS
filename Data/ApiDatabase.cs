@@ -3,21 +3,17 @@ using FluentNHibernate.Cfg.Db;
 using Microsoft.Extensions.Options;
 using MightyRSS.Settings;
 using NHibernate;
+using WJBCommon.Lib.Data;
 
 namespace MightyRSS.Data
 {
-    public interface IApiDatabase
-    {
-        ISessionFactory SessionFactory { get; }
-    }
-
     public sealed class ApiDatabase: IApiDatabase
     {
-        public ISessionFactory SessionFactory { get; }
-
+        private readonly ISessionFactory _sessionFactory;
+        
         public ApiDatabase(IOptions<DatabaseSettings> databaseSettings)
         {
-            SessionFactory = CreateSessionFactory(databaseSettings.Value);
+            _sessionFactory = CreateSessionFactory(databaseSettings.Value);
         }
 
         private ISessionFactory CreateSessionFactory(DatabaseSettings databaseSettings)
@@ -31,6 +27,11 @@ namespace MightyRSS.Data
                     .Password(databaseSettings.Password)))
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Program>())
                 .BuildSessionFactory();
+        }
+
+        public ISessionFactory SessionFactory()
+        {
+            return _sessionFactory;
         }
     }
 }

@@ -8,7 +8,9 @@ using MightyRSS._Api.Feed;
 using MightyRSS.Auth;
 using MightyRSS.Data;
 using MightyRSS.Data.Repositories;
+using MightyRSS.Data.UoW;
 using MightyRSS.Settings;
+using WJBCommon.Lib.Data;
 
 namespace MightyRSS
 {
@@ -37,6 +39,7 @@ namespace MightyRSS
             services.AddSingleton<IJwtHelper, JwtHelper>();
 
             services.AddSingleton<IApiDatabase, ApiDatabase>();
+            services.AddSingleton<IMightyUnitOfWork, MightyUnitOfWork>();
             services.AddSingleton<IFeedSourceRepository, FeedSourceRepository>();
             services.AddSingleton<IUserDataFeedSourceRepository, UserDataFeedSourceRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();
