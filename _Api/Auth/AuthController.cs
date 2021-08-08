@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MightyRSS._Api.Auth.Types;
 using System;
-using System.Net;
 using WJBCommon.Lib.Api.Controller;
 
 namespace MightyRSS._Api.Auth
@@ -20,29 +19,27 @@ namespace MightyRSS._Api.Auth
         [Route("user/{reference:guid}")]
         public IActionResult GetUser([FromRoute] Guid reference)
         {
-            var getUserResponse = _authService.GetUser(reference);
-            if (getUserResponse == null)
-                return NotFound();
+            var result = _authService.GetUser(reference);
 
-            return Ok(getUserResponse);
+            return ApiResponseFromResult(result);
         }
 
         [HttpPost]
         [Route("user")]
         public IActionResult CreateUser([FromBody] CreateUserRequest request)
         {
-            return StatusCode((int)HttpStatusCode.Created, _authService.CreateUser(request));
+            var result = _authService.CreateUser(request);
+
+            return ApiResponseFromResult(result);
         }
 
         [HttpPost]
         [Route("login")]
         public IActionResult LogIn([FromBody] LogInRequest request)
         {
-            var logInResponse = _authService.LogIn(request);
-            if (logInResponse == null)
-                return Unauthorized();
+            var result = _authService.LogIn(request);
 
-            return Ok(logInResponse);
+            return ApiResponseFromResult(result);
         }
     }
 }

@@ -4,15 +4,17 @@ using MightyRSS.Auth.Types;
 using MightyRSS.Data.Records;
 using MightyRSS.Data.UoW;
 using System;
+using System.Net;
+using WJBCommon.Lib.Api.Type;
 using WJBCommon.Lib.Data;
 
 namespace MightyRSS._Api.Auth
 {
     public interface IAuthService
     {
-        GetUserResponse GetUser(Guid reference);
-        CreateUserResponse CreateUser(CreateUserRequest request);
-        LogInResponse LogIn(LogInRequest request);
+        Result<GetUserResponse> GetUser(Guid reference);
+        Result<CreateUserResponse> CreateUser(CreateUserRequest request);
+        Result<LogInResponse> LogIn(LogInRequest request);
     }
 
     public sealed class AuthService : IAuthService
@@ -31,24 +33,24 @@ namespace MightyRSS._Api.Auth
             _jwtHelper = jwtHelper;
         }
 
-        public GetUserResponse GetUser(Guid reference)
+        public Result<GetUserResponse> GetUser(Guid reference)
         {
             using var unitOfWork = _mightyUnitOfWork.Create();
 
             var user = unitOfWork.Users.GetByReference(reference);
             if (user == null)
-                return null;
+                return Result<GetUserResponse>.Error("User with the given reference could not be found.", HttpStatusCode.NotFound);
 
             unitOfWork.Commit();
 
-            return new GetUserResponse
+            return Result<GetUserResponse>.Of(new GetUserResponse
             {
                 Reference = user.Reference,
                 Username = user.Username
-            };
+            });
         }
 
-        public CreateUserResponse CreateUser(CreateUserRequest request)
+        public Result<CreateUserResponse> CreateUser(CreateUserRequest request)
         {
             var userReference = Guid.NewGuid();
             var passwordSalt = Guid.NewGuid();
@@ -68,20 +70,20 @@ namespace MightyRSS._Api.Auth
 
             unitOfWork.Commit();
 
-            return new CreateUserResponse
+            return Result<CreateUserResponse>.Of(new CreateUserResponse
             {
                 Reference = user.Reference,
                 Username = user.Username
-            };
+            }, HttpStatusCode.Created);
         }
 
-        public LogInResponse LogIn(LogInRequest request)
+        public Result<LogInResponse> LogIn(LogInRequest request)
         {
             using var unitOfWork = _mightyUnitOfWork.Create();
 
             var user = unitOfWork.Users.GetByUsername(request.Username);
             if (user == null)
-                return null;
+                return Result<LogInResponse>.Error("User with the given username could not be found, please check and try again.", HttpStatusCode.Unauthorized);
             if (!_passwordHelper.IsMatch(user.Password, request.Password, user.PasswordSalt))
                 return null;
 
@@ -92,10 +94,10 @@ namespace MightyRSS._Api.Auth
 
             unitOfWork.Commit();
 
-            return new LogInResponse
+            return Result<LogInResponse>.Of(new LogInResponse
             {
                 JwtToken = jwtToken
-            };
+            });
         }
     }
 }
