@@ -2,20 +2,21 @@
 using MightyRSS._Api.Feed.Types;
 using System;
 using System.Linq;
+using WJBCommon.Lib.Api.Type;
 
 namespace MightyRSS._Api.Feed
 {
     public interface IFeedReaderService
     {
-        FeedReaderResult Read(string url, Guid? reference);
+        Result<FeedDetails> Read(string url, Guid? reference);
     }
 
     public sealed class FeedReaderService : IFeedReaderService
     {
-        public FeedReaderResult Read(string url, Guid? reference)
+        public Result<FeedDetails> Read(string url, Guid? reference)
         {
             if (!Uri.TryCreate(url, UriKind.Absolute, out var sourceUrl))
-                return null;
+                return Result<FeedDetails>.Error("The given URL was formatted incorrectly please try again.");
 
             try
             {
@@ -23,15 +24,15 @@ namespace MightyRSS._Api.Feed
             }
             catch
             {
-                return null;
+                return Result<FeedDetails>.Error("Sorry, unable to retrieve details of the feed. Please try again later.");
             }
         }
 
-        private FeedReaderResult Read(string sourceUrl, string url, Guid? reference)
+        private Result<FeedDetails> Read(string sourceUrl, string url, Guid? reference)
         {
             var feed = FeedReader.ReadAsync(sourceUrl).Result;
 
-            return new FeedReaderResult
+            return Result<FeedDetails>.Of(new FeedDetails
             {
                 Reference = reference ?? Guid.NewGuid(),
                 Title = feed.Title,
@@ -39,7 +40,7 @@ namespace MightyRSS._Api.Feed
                 RssUrl = url,
                 WebsiteUrl = feed.Link,
                 Articles = feed.Items
-                    .Select(x => new FeedReaderResult.FeedArticle
+                    .Select(x => new FeedDetails.Article
                     {
                         Url = x.Link,
                         Title = x.Title,
@@ -49,7 +50,7 @@ namespace MightyRSS._Api.Feed
                         PublishedAtAsString = x.PublishingDateString
                     })
                     .ToList()
-            };
+            });
         }
     }
 }

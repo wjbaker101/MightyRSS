@@ -21,11 +21,9 @@ namespace MightyRSS._Api.Feed
         [ServiceFilter(typeof(Authorisation))]
         public IActionResult AddFeedSource([FromServices] IRequestContext requestContext, [FromBody] AddFeedSourceRequest request)
         {
-            var feedSource = _feedService.AddFeedSource(requestContext.User, request);
-            if (feedSource == null)
-                return BadRequest();
+            var result = _feedService.AddFeedSource(requestContext.User, request);
 
-            return Created(feedSource.Reference.ToString(), feedSource);
+            return ApiResponseFromResult(result);
         }
 
         [HttpGet]
@@ -33,9 +31,9 @@ namespace MightyRSS._Api.Feed
         [ServiceFilter(typeof(Authorisation))]
         public IActionResult GetFeed([FromServices] IRequestContext requestContext)
         {
-            var feed = _feedService.GetFeed(requestContext.User);
+            var result = _feedService.GetFeed(requestContext.User);
 
-            return Ok(feed);
+            return ApiResponseFromResult(result);
         }
 
         [HttpDelete]

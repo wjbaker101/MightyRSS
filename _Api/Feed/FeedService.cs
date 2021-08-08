@@ -13,8 +13,8 @@ namespace MightyRSS._Api.Feed
 {
     public interface IFeedService
     {
-        AddFeedSourceResponse AddFeedSource(UserRecord user, AddFeedSourceRequest request);
-        GetFeedResponse GetFeed(UserRecord user);
+        Result<AddFeedSourceResponse> AddFeedSource(UserRecord user, AddFeedSourceRequest request);
+        Result<GetFeedResponse> GetFeed(UserRecord user);
         Result DeleteFeedSource(UserRecord user, Guid reference);
     }
 
@@ -36,25 +36,27 @@ namespace MightyRSS._Api.Feed
             _feedRefreshPeriod = TimeSpan.FromSeconds(feedSettings.Value.RefreshPeriod);
         }
 
-        public AddFeedSourceResponse AddFeedSource(UserRecord user, AddFeedSourceRequest request)
+        public Result<AddFeedSourceResponse> AddFeedSource(UserRecord user, AddFeedSourceRequest request)
         {
             using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
             var feedSource = unitOfWork.FeedSources.GetByRssUrl(request.Url);
             if (feedSource == null)
             {
-                var feedReaderResult = _feedReaderService.Read(request.Url, null);
-                if (feedReaderResult == null)
-                    return null;
+                var feedDetailsResult = _feedReaderService.Read(request.Url, null);
+                if (feedDetailsResult.IsFailure)
+                    return Result<AddFeedSourceResponse>.Error(feedDetailsResult.ErrorMessage);
+
+                var feedDetails = feedDetailsResult.Value;
 
                 feedSource = new FeedSourceRecord
                 {
-                    Reference = feedReaderResult.Reference,
-                    Title = feedReaderResult.Title,
-                    Description = feedReaderResult.Description,
-                    RssUrl = feedReaderResult.RssUrl,
-                    WebsiteUrl = feedReaderResult.WebsiteUrl,
-                    Articles = feedReaderResult.Articles
+                    Reference = feedDetails.Reference,
+                    Title = feedDetails.Title,
+                    Description = feedDetails.Description,
+                    RssUrl = feedDetails.RssUrl,
+                    WebsiteUrl = feedDetails.WebsiteUrl,
+                    Articles = feedDetails.Articles
                         .Select(x => new FeedSourceRecord.Article
                         {
                             Url = x.Url,
@@ -82,7 +84,7 @@ namespace MightyRSS._Api.Feed
 
             unitOfWork.Commit();
 
-            return new AddFeedSourceResponse
+            return Result<AddFeedSourceResponse>.Of(new AddFeedSourceResponse
             {
                 Reference = feedSource.Reference,
                 Title = feedSource.Title,
@@ -99,10 +101,10 @@ namespace MightyRSS._Api.Feed
                     PublishedAt = x.PublishedAt,
                     PublishedAtAsString = x.PublishedAtAsString
                 })
-            };
+            });
         }
 
-        public GetFeedResponse GetFeed(UserRecord user)
+        public Result<GetFeedResponse> GetFeed(UserRecord user)
         {
             using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
@@ -112,7 +114,7 @@ namespace MightyRSS._Api.Feed
 
             unitOfWork.Commit();
 
-            return new GetFeedResponse
+            return Result<GetFeedResponse>.Of(new GetFeedResponse
             {
                 Sources = feedSources.ConvertAll(source => new GetFeedResponse.FeedSource
                 {
@@ -132,7 +134,7 @@ namespace MightyRSS._Api.Feed
                         PublishedAtAsString = article.PublishedAtAsString
                     })
                 })
-            };
+            });
         }
 
         private void UpdateFeedSources(IMightyUnitOfWork unitOfWork, UserRecord user)
@@ -150,15 +152,17 @@ namespace MightyRSS._Api.Feed
 
         private void UpdateFeedSource(IMightyUnitOfWork unitOfWork, FeedSourceRecord feedSource)
         {
-            var feed = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
-            if (feed == null)
+            var feedDetailsResult = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
+            if (feedDetailsResult.IsFailure)
                 return;
 
-            feedSource.Title = feed.Title;
-            feedSource.Description = feed.Description;
-            feedSource.RssUrl = feed.RssUrl;
-            feedSource.WebsiteUrl = feed.WebsiteUrl;
-            feedSource.Articles = feed.Articles.ConvertAll(x => new FeedSourceRecord.Article
+            var feedDetails = feedDetailsResult.Value;
+
+            feedSource.Title = feedDetails.Title;
+            feedSource.Description = feedDetails.Description;
+            feedSource.RssUrl = feedDetails.RssUrl;
+            feedSource.WebsiteUrl = feedDetails.WebsiteUrl;
+            feedSource.Articles = feedDetails.Articles.ConvertAll(x => new FeedSourceRecord.Article
             {
                 Url = x.Url,
                 Title = x.Title,
