@@ -2,12 +2,12 @@
 using MightyRSS.Data.Types;
 using System;
 using System.Collections.Generic;
+using WJBCommon.Lib.Data.Type;
 
 namespace MightyRSS.Data.Records
 {
-    public class FeedSourceRecord
+    public class FeedSourceRecord : DatabaseRecord
     {
-        public virtual int Id { get; init; }
         public virtual Guid Reference { get; init; }
         public virtual string Title { get; init; }
         public virtual string Description { get; init; }

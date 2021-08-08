@@ -1,11 +1,11 @@
 ﻿using FluentNHibernate.Mapping;
 using System;
+using WJBCommon.Lib.Data.Type;
 
 namespace MightyRSS.Data.Records
 {
-    public class UserRecord
+    public class UserRecord : DatabaseRecord
     {
-        public virtual int Id { get; init; }
         public virtual Guid Reference { get; init; }
         public virtual string Username { get; init; }
         public virtual string Password { get; init; }

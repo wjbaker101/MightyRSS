@@ -1,10 +1,10 @@
 ﻿using FluentNHibernate.Mapping;
+using WJBCommon.Lib.Data.Type;
 
 namespace MightyRSS.Data.Records
 {
-    public class UserDataFeedSourceRecord
+    public class UserDataFeedSourceRecord : DatabaseRecord
     {
-        public virtual int Id { get; init; }
         public virtual UserRecord User { get; init; }
         public virtual FeedSourceRecord FeedSource { get; init; }
         public virtual string Collection { get; init; }
