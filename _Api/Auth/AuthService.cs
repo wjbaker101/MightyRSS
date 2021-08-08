@@ -1,9 +1,10 @@
 ﻿using MightyRSS._Api.Auth.Types;
-using MightyRSS.Data.Records;
-using MightyRSS.Data.Repositories;
-using System;
 using MightyRSS.Auth;
 using MightyRSS.Auth.Types;
+using MightyRSS.Data.Records;
+using MightyRSS.Data.UoW;
+using System;
+using WJBCommon.Lib.Data;
 
 namespace MightyRSS._Api.Auth
 {
@@ -16,22 +17,29 @@ namespace MightyRSS._Api.Auth
 
     public sealed class AuthService : IAuthService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWork;
         private readonly IPasswordHelper _passwordHelper;
         private readonly IJwtHelper _jwtHelper;
 
-        public AuthService(IUserRepository userRepository, IPasswordHelper passwordHelper, IJwtHelper jwtHelper)
+        public AuthService(
+            IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWork,
+            IPasswordHelper passwordHelper,
+            IJwtHelper jwtHelper)
         {
-            _userRepository = userRepository;
+            _mightyUnitOfWork = mightyUnitOfWork;
             _passwordHelper = passwordHelper;
             _jwtHelper = jwtHelper;
         }
 
         public GetUserResponse GetUser(Guid reference)
         {
-            var user = _userRepository.GetByReference(reference);
+            using var unitOfWork = _mightyUnitOfWork.Create();
+
+            var user = unitOfWork.Users.GetByReference(reference);
             if (user == null)
                 return null;
+
+            unitOfWork.Commit();
 
             return new GetUserResponse
             {
@@ -46,13 +54,19 @@ namespace MightyRSS._Api.Auth
             var passwordSalt = Guid.NewGuid();
             var hashedPassword = _passwordHelper.HashPassword(request.Password, passwordSalt);
 
-            var user = _userRepository.Save(new UserRecord
+            using var unitOfWork = _mightyUnitOfWork.Create();
+
+            var user = new UserRecord
             {
                 Reference = userReference,
                 Username = request.Username,
                 Password = hashedPassword,
                 PasswordSalt = passwordSalt
-            });
+            };
+
+            unitOfWork.Users.Save(user);
+
+            unitOfWork.Commit();
 
             return new CreateUserResponse
             {
@@ -63,7 +77,9 @@ namespace MightyRSS._Api.Auth
 
         public LogInResponse LogIn(LogInRequest request)
         {
-            var user = _userRepository.GetByUsername(request.Username);
+            using var unitOfWork = _mightyUnitOfWork.Create();
+
+            var user = unitOfWork.Users.GetByUsername(request.Username);
             if (user == null)
                 return null;
             if (!_passwordHelper.IsMatch(user.Password, request.Password, user.PasswordSalt))
@@ -73,6 +89,8 @@ namespace MightyRSS._Api.Auth
             {
                 UserReference = user.Reference
             });
+
+            unitOfWork.Commit();
 
             return new LogInResponse
             {

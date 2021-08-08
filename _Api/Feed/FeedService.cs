@@ -36,7 +36,7 @@ namespace MightyRSS._Api.Feed
 
         public AddFeedSourceResponse AddFeedSource(UserRecord user, AddFeedSourceRequest request)
         {
-            var unitOfWork = _mightyUnitOfWorkFactory.Create();
+            using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
             var feedSource = unitOfWork.FeedSources.GetByRssUrl(request.Url);
             if (feedSource == null)
@@ -102,7 +102,7 @@ namespace MightyRSS._Api.Feed
 
         public GetFeedResponse GetFeed(UserRecord user)
         {
-            var unitOfWork = _mightyUnitOfWorkFactory.Create();
+            using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
             UpdateFeedSources(unitOfWork, user);
 
