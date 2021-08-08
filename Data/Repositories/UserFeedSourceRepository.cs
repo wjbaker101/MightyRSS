@@ -8,15 +8,15 @@ using WJBCommon.Lib.Data;
 
 namespace MightyRSS.Data.Repositories
 {
-    public interface IUserFeedSourceRepositoryV2 : IRepository<UserDataFeedSourceRecord>
+    public interface IUserFeedSourceRepository : IRepository<UserDataFeedSourceRecord>
     {
         UserDataFeedSourceRecord GetByUserAndFeedSourceReference(UserRecord user, Guid feedSourceReference);
         List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user);
     }
 
-    public sealed class UserFeedSourceRepositoryV2 : Repository<UserDataFeedSourceRecord>, IUserFeedSourceRepositoryV2
+    public sealed class UserFeedSourceRepository : Repository<UserDataFeedSourceRecord>, IUserFeedSourceRepository
     {
-        public UserFeedSourceRepositoryV2(ISession session) : base(session)
+        public UserFeedSourceRepository(ISession session) : base(session)
         {
         }
 

@@ -6,15 +6,15 @@ using WJBCommon.Lib.Data;
 
 namespace MightyRSS.Data.Repositories
 {
-    public interface IUserRepositoryV2 : IRepository<UserRecord>
+    public interface IUserRepository : IRepository<UserRecord>
     {
         UserRecord GetByReference(Guid reference);
         UserRecord GetByUsername(string username);
     }
 
-    public sealed class UserRepositoryV2 : Repository<UserRecord>, IUserRepositoryV2
+    public sealed class UserRepository : Repository<UserRecord>, IUserRepository
     {
-        public UserRepositoryV2(ISession session) : base(session)
+        public UserRepository(ISession session) : base(session)
         {
         }
 

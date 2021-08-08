@@ -6,15 +6,15 @@ using WJBCommon.Lib.Data;
 
 namespace MightyRSS.Data.Repositories
 {
-    public interface IFeedSourceRepositoryV2 : IRepository<FeedSourceRecord>
+    public interface IFeedSourceRepository : IRepository<FeedSourceRecord>
     {
         FeedSourceRecord GetByReference(Guid reference);
         FeedSourceRecord GetByRssUrl(string url);
     }
 
-    public sealed class FeedSourceRepositoryV2 : Repository<FeedSourceRecord>, IFeedSourceRepositoryV2
+    public sealed class FeedSourceRepository : Repository<FeedSourceRecord>, IFeedSourceRepository
     {
-        public FeedSourceRepositoryV2(ISession session) : base(session)
+        public FeedSourceRepository(ISession session) : base(session)
         {
         }
 
