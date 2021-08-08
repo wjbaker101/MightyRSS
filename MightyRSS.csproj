@@ -10,7 +10,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Npgsql" Version="5.0.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.0" />
-    <PackageReference Include="WJBCommon" Version="20210606.1451.3641" />
+    <PackageReference Include="WJBCommon" Version="20210808.2202.8102" />
   </ItemGroup>
 
 </Project>

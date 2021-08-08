@@ -43,9 +43,9 @@ namespace MightyRSS._Api.Feed
         [ServiceFilter(typeof(Authorisation))]
         public IActionResult DeleteFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference)
         {
-            _feedService.DeleteFeedSource(requestContext.User, reference);
+            var result = _feedService.DeleteFeedSource(requestContext.User, reference);
 
-            return NoContent();
+            return ApiResponseFromResult(result);
         }
     }
 }

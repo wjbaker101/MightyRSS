@@ -5,6 +5,8 @@ using MightyRSS.Data.UoW;
 using MightyRSS.Settings;
 using System;
 using System.Linq;
+using System.Net;
+using WJBCommon.Lib.Api.Type;
 using WJBCommon.Lib.Data;
 
 namespace MightyRSS._Api.Feed
@@ -13,7 +15,7 @@ namespace MightyRSS._Api.Feed
     {
         AddFeedSourceResponse AddFeedSource(UserRecord user, AddFeedSourceRequest request);
         GetFeedResponse GetFeed(UserRecord user);
-        void DeleteFeedSource(UserRecord user, Guid reference);
+        Result DeleteFeedSource(UserRecord user, Guid reference);
     }
 
     public sealed class FeedService: IFeedService
@@ -170,17 +172,19 @@ namespace MightyRSS._Api.Feed
             unitOfWork.FeedSources.Update(feedSource);
         }
 
-        public void DeleteFeedSource(UserRecord user, Guid reference)
+        public Result DeleteFeedSource(UserRecord user, Guid reference)
         {
             using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
             var userFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, reference);
             if (userFeedSource == null)
-                return;
+                return Result.Error("Sorry, unable to delete feed source as it could not be found.");
 
             unitOfWork.UserFeedSources.Delete(userFeedSource);
 
             unitOfWork.Commit();
+
+            return Result.Success(HttpStatusCode.NoContent);
         }
     }
 }
