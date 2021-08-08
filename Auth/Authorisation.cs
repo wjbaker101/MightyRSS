@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using MightyRSS.Data.Repositories;
+using MightyRSS.Data.UoW;
 using System;
+using WJBCommon.Lib.Data;
 
 namespace MightyRSS.Auth
 {
@@ -9,13 +10,16 @@ namespace MightyRSS.Auth
     public sealed class Authorisation : Attribute, IAuthorizationFilter
     {
         private readonly IJwtHelper _jwtHelper;
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWork;
         private readonly IRequestContext _requestContext;
 
-        public Authorisation(IJwtHelper jwtHelper, IUserRepository userRepository, IRequestContext requestContext)
+        public Authorisation(
+            IJwtHelper jwtHelper,
+            IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWork,
+            IRequestContext requestContext)
         {
             _jwtHelper = jwtHelper;
-            _userRepository = userRepository;
+            _mightyUnitOfWork = mightyUnitOfWork;
             _requestContext = requestContext;
         }
 
@@ -29,12 +33,16 @@ namespace MightyRSS.Auth
                 return;
             }
 
-            var user = _userRepository.GetByReference(authClaims.UserReference);
+            using var unitOfWork = _mightyUnitOfWork.Create();
+
+            var user = unitOfWork.Users.GetByReference(authClaims.UserReference);
             if (user == null)
             {
                 context.Result = new UnauthorizedResult();
                 return;
             }
+
+            unitOfWork.Commit();
 
             _requestContext.User = user;
         }
