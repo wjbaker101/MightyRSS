@@ -139,6 +139,8 @@ namespace MightyRSS._Api.Feed
         private void UpdateFeedSource(FeedSourceRecord feedSource)
         {
             var feed = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
+            if (feed == null)
+                return;
 
             _feedSourceRepository.Update(new FeedSourceRecord
             {

@@ -17,7 +17,19 @@ namespace MightyRSS._Api.Feed
             if (!Uri.TryCreate(url, UriKind.Absolute, out var sourceUrl))
                 return null;
 
-            var feed = FeedReader.ReadAsync(sourceUrl.ToString()).Result;
+            try
+            {
+                return Read(sourceUrl.ToString(), url, reference);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private FeedReaderResult Read(string sourceUrl, string url, Guid? reference)
+        {
+            var feed = FeedReader.ReadAsync(sourceUrl).Result;
 
             return new FeedReaderResult
             {
