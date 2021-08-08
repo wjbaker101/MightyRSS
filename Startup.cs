@@ -39,7 +39,7 @@ namespace MightyRSS
             services.AddSingleton<IJwtHelper, JwtHelper>();
 
             services.AddSingleton<IApiDatabase, ApiDatabase>();
-            services.AddSingleton<IMightyUnitOfWork, MightyUnitOfWork>();
+            services.AddSingleton<IUnitOfWorkFactory<IMightyUnitOfWork>, MightyUnitOfWorkFactory>();
             services.AddSingleton<IFeedSourceRepository, FeedSourceRepository>();
             services.AddSingleton<IUserDataFeedSourceRepository, UserDataFeedSourceRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();

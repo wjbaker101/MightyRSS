@@ -2,9 +2,11 @@
 using MightyRSS._Api.Feed.Types;
 using MightyRSS.Data.Records;
 using MightyRSS.Data.Repositories;
+using MightyRSS.Data.UoW;
 using MightyRSS.Settings;
 using System;
 using System.Linq;
+using WJBCommon.Lib.Data;
 
 namespace MightyRSS._Api.Feed
 {
@@ -17,6 +19,7 @@ namespace MightyRSS._Api.Feed
 
     public sealed class FeedService: IFeedService
     {
+        private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWorkFactory;
         private readonly IFeedSourceRepository _feedSourceRepository;
         private readonly IFeedReaderService _feedReaderService;
         private readonly IUserDataFeedSourceRepository _userDataFeedSourceRepository;
@@ -25,10 +28,12 @@ namespace MightyRSS._Api.Feed
 
         public FeedService(
             IOptions<FeedSettings> feedSettings,
+            IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWorkFactory,
             IFeedSourceRepository feedSourceRepository,
             IFeedReaderService feedReaderService,
             IUserDataFeedSourceRepository userDataFeedSourceRepository)
         {
+            _mightyUnitOfWorkFactory = mightyUnitOfWorkFactory;
             _feedSourceRepository = feedSourceRepository;
             _feedReaderService = feedReaderService;
             _userDataFeedSourceRepository = userDataFeedSourceRepository;
@@ -165,11 +170,15 @@ namespace MightyRSS._Api.Feed
 
         public void DeleteFeedSource(UserRecord user, Guid reference)
         {
-            var userDataFeedSource = _userDataFeedSourceRepository.GetByUserAndFeedSourceReference(user, reference);
-            if (userDataFeedSource == null)
+            using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+
+            var userFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, reference);
+            if (userFeedSource == null)
                 return;
 
-            _userDataFeedSourceRepository.Delete(userDataFeedSource);
+            unitOfWork.UserFeedSources.Delete(userFeedSource);
+
+            unitOfWork.Commit();
         }
     }
 }
