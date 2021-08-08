@@ -8,22 +8,22 @@ namespace MightyRSS.Data.Records
 {
     public class FeedSourceRecord : DatabaseRecord
     {
-        public virtual Guid Reference { get; init; }
-        public virtual string Title { get; init; }
-        public virtual string Description { get; init; }
-        public virtual string RssUrl { get; init; }
-        public virtual string WebsiteUrl { get; init; }
-        public virtual List<Article> Articles { get; init; }
-        public virtual DateTime ArticlesUpdatedAt { get; init; }
+        public virtual Guid Reference { get; set; }
+        public virtual string Title { get; set; }
+        public virtual string Description { get; set; }
+        public virtual string RssUrl { get; set; }
+        public virtual string WebsiteUrl { get; set; }
+        public virtual List<Article> Articles { get; set; }
+        public virtual DateTime ArticlesUpdatedAt { get; set; }
 
         public sealed class Article
         {
-            public string Url { get; init; }
-            public string Title { get; init; }
-            public string Summary { get; init; }
-            public string Author { get; init; }
-            public DateTime? PublishedAt { get; init; }
-            public string PublishedAtAsString { get; init; }
+            public string Url { get; set; }
+            public string Title { get; set; }
+            public string Summary { get; set; }
+            public string Author { get; set; }
+            public DateTime? PublishedAt { get; set; }
+            public string PublishedAtAsString { get; set; }
         }
     }
 

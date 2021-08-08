@@ -6,10 +6,10 @@ namespace MightyRSS.Data.Records
 {
     public class UserRecord : DatabaseRecord
     {
-        public virtual Guid Reference { get; init; }
-        public virtual string Username { get; init; }
-        public virtual string Password { get; init; }
-        public virtual Guid PasswordSalt { get; init; }
+        public virtual Guid Reference { get; set; }
+        public virtual string Username { get; set; }
+        public virtual string Password { get; set; }
+        public virtual Guid PasswordSalt { get; set; }
     }
 
     public sealed class UserRecordMap : ClassMap<UserRecord>

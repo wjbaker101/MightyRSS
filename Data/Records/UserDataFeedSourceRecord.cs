@@ -5,9 +5,9 @@ namespace MightyRSS.Data.Records
 {
     public class UserDataFeedSourceRecord : DatabaseRecord
     {
-        public virtual UserRecord User { get; init; }
-        public virtual FeedSourceRecord FeedSource { get; init; }
-        public virtual string Collection { get; init; }
+        public virtual UserRecord User { get; set; }
+        public virtual FeedSourceRecord FeedSource { get; set; }
+        public virtual string Collection { get; set; }
     }
 
     public sealed class UserDataFeedSourceRecordMap : ClassMap<UserDataFeedSourceRecord>
