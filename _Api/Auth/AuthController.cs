@@ -2,11 +2,12 @@
 using MightyRSS._Api.Auth.Types;
 using System;
 using System.Net;
+using WJBCommon.Lib.Api.Controller;
 
 namespace MightyRSS._Api.Auth
 {
     [Route("api/auth")]
-    public sealed class AuthController : Controller
+    public sealed class AuthController : ApiController
     {
         private readonly IAuthService _authService;
 

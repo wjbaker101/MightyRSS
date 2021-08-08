@@ -2,11 +2,12 @@
 using MightyRSS._Api.Feed.Types;
 using MightyRSS.Auth;
 using System;
+using WJBCommon.Lib.Api.Controller;
 
 namespace MightyRSS._Api.Feed
 {
     [Route("api/feed")]
-    public sealed class FeedController : Controller
+    public sealed class FeedController : ApiController
     {
         private readonly IFeedService _feedService;
 
