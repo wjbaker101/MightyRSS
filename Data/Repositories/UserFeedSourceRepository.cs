@@ -10,6 +10,7 @@ namespace MightyRSS.Data.Repositories
 {
     public interface IUserFeedSourceRepository : IRepository<UserDataFeedSourceRecord>
     {
+        List<UserDataFeedSourceRecord> GetAll();
         UserDataFeedSourceRecord GetByUserAndFeedSourceReference(UserRecord user, Guid feedSourceReference);
         List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user);
     }
@@ -18,6 +19,14 @@ namespace MightyRSS.Data.Repositories
     {
         public UserFeedSourceRepository(ISession session) : base(session)
         {
+        }
+
+        public List<UserDataFeedSourceRecord> GetAll()
+        {
+            return Session
+                .Query<UserDataFeedSourceRecord>()
+                .Fetch(x => x.FeedSource)
+                .ToList();
         }
 
         public UserDataFeedSourceRecord GetByUserAndFeedSourceReference(UserRecord user, Guid feedSourceReference)
