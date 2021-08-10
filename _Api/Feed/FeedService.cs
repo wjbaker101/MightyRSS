@@ -108,8 +108,6 @@ namespace MightyRSS._Api.Feed
         {
             using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
-            UpdateFeedSources(unitOfWork, user);
-
             var feedSources = unitOfWork.UserFeedSources.GetFeedSources(user);
 
             unitOfWork.Commit();
@@ -135,45 +133,6 @@ namespace MightyRSS._Api.Feed
                     })
                 })
             });
-        }
-
-        private void UpdateFeedSources(IMightyUnitOfWork unitOfWork, UserRecord user)
-        {
-            var feedSources = unitOfWork.UserFeedSources.GetFeedSources(user);
-
-            foreach (var feedSource in feedSources)
-            {
-                if (feedSource.FeedSource.ArticlesUpdatedAt + _feedRefreshPeriod > DateTime.Now)
-                    continue;
-
-                UpdateFeedSource(unitOfWork, feedSource.FeedSource);
-            }
-        }
-
-        private void UpdateFeedSource(IMightyUnitOfWork unitOfWork, FeedSourceRecord feedSource)
-        {
-            var feedDetailsResult = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
-            if (feedDetailsResult.IsFailure)
-                return;
-
-            var feedDetails = feedDetailsResult.Value;
-
-            feedSource.Title = feedDetails.Title;
-            feedSource.Description = feedDetails.Description;
-            feedSource.RssUrl = feedDetails.RssUrl;
-            feedSource.WebsiteUrl = feedDetails.WebsiteUrl;
-            feedSource.Articles = feedDetails.Articles.ConvertAll(x => new FeedSourceRecord.Article
-            {
-                Url = x.Url,
-                Title = x.Title,
-                Summary = x.Summary,
-                PublishedAt = x.PublishedAt,
-                PublishedAtAsString = x.PublishedAtAsString,
-                Author = x.Author
-            });
-            feedSource.ArticlesUpdatedAt = DateTime.Now.ToLocalTime();
-
-            unitOfWork.FeedSources.Update(feedSource);
         }
 
         public Result DeleteFeedSource(UserRecord user, Guid reference)
