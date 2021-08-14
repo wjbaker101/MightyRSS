@@ -14,6 +14,7 @@ namespace MightyRSS._Api.Feed
         Result<AddFeedSourceResponse> AddFeedSource(UserRecord user, AddFeedSourceRequest request);
         Result<GetFeedResponse> GetFeed(UserRecord user);
         Result DeleteFeedSource(UserRecord user, Guid reference);
+        Result AddFeedToCollection(UserRecord user, Guid feedReference, AddFeedToCollectionRequest request);
     }
 
     public sealed class FeedService: IFeedService
@@ -141,6 +142,23 @@ namespace MightyRSS._Api.Feed
             unitOfWork.Commit();
 
             return Result.Success(HttpStatusCode.NoContent);
+        }
+
+        public Result AddFeedToCollection(UserRecord user, Guid feedReference, AddFeedToCollectionRequest request)
+        {
+            var unitOfWork = _mightyUnitOfWorkFactory.Create();
+
+            var userFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
+            if (userFeedSource == null)
+                return Result.Error("The feed source with the given reference could not be found for you.", HttpStatusCode.NotFound);
+
+            userFeedSource.Collection = request.Collection;
+
+            unitOfWork.UserFeedSources.Update(userFeedSource);
+
+            unitOfWork.Commit();
+
+            return Result.Success();
         }
     }
 }

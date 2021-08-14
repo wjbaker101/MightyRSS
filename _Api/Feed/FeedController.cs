@@ -45,5 +45,18 @@ namespace MightyRSS._Api.Feed
 
             return ApiResponseFromResult(result);
         }
+
+        [HttpPost]
+        [Route("source/{reference:guid}/collection")]
+        [ServiceFilter(typeof(Authorisation))]
+        public IActionResult AddFeedToCollection(
+            [FromServices] IRequestContext requestContext,
+            [FromRoute] Guid reference,
+            [FromBody] AddFeedToCollectionRequest request)
+        {
+            var result = _feedService.AddFeedToCollection(requestContext.User, reference, request);
+
+            return ApiResponseFromResult(result);
+        }
     }
 }
