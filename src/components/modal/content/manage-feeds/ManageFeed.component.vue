@@ -56,13 +56,11 @@ export default defineComponent({
         padding: 0 0.5rem;
         cursor: pointer;
         border-radius: 0.25rem;
-        color: #888;
         opacity: 0;
         transition: all 0.2s;
 
         &:hover {
             background-color: rgba(0, 0, 0, 0.2);
-            color: #222;
         }
     }
 }
