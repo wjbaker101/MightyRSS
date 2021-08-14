@@ -14,8 +14,8 @@
         <section>
             <div :key="`collection-${collection}`" v-for="(feeds, collection) in feedsByCollection">
                 <h3>{{ collection === 'mighty-rss-no-collection' ? 'Not in a Collection' : collection }}</h3>
-                <div :key="feed.reference" v-for="feed in feeds">
-                    {{ feed.title }}
+                <div>
+                    <ManageFeedComponent :key="feed.reference" v-for="feed in feeds" :feed="feed" />
                 </div>
             </div>
         </section>
@@ -27,6 +27,7 @@ import { computed, defineComponent, ref } from 'vue';
 
 import SideModalContentComponent from '@/components/modal/SideModalContent.component.vue';
 import UserMessageComponent from '@/components/UserMessage.component.vue';
+import ManageFeedComponent from '@/components/modal/content/manage-feeds/ManageFeed.component.vue';
 
 import { feedService } from '@/service/Feed.service';
 import { UseRss } from '@/use/Rss.use';
@@ -40,6 +41,7 @@ export default defineComponent({
     components: {
         SideModalContentComponent,
         UserMessageComponent,
+        ManageFeedComponent,
     },
 
     setup(_, { emit }) {
