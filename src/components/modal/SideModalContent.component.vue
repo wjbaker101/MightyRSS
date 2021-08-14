@@ -48,17 +48,19 @@ export default defineComponent({
 
 <style lang="scss">
 .side-modal-content-component {
+    width: 720px;
+    max-width: 100%;
     padding: 1rem;
-    margin-left: 1rem;
+    margin: 1rem 0 1rem 1rem;
     position: fixed;
-    top: 50%;
+    top: 0;
     right: 0;
-    left: 0;
+    bottom: 0;
     opacity: 0;
     pointer-events: none;
     border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
-    transform: translate(100%, -50%);
+    transform: translateX(100%);
     box-shadow: 1px 3px 7px rgba(0, 0, 0, 0.5);
     animation: open 0.5s;
     z-index: 12;
@@ -67,7 +69,7 @@ export default defineComponent({
     &.is-open {
         opacity: 1;
         pointer-events: all;
-        transform: translate(0, -50%);
+        transform: translateX(0);
     }
 
     & > h2 {
