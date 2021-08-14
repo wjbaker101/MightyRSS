@@ -13,7 +13,7 @@
         </section>
         <section>
             <div :key="`collection-${collection}`" v-for="(feeds, collection) in feedsByCollection">
-                <h3>{{ collection === 'mighty-rss-no-collection' ? 'Feeds with no Collection' : collection }}</h3>
+                <h3>{{ collection === 'mighty-rss-no-collection' ? 'Not in a Collection' : collection }}</h3>
                 <div :key="feed.reference" v-for="feed in feeds">
                     {{ feed.title }}
                 </div>
