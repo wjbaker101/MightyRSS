@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using MightyRSS._Api.Feed.Types;
+﻿using MightyRSS._Api.Feed.Types;
 using MightyRSS.Data.Records;
 using MightyRSS.Data.UoW;
-using MightyRSS.Settings;
 using System;
 using System.Linq;
 using System.Net;
@@ -23,17 +21,12 @@ namespace MightyRSS._Api.Feed
         private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWorkFactory;
         private readonly IFeedReaderService _feedReaderService;
 
-        private readonly TimeSpan _feedRefreshPeriod;
-
         public FeedService(
-            IOptions<FeedSettings> feedSettings,
             IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWorkFactory,
             IFeedReaderService feedReaderService)
         {
             _mightyUnitOfWorkFactory = mightyUnitOfWorkFactory;
             _feedReaderService = feedReaderService;
-
-            _feedRefreshPeriod = TimeSpan.FromSeconds(feedSettings.Value.RefreshPeriod);
         }
 
         public Result<AddFeedSourceResponse> AddFeedSource(UserRecord user, AddFeedSourceRequest request)
