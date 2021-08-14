@@ -10,7 +10,7 @@
 import { defineComponent } from 'vue';
 
 import CogIcon from '@/components/icons/CogIcon.vue';
-import ManageFeedsModalComponent from '@/components/modal/content/ManageFeeds.modal.component.vue';
+import ManageFeedsModalComponent from '@/components/modal/content/manage-feeds/ManageFeeds.modal.component.vue';
 
 import { Event, eventService } from '@/service/Event.service';
 
