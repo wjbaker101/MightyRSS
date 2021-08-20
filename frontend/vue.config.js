@@ -1,5 +1,5 @@
 module.exports = {
-    outputDir: '../mighty-rss-api/wwwroot',
+    outputDir: '../backend/wwwroot',
 
     devServer: {
         proxy: {
