@@ -23,6 +23,8 @@ module.exports = {
     pwa: {
         name: 'MightyRSS',
         themeColor: '#be9342',
+        msTileColor: '#be9342',
+        appleMobileWebAppCapable: 'yes',
         manifestOptions: {
             'background_color': '#be9342',
         },
