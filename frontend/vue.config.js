@@ -11,4 +11,12 @@ module.exports = {
         },
         disableHostCheck: true,
     },
+
+    pwa: {
+        name: 'MightyRSS',
+        themeColor: '#be9342',
+        manifestOptions: {
+            'background_color': '#be9342',
+        },
+    },
 }
