@@ -1,9 +1,13 @@
 <template>
     <AsideComponent />
-    <div class="content-width">
-        <HeaderComponent />
-        <LoginComponent v-if="loginToken === null" @login="onLogin" />
-        <ArticlesFeedComponent v-else />
+    <div class="flex flex-columns">
+        <div class="aside-placeholder flex-auto"></div>
+        <div class="content-width">
+            <HeaderComponent />
+            <LoginComponent v-if="loginToken === null" @login="onLogin" />
+            <ArticlesFeedComponent v-else />
+        </div>
+        <div class="aside-placeholder flex-auto"></div>
     </div>
     <SideModalComponent />
     <OpenManageFeedsComponent />
@@ -61,4 +65,12 @@ export default defineComponent({
 
 <style lang="scss">
 @import './style/main.scss';
+
+.aside-placeholder {
+    width: 350px;
+
+    @media screen and (max-width: BREAKPOINT('mid')) {
+        display: none;
+    }
+}
 </style>

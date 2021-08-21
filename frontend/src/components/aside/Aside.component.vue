@@ -64,6 +64,12 @@ export default defineComponent({
     left: 0;
     bottom: 0;
 
+    @media screen and (max-width: BREAKPOINT('mid')) {
+        .flex {
+            display: none;
+        }
+    }
+
     h2 {
         margin: 0;
     }
