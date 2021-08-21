@@ -19,6 +19,9 @@
                 </div>
             </div>
         </section>
+        <section>
+            <button @click="onLogOut">Log Out</button>
+        </section>
     </SideModalContentComponent>
 </template>
 
@@ -31,6 +34,7 @@ import ManageFeedComponent from '@/components/modal/content/manage-feeds/ManageF
 
 import { feedService } from '@/service/Feed.service';
 import { UseRss } from '@/use/Rss.use';
+import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 
 import { FeedSource } from '@/types/FeedSource.type';
@@ -46,6 +50,7 @@ export default defineComponent({
 
     setup(_, { emit }) {
         const useRss = UseRss();
+        const useLoginToken = UseLoginToken();
         const useUserMessage = UseUserMessage();
 
         const feeds = useRss.feeds;
@@ -107,6 +112,11 @@ export default defineComponent({
                 useRss.articles.value = useRss.articles.value?.concat(addFeedResponse) ?? null;
 
                 newFeed.value = '';
+            },
+
+            onLogOut() {
+                useLoginToken.clear();
+                emit('close');
             },
         }
     },
