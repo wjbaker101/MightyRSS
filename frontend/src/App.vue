@@ -1,12 +1,7 @@
 <template>
     <AsideComponent />
     <div class="content-width">
-        <h1 class="text-centered">
-            <span class="mighty-rss-title" @click="loadFeed">
-                <img class="swords-branding" width="48" height="48" src="@/assets/swords.svg">
-                <span class="branding-text">Mighty RSS</span>
-            </span>
-        </h1>
+        <HeaderComponent />
         <LoginComponent v-if="loginToken === null" @login="onLogin" />
         <ArticlesFeedComponent v-else />
     </div>
@@ -18,6 +13,7 @@
 import { defineComponent, onMounted } from 'vue';
 
 import AsideComponent from '@/components/aside/Aside.component.vue';
+import HeaderComponent from '@/components/Header.component.vue';
 import ArticlesFeedComponent from '@/components/articles/ArticlesFeed.component.vue';
 import SideModalComponent from '@/components/modal/SideModal.component.vue';
 import LoginComponent from '@/components/login/Login.component.vue';
@@ -32,6 +28,7 @@ export default defineComponent({
 
     components: {
         AsideComponent,
+        HeaderComponent,
         ArticlesFeedComponent,
         SideModalComponent,
         LoginComponent,
@@ -64,18 +61,4 @@ export default defineComponent({
 
 <style lang="scss">
 @import './style/main.scss';
-
-.mighty-rss-title {
-    cursor: pointer;
-    user-select: none;
-}
-
-.swords-branding,
-.branding-text {
-    vertical-align: middle;
-}
-
-.swords-branding {
-    margin-right: 1rem;
-}
 </style>
