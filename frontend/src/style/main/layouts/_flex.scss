@@ -1,0 +1,27 @@
+.flex {
+    display: flex;
+
+    &.gap {
+        gap: 0.5rem;
+    }
+
+    &.gap-small {
+        gap: 0.25rem;
+    }
+
+    & > * {
+        flex: 1;
+    }
+
+    &.flex-vertical {
+        align-items: center;
+    }
+
+    &.flex-bottom {
+        align-items: baseline;
+    }
+
+    .flex-auto {
+        flex: 0 0 auto;
+    }
+}
