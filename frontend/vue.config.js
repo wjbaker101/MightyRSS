@@ -27,6 +27,7 @@ module.exports = {
         appleMobileWebAppCapable: 'yes',
         manifestOptions: {
             'background_color': '#be9342',
+            orientation: 'portrait',
         },
     },
 }
