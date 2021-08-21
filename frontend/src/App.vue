@@ -77,6 +77,10 @@ body {
     color: #222;
 }
 
+#app {
+    padding: 0 1rem;
+}
+
 *,
 *::before,
 *::after {
