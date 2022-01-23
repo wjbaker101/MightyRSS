@@ -5,9 +5,6 @@
                 {{ source.title }}
             </a>
         </div>
-        <div class="delete-feed flex-auto" @click="onDelete">
-            &times;
-        </div>
     </div>
 </template>
 
@@ -57,12 +54,6 @@ export default defineComponent({
 
     &:last-child {
         padding-bottom: 0;
-    }
-
-    &:hover {
-        .delete-feed {
-            opacity: 1;
-        }
     }
 
     .delete-feed {
