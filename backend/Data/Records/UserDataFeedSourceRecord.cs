@@ -8,6 +8,7 @@ public class UserDataFeedSourceRecord
     public virtual UserRecord User { get; set; }
     public virtual FeedSourceRecord FeedSource { get; set; }
     public virtual string Collection { get; set; }
+    public virtual string Title { get; set; }
 }
 
 public sealed class UserDataFeedSourceRecordMap : ClassMap<UserDataFeedSourceRecord>
@@ -20,5 +21,6 @@ public sealed class UserDataFeedSourceRecordMap : ClassMap<UserDataFeedSourceRec
         References(x => x.User, "user_id");
         References(x => x.FeedSource, "feed_source_id");
         Map(x => x.Collection, "collection");
+        Map(x => x.Title, "title");
     }
 }
