@@ -1,19 +1,21 @@
-﻿using WJBCommon.Lib.Data;
+﻿namespace MightyRSS.Data.UoW;
 
-namespace MightyRSS.Data.UoW
+public interface IUnitOfWorkFactory<out T>
 {
-    public sealed class MightyUnitOfWorkFactory : IUnitOfWorkFactory<IMightyUnitOfWork>
+    T Create();
+}
+
+public sealed class MightyUnitOfWorkFactory : IUnitOfWorkFactory<IMightyUnitOfWork>
+{
+    private readonly IApiDatabase _database;
+
+    public MightyUnitOfWorkFactory(IApiDatabase database)
     {
-        private readonly IApiDatabase _database;
+        _database = database;
+    }
 
-        public MightyUnitOfWorkFactory(IApiDatabase database)
-        {
-            _database = database;
-        }
-
-        public IMightyUnitOfWork Create()
-        {
-            return new MightyUnitOfWork(_database);
-        }
+    public IMightyUnitOfWork Create()
+    {
+        return new MightyUnitOfWork(_database);
     }
 }

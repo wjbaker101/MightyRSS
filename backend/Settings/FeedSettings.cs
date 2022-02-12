@@ -1,7 +1,6 @@
-﻿namespace MightyRSS.Settings
+﻿namespace MightyRSS.Settings;
+
+public sealed class FeedSettings
 {
-    public sealed class FeedSettings
-    {
-        public int RefreshPeriod { get; init; }
-    }
+    public int RefreshPeriod { get; init; }
 }

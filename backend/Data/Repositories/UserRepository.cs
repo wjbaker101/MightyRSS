@@ -1,35 +1,34 @@
 ﻿using MightyRSS.Data.Records;
+using MightyRSS.Data.UoW;
 using NHibernate;
 using System;
 using System.Linq;
-using WJBCommon.Lib.Data;
 
-namespace MightyRSS.Data.Repositories
+namespace MightyRSS.Data.Repositories;
+
+public interface IUserRepository : IRepository<UserRecord>
 {
-    public interface IUserRepository : IRepository<UserRecord>
+    UserRecord GetByReference(Guid reference);
+    UserRecord GetByUsername(string username);
+}
+
+public sealed class UserRepository : Repository<UserRecord>, IUserRepository
+{
+    public UserRepository(ISession session) : base(session)
     {
-        UserRecord GetByReference(Guid reference);
-        UserRecord GetByUsername(string username);
     }
 
-    public sealed class UserRepository : Repository<UserRecord>, IUserRepository
+    public UserRecord GetByReference(Guid reference)
     {
-        public UserRepository(ISession session) : base(session)
-        {
-        }
+        return Session
+            .Query<UserRecord>()
+            .SingleOrDefault(x => x.Reference == reference);
+    }
 
-        public UserRecord GetByReference(Guid reference)
-        {
-            return Session
-                .Query<UserRecord>()
-                .SingleOrDefault(x => x.Reference == reference);
-        }
-
-        public UserRecord GetByUsername(string username)
-        {
-            return Session
-                .Query<UserRecord>()
-                .SingleOrDefault(x => x.Username.ToLower() == username.ToLower());
-        }
+    public UserRecord GetByUsername(string username)
+    {
+        return Session
+            .Query<UserRecord>()
+            .SingleOrDefault(x => x.Username.ToLower() == username.ToLower());
     }
 }

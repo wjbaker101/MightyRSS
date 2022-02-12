@@ -9,69 +9,67 @@ using MightyRSS.Auth;
 using MightyRSS.Data;
 using MightyRSS.Data.UoW;
 using MightyRSS.Settings;
-using WJBCommon.Lib.Data;
 
-namespace MightyRSS
+namespace MightyRSS;
+
+public sealed class Startup
 {
-    public sealed class Startup
+    public IConfiguration Configuration { get; }
+
+    public Startup(IWebHostEnvironment env)
     {
-        public IConfiguration Configuration { get; }
+        var appSettingsBaseFileName = env.IsDevelopment() ? "appsettings.Development" : "appsettings";
 
-        public Startup(IWebHostEnvironment env)
+        Configuration = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile($"{appSettingsBaseFileName}.json")
+            .AddJsonFile($"{appSettingsBaseFileName}.Secrets.json")
+            .Build();
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.Configure<DatabaseSettings>(Configuration.GetSection("Database"));
+        services.Configure<FeedSettings>(Configuration.GetSection("Feed"));
+
+        services.AddScoped<IRequestContext, RequestContext>();
+        services.AddScoped<Authorisation>();
+        services.AddSingleton<IJwtHelper, JwtHelper>();
+
+        services.AddSingleton<IApiDatabase, ApiDatabase>();
+        services.AddSingleton<IUnitOfWorkFactory<IMightyUnitOfWork>, MightyUnitOfWorkFactory>();
+
+        services.AddSingleton<IPasswordHelper, PasswordHelper>();
+        services.AddSingleton<IAuthService, AuthService>();
+
+        services.AddSingleton<IFeedReaderService, FeedReaderService>();
+        services.AddSingleton<IFeedService, FeedService>();
+
+        services.AddControllers();
+
+        services.AddSpaStaticFiles(configuration =>
         {
-            var appSettingsBaseFileName = env.IsDevelopment() ? "appsettings.Development" : "appsettings";
+            configuration.RootPath = "wwwroot";
+        });
+    }
 
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile($"{appSettingsBaseFileName}.json")
-                .AddJsonFile($"{appSettingsBaseFileName}.Secrets.json")
-                .Build();
-        }
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+            app.UseDeveloperExceptionPage();
 
-        public void ConfigureServices(IServiceCollection services)
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseAuthorization();
+
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
+
+        app.UseSpa(spa =>
         {
-            services.Configure<DatabaseSettings>(Configuration.GetSection("Database"));
-            services.Configure<FeedSettings>(Configuration.GetSection("Feed"));
+            spa.Options.SourcePath = "wwwroot";
+        });
 
-            services.AddScoped<IRequestContext, RequestContext>();
-            services.AddScoped<Authorisation>();
-            services.AddSingleton<IJwtHelper, JwtHelper>();
-
-            services.AddSingleton<IApiDatabase, ApiDatabase>();
-            services.AddSingleton<IUnitOfWorkFactory<IMightyUnitOfWork>, MightyUnitOfWorkFactory>();
-
-            services.AddSingleton<IPasswordHelper, PasswordHelper>();
-            services.AddSingleton<IAuthService, AuthService>();
-
-            services.AddSingleton<IFeedReaderService, FeedReaderService>();
-            services.AddSingleton<IFeedService, FeedService>();
-
-            services.AddControllers();
-
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "wwwroot";
-            });
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseAuthorization();
-
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "wwwroot";
-            });
-
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
-        }
+        app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 }

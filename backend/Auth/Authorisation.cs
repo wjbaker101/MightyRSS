@@ -2,49 +2,47 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using MightyRSS.Data.UoW;
 using System;
-using WJBCommon.Lib.Data;
 
-namespace MightyRSS.Auth
+namespace MightyRSS.Auth;
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public sealed class Authorisation : Attribute, IAuthorizationFilter
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public sealed class Authorisation : Attribute, IAuthorizationFilter
+    private readonly IJwtHelper _jwtHelper;
+    private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWork;
+    private readonly IRequestContext _requestContext;
+
+    public Authorisation(
+        IJwtHelper jwtHelper,
+        IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWork,
+        IRequestContext requestContext)
     {
-        private readonly IJwtHelper _jwtHelper;
-        private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWork;
-        private readonly IRequestContext _requestContext;
+        _jwtHelper = jwtHelper;
+        _mightyUnitOfWork = mightyUnitOfWork;
+        _requestContext = requestContext;
+    }
 
-        public Authorisation(
-            IJwtHelper jwtHelper,
-            IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWork,
-            IRequestContext requestContext)
+    public void OnAuthorization(AuthorizationFilterContext context)
+    {
+        var authHeader = context.HttpContext.Request.Headers["Authorisation"];
+
+        if (!_jwtHelper.TryParseToken(authHeader, out var authClaims))
         {
-            _jwtHelper = jwtHelper;
-            _mightyUnitOfWork = mightyUnitOfWork;
-            _requestContext = requestContext;
+            context.Result = new UnauthorizedResult();
+            return;
         }
 
-        public void OnAuthorization(AuthorizationFilterContext context)
+        using var unitOfWork = _mightyUnitOfWork.Create();
+
+        var user = unitOfWork.Users.GetByReference(authClaims.UserReference);
+        if (user == null)
         {
-            var authHeader = context.HttpContext.Request.Headers["Authorisation"];
-
-            if (!_jwtHelper.TryParseToken(authHeader, out var authClaims))
-            {
-                context.Result = new UnauthorizedResult();
-                return;
-            }
-
-            using var unitOfWork = _mightyUnitOfWork.Create();
-
-            var user = unitOfWork.Users.GetByReference(authClaims.UserReference);
-            if (user == null)
-            {
-                context.Result = new UnauthorizedResult();
-                return;
-            }
-
-            unitOfWork.Commit();
-
-            _requestContext.User = user;
+            context.Result = new UnauthorizedResult();
+            return;
         }
+
+        unitOfWork.Commit();
+
+        _requestContext.User = user;
     }
 }

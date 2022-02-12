@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace MightyRSS._Api.Feed.Types
+namespace MightyRSS._Api.Feed.Types;
+
+public sealed class AddFeedToCollectionRequest
 {
-    public sealed class AddFeedToCollectionRequest
-    {
-        public string Collection { get; init; }
-    }
+    public string Collection { get; init; }
 }

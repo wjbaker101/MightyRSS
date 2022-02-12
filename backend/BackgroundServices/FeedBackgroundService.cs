@@ -7,84 +7,82 @@ using MightyRSS.Settings;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WJBCommon.Lib.Data;
 
-namespace MightyRSS.BackgroundServices
+namespace MightyRSS.BackgroundServices;
+
+public sealed class FeedBackgroundService : BackgroundService
 {
-    public sealed class FeedBackgroundService : BackgroundService
+    private readonly FeedSettings _feedSettings;
+    private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWorkFactory;
+    private readonly IFeedReaderService _feedReaderService;
+
+    public FeedBackgroundService(
+        IOptions<FeedSettings> feedSettings,
+        IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWorkFactory,
+        IFeedReaderService feedReaderService)
     {
-        private readonly FeedSettings _feedSettings;
-        private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWorkFactory;
-        private readonly IFeedReaderService _feedReaderService;
+        _mightyUnitOfWorkFactory = mightyUnitOfWorkFactory;
+        _feedReaderService = feedReaderService;
+        _feedSettings = feedSettings.Value;
+    }
 
-        public FeedBackgroundService(
-            IOptions<FeedSettings> feedSettings,
-            IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWorkFactory,
-            IFeedReaderService feedReaderService)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
         {
-            _mightyUnitOfWorkFactory = mightyUnitOfWorkFactory;
-            _feedReaderService = feedReaderService;
-            _feedSettings = feedSettings.Value;
-        }
+            Handle();
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+            await Task.Delay(TimeSpan.FromSeconds(_feedSettings.RefreshPeriod), stoppingToken);
+        }
+    }
+
+    private void Handle()
+    {
+        try
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                Handle();
-
-                await Task.Delay(TimeSpan.FromSeconds(_feedSettings.RefreshPeriod), stoppingToken);
-            }
+            UpdateFeeds();
         }
-
-        private void Handle()
+        catch
         {
-            try
-            {
-                UpdateFeeds();
-            }
-            catch
-            {
-                // ignored
-            }
+            // ignored
         }
+    }
 
-        private void UpdateFeeds()
+    private void UpdateFeeds()
+    {
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+
+        var userFeedSources = unitOfWork.UserFeedSources.GetAll();
+
+        foreach (var feedSource in userFeedSources)
+            UpdateFeedSource(unitOfWork, feedSource.FeedSource);
+
+        unitOfWork.Commit();
+    }
+
+    private void UpdateFeedSource(IMightyUnitOfWork unitOfWork, FeedSourceRecord feedSource)
+    {
+        var feedDetailsResult = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
+        if (feedDetailsResult.IsFailure)
+            return;
+
+        var feedDetails = feedDetailsResult.Value;
+
+        feedSource.Title = feedDetails.Title;
+        feedSource.Description = feedDetails.Description;
+        feedSource.RssUrl = feedDetails.RssUrl;
+        feedSource.WebsiteUrl = feedDetails.WebsiteUrl;
+        feedSource.Articles = feedDetails.Articles.ConvertAll(x => new FeedSourceRecord.Article
         {
-            using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+            Url = x.Url,
+            Title = x.Title,
+            Summary = x.Summary,
+            PublishedAt = x.PublishedAt,
+            PublishedAtAsString = x.PublishedAtAsString,
+            Author = x.Author
+        });
+        feedSource.ArticlesUpdatedAt = DateTime.Now.ToLocalTime();
 
-            var userFeedSources = unitOfWork.UserFeedSources.GetAll();
-
-            foreach (var feedSource in userFeedSources)
-                UpdateFeedSource(unitOfWork, feedSource.FeedSource);
-
-            unitOfWork.Commit();
-        }
-
-        private void UpdateFeedSource(IMightyUnitOfWork unitOfWork, FeedSourceRecord feedSource)
-        {
-            var feedDetailsResult = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
-            if (feedDetailsResult.IsFailure)
-                return;
-
-            var feedDetails = feedDetailsResult.Value;
-
-            feedSource.Title = feedDetails.Title;
-            feedSource.Description = feedDetails.Description;
-            feedSource.RssUrl = feedDetails.RssUrl;
-            feedSource.WebsiteUrl = feedDetails.WebsiteUrl;
-            feedSource.Articles = feedDetails.Articles.ConvertAll(x => new FeedSourceRecord.Article
-            {
-                Url = x.Url,
-                Title = x.Title,
-                Summary = x.Summary,
-                PublishedAt = x.PublishedAt,
-                PublishedAtAsString = x.PublishedAtAsString,
-                Author = x.Author
-            });
-            feedSource.ArticlesUpdatedAt = DateTime.Now.ToLocalTime();
-
-            unitOfWork.FeedSources.Update(feedSource);
-        }
+        unitOfWork.FeedSources.Update(feedSource);
     }
 }

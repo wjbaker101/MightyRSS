@@ -7,69 +7,68 @@ using System.Security.Claims;
 using System.Text;
 using MightyRSS.Auth.Types;
 
-namespace MightyRSS.Auth
+namespace MightyRSS.Auth;
+
+public interface IJwtHelper
 {
-    public interface IJwtHelper
+    string CreateToken(AuthClaims authClaims);
+    bool TryParseToken(string jwtToken, out AuthClaims authClaims);
+}
+
+public sealed class JwtHelper : IJwtHelper
+{
+    private readonly SecurityKey _securityKey;
+
+    public JwtHelper()
     {
-        string CreateToken(AuthClaims authClaims);
-        bool TryParseToken(string jwtToken, out AuthClaims authClaims);
+        _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("d41a1136-3314-42e3-a56f-881ad059e20b"));
     }
 
-    public sealed class JwtHelper : IJwtHelper
+    public string CreateToken(AuthClaims authClaims)
     {
-        private readonly SecurityKey _securityKey;
-
-        public JwtHelper()
+        var descriptor = new SecurityTokenDescriptor
         {
-            _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("d41a1136-3314-42e3-a56f-881ad059e20b"));
-        }
-
-        public string CreateToken(AuthClaims authClaims)
-        {
-            var descriptor = new SecurityTokenDescriptor
+            Subject = new ClaimsIdentity(new List<Claim>
             {
-                Subject = new ClaimsIdentity(new List<Claim>
-                {
-                    new(AuthClaimType.UserReference, authClaims.UserReference.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256Signature)
+                new(AuthClaimType.UserReference, authClaims.UserReference.ToString())
+            }),
+            Expires = DateTime.UtcNow.AddDays(7),
+            SigningCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var handler = new JwtSecurityTokenHandler();
+        var securityToken = handler.CreateToken(descriptor);
+
+        return handler.WriteToken(securityToken);
+    }
+
+    public bool TryParseToken(string jwtToken, out AuthClaims authClaims)
+    {
+        authClaims = null;
+
+        var parameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            IssuerSigningKey = _securityKey
+        };
+
+        try
+        {
+            var principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, parameters, out _);
+
+            var userReference = principal.Claims.Single(x => x.Type == AuthClaimType.UserReference).Value;
+
+            authClaims = new AuthClaims
+            {
+                UserReference = Guid.Parse(userReference)
             };
 
-            var handler = new JwtSecurityTokenHandler();
-            var securityToken = handler.CreateToken(descriptor);
-
-            return handler.WriteToken(securityToken);
+            return true;
         }
-
-        public bool TryParseToken(string jwtToken, out AuthClaims authClaims)
+        catch (Exception)
         {
-            authClaims = null;
-
-            var parameters = new TokenValidationParameters
-            {
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                IssuerSigningKey = _securityKey
-            };
-
-            try
-            {
-                var principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, parameters, out _);
-
-                var userReference = principal.Claims.Single(x => x.Type == AuthClaimType.UserReference).Value;
-
-                authClaims = new AuthClaims
-                {
-                    UserReference = Guid.Parse(userReference)
-                };
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return false;
         }
     }
 }
