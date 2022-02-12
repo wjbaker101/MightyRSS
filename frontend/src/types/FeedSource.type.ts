@@ -5,4 +5,5 @@ export interface FeedSource {
     rssUrl: string;
     websiteUrl: string;
     collection: string | null;
+    titleAlias: string | null;
 }

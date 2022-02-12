@@ -27,6 +27,7 @@ class FeedService {
                     rssUrl: source.rssUrl,
                     websiteUrl: source.websiteUrl,
                     collection: source.collection,
+                    titleAlias: source.titleAlias,
                 },
             })))
             .flat();
@@ -51,6 +52,7 @@ class FeedService {
                 rssUrl: addFeedSourceResponse.rssUrl,
                 websiteUrl: addFeedSourceResponse.websiteUrl,
                 collection: addFeedSourceResponse.collection,
+                titleAlias: null,
             },
         }));
     }

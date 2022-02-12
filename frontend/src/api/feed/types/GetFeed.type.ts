@@ -8,7 +8,8 @@ export interface FeedSource {
     description: string;
     rssUrl: string;
     websiteUrl: string;
-    collection: string;
+    collection: string | null;
+    titleAlias: string | null;
     articles: Array<FeedArticle>;
 }
 

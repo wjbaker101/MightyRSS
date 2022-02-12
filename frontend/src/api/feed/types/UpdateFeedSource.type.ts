@@ -1,4 +1,4 @@
 export interface UpdateFeedSourceRequest {
-    title: string;
-    collection: string;
+    title: string | null;
+    collection: string | null;
 }

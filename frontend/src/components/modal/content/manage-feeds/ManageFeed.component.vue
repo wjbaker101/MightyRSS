@@ -1,9 +1,7 @@
 <template>
     <div class="manage-feed-component flex flex-vertical">
         <div>
-            <a :href="feed.websiteUrl" rel="noopener noreferrer" target="_blank">
-                {{ feed.title }}
-            </a>
+            <HiddenTextBoxComponent v-model="displayTitle" @finish="onTitleFinish" />
             <br>
             <small>{{ feed.rssUrl }}</small>
         </div>
@@ -14,12 +12,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
+
+import HiddenTextBoxComponent from '@/components/HiddenTextBox.component.vue';
 
 import { FeedSource } from '@/types/FeedSource.type';
+import { feedApi } from '@/api/feed/Feed.api';
 
 export default defineComponent({
     name: 'ManageFeedComponent',
+
+    components: {
+        HiddenTextBoxComponent,
+    },
 
     props: {
         feed: {
@@ -28,8 +33,26 @@ export default defineComponent({
         },
     },
 
-    setup() {
-        return {}
+    setup(props) {
+        const displayTitle = computed<string>({
+            get() {
+                return props.feed.titleAlias ?? props.feed.title;
+            },
+            set(title) {
+                props.feed.titleAlias = title;
+            },
+        });
+
+        return {
+            displayTitle,
+
+            async onTitleFinish(newTitle: string) {
+                await feedApi.updateFeedSource(props.feed.reference, {
+                    collection: props.feed.collection,
+                    title: newTitle,
+                });
+            },
+        }
     },
 });
 </script>
