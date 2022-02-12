@@ -49,12 +49,19 @@ public sealed class FeedController : ApiController
     [HttpPost]
     [Route("source/{reference:guid}/collection")]
     [ServiceFilter(typeof(Authorisation))]
-    public IActionResult AddFeedToCollection(
-        [FromServices] IRequestContext requestContext,
-        [FromRoute] Guid reference,
-        [FromBody] AddFeedToCollectionRequest request)
+    public IActionResult AddFeedToCollection([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] AddFeedToCollectionRequest request)
     {
         var result = _feedService.AddFeedToCollection(requestContext.User, reference, request);
+
+        return ToApiResponse(result);
+    }
+
+    [HttpPut]
+    [Route("source/{reference:guid}")]
+    [ServiceFilter(typeof(Authorisation))] 
+    public IActionResult UpdateFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] UpdateFeedSourceRequest request)
+    {
+        var result = _feedService.UpdateFeedSource(requestContext.User, reference, request);
 
         return ToApiResponse(result);
     }

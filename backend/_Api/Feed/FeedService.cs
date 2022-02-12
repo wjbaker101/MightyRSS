@@ -14,6 +14,7 @@ public interface IFeedService
     Result<GetFeedResponse> GetFeed(UserRecord user);
     Result DeleteFeedSource(UserRecord user, Guid reference);
     Result AddFeedToCollection(UserRecord user, Guid feedReference, AddFeedToCollectionRequest request);
+    Result UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request);
 }
 
 public sealed class FeedService: IFeedService
@@ -70,7 +71,8 @@ public sealed class FeedService: IFeedService
         {
             User = user,
             FeedSource = feedSource,
-            Collection = null
+            Collection = null,
+            Title = feedSource.Title
         };
 
         unitOfWork.UserFeedSources.Save(userFeedSource);
@@ -158,5 +160,23 @@ public sealed class FeedService: IFeedService
         unitOfWork.Commit();
 
         return Result.Success();
+    }
+
+    public Result UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request)
+    {
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+
+        var userFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
+        if (userFeedSource == null)
+            return Result.Failure("The feed source with the given reference could not be found for you.", HttpStatusCode.NotFound);
+
+        userFeedSource.Collection = request.Collection;
+        userFeedSource.Title = request.Title;
+
+        unitOfWork.UserFeedSources.Update(userFeedSource);
+
+        unitOfWork.Commit();
+
+        return Result.Success(HttpStatusCode.Created);
     }
 }
