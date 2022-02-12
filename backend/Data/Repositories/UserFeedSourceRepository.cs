@@ -1,17 +1,19 @@
 ﻿using MightyRSS.Data.Records;
 using MightyRSS.Data.UoW;
+using NetApiLibs.Type;
 using NHibernate;
 using NHibernate.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace MightyRSS.Data.Repositories;
 
 public interface IUserFeedSourceRepository : IRepository<UserDataFeedSourceRecord>
 {
     List<UserDataFeedSourceRecord> GetAll();
-    UserDataFeedSourceRecord GetByUserAndFeedSourceReference(UserRecord user, Guid feedSourceReference);
+    Result<UserDataFeedSourceRecord> GetByUserAndFeedSourceReference(UserRecord user, Guid reference);
     List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user);
 }
 
@@ -29,11 +31,16 @@ public sealed class UserFeedSourceRepository : Repository<UserDataFeedSourceReco
             .ToList();
     }
 
-    public UserDataFeedSourceRecord GetByUserAndFeedSourceReference(UserRecord user, Guid feedSourceReference)
+    public Result<UserDataFeedSourceRecord> GetByUserAndFeedSourceReference(UserRecord user, Guid reference)
     {
-        return Session
+        var userFeedSource = Session
             .Query<UserDataFeedSourceRecord>()
-            .SingleOrDefault(x => x.User == user && x.FeedSource.Reference == feedSourceReference);
+            .SingleOrDefault(x => x.User == user && x.FeedSource.Reference == reference);
+
+        if (userFeedSource == null)
+            return Result<UserDataFeedSourceRecord>.Failure("The feed source could not be found in your feed.", HttpStatusCode.NotFound);
+
+        return userFeedSource;
     }
 
     public List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user)

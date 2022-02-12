@@ -134,9 +134,9 @@ public sealed class FeedService: IFeedService
     {
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
-        var userFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, reference);
-        if (userFeedSource == null)
-            return Result.Failure("Sorry, unable to delete feed source as it could not be found.", HttpStatusCode.NotFound);
+        var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, reference);
+        if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
+            return Result.FromFailure(userFeedSourceResult);
 
         unitOfWork.UserFeedSources.Delete(userFeedSource);
 
@@ -149,9 +149,9 @@ public sealed class FeedService: IFeedService
     {
         var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
-        var userFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
-        if (userFeedSource == null)
-            return Result.Failure("The feed source with the given reference could not be found for you.", HttpStatusCode.NotFound);
+        var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
+        if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
+            return Result.FromFailure(userFeedSourceResult);
 
         userFeedSource.Collection = request.Collection;
 
@@ -166,9 +166,9 @@ public sealed class FeedService: IFeedService
     {
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
-        var userFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
-        if (userFeedSource == null)
-            return Result.Failure("The feed source with the given reference could not be found for you.", HttpStatusCode.NotFound);
+        var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
+        if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
+            return Result.FromFailure(userFeedSourceResult);
 
         userFeedSource.Collection = request.Collection;
         userFeedSource.Title = request.Title;
