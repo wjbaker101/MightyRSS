@@ -16,6 +16,7 @@ public sealed class GetFeedResponse
         public string WebsiteUrl { get; init; }
         public string Collection { get; init; }
         public List<FeedArticle> Articles { get; init; }
+        public string TitleAlias { get; init; }
     }
 
     public sealed class FeedArticle

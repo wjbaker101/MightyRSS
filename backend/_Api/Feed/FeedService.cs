@@ -117,6 +117,7 @@ public sealed class FeedService: IFeedService
                 RssUrl = source.FeedSource.RssUrl,
                 WebsiteUrl = source.FeedSource.WebsiteUrl,
                 Collection = source.Collection,
+                TitleAlias = source.Title,
                 Articles = source.FeedSource.Articles.ConvertAll(article => new GetFeedResponse.FeedArticle
                 {
                     Url = article.Url,
