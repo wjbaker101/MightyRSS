@@ -65,6 +65,8 @@ export default defineComponent({
 .hidden-textbox-component {
     width: 100%;
     padding: 0;
+    background: none;
+    box-shadow: none;
     background-color: transparent;
     border: 0;
     font: inherit;
@@ -78,7 +80,7 @@ export default defineComponent({
     &:focus {
         outline: none;
         border-color: #555;
-        background-color: transparentize(#444, 0.6);
+        background-color: transparentize(#eee, 0.6);
         transition: background-color 0.4s, border-color 1s;
     }
 }
