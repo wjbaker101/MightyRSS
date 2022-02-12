@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-import { responseHelper } from '@/api/ResponseHelper';
+import { ApiResultResponse, responseHelper } from '@/api/ResponseHelper';
 import { UseLoginToken } from '@/use/LoginToken.use';
 
 import { AddFeedSourceRequest, AddFeedSourceResponse } from '@/api/feed/types/AddFeedSource.type';
@@ -26,9 +26,9 @@ class FeedApi {
 
     async getFeed(): Promise<GetFeedResponse | Error> {
         try {
-            const response = await this.api.get<GetFeedResponse>('');
+            const response = await this.api.get<ApiResultResponse<GetFeedResponse>>('');
 
-            return response.data;
+            return response.data.result;
         }
         catch (error) {
             return responseHelper.handleError(error);
@@ -37,9 +37,9 @@ class FeedApi {
 
     async addFeedSource(request: AddFeedSourceRequest): Promise<AddFeedSourceResponse | Error> {
         try {
-            const response = await this.api.post<AddFeedSourceResponse>('', request);
+            const response = await this.api.post<ApiResultResponse<AddFeedSourceResponse>>('', request);
 
-            return response.data;
+            return response.data.result;
         }
         catch (error) {
             return responseHelper.handleError(error);
@@ -48,7 +48,7 @@ class FeedApi {
 
     async deleteFeedSource(reference: string): Promise<void | Error> {
         try {
-            await this.api.delete<AddFeedSourceResponse>(`/source/${reference}`);
+            await this.api.delete<ApiResultResponse<AddFeedSourceResponse>>(`/source/${reference}`);
         }
         catch (error) {
             return responseHelper.handleError(error);

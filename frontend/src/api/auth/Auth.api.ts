@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-import { responseHelper } from '@/api/ResponseHelper';
+import { ApiResultResponse, responseHelper } from '@/api/ResponseHelper';
 
 import { LogInRequest, LogInResponse } from '@/api/auth/types/LogIn.type';
 
@@ -16,9 +16,9 @@ class AuthApi {
 
     async logIn(request: LogInRequest): Promise<LogInResponse | Error> {
         try {
-            const response = await this.api.post<LogInResponse>('/login', request);
+            const response = await this.api.post<ApiResultResponse<LogInResponse>>('/login', request);
 
-            return response.data;
+            return response.data.result;
         }
         catch (error) {
             return responseHelper.handleError(error);

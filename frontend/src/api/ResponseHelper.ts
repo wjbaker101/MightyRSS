@@ -6,6 +6,11 @@ const useLoginToken = UseLoginToken();
 
 const UNAUTHORISED = 401;
 
+export interface ApiResultResponse<T> {
+    result: T;
+    responseAt: string;
+}
+
 class ResponseHelper {
 
     handleError(error: any): Error {
