@@ -5,6 +5,7 @@ import { UseLoginToken } from '@/use/LoginToken.use';
 
 import { AddFeedSourceRequest, AddFeedSourceResponse } from '@/api/feed/types/AddFeedSource.type';
 import { GetFeedResponse } from '@/api/feed/types/GetFeed.type';
+import { UpdateFeedSourceRequest } from '@/api/feed/types/UpdateFeedSource.type';
 
 class FeedApi {
 
@@ -38,6 +39,17 @@ class FeedApi {
     async addFeedSource(request: AddFeedSourceRequest): Promise<AddFeedSourceResponse | Error> {
         try {
             const response = await this.api.post<ApiResultResponse<AddFeedSourceResponse>>('', request);
+
+            return response.data.result;
+        }
+        catch (error) {
+            return responseHelper.handleError(error);
+        }
+    }
+
+    async updateFeedSource(reference: string, request: UpdateFeedSourceRequest): Promise<AddFeedSourceResponse | Error> {
+        try {
+            const response = await this.api.put<ApiResultResponse<AddFeedSourceResponse>>(`/source/${reference}`, request);
 
             return response.data.result;
         }
