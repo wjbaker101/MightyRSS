@@ -61,7 +61,7 @@ public sealed class FeedService: IFeedService
                         Author = x.Author
                     })
                     .ToList(),
-                ArticlesUpdatedAt = DateTime.Now.ToLocalTime()
+                ArticlesUpdatedAt = DateTime.UtcNow
             };
 
             unitOfWork.FeedSources.Save(feedSource);

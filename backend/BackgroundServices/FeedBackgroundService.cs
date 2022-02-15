@@ -81,7 +81,7 @@ public sealed class FeedBackgroundService : BackgroundService
             PublishedAtAsString = x.PublishedAtAsString,
             Author = x.Author
         });
-        feedSource.ArticlesUpdatedAt = DateTime.Now.ToLocalTime();
+        feedSource.ArticlesUpdatedAt = DateTime.UtcNow;
 
         unitOfWork.FeedSources.Update(feedSource);
     }
