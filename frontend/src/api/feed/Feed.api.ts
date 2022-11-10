@@ -19,7 +19,9 @@ class FeedApi {
         });
 
         this.api.interceptors.request.use((config: AxiosRequestConfig) => {
-            config.headers['Authorisation'] = useLoginToken.loginToken.value;
+            config.headers = {
+                'Authorisation': useLoginToken.loginToken.value,
+            };
 
             return config;
         });

@@ -1,10 +1,14 @@
-module.exports = {
+const { defineConfig } = require('@vue/cli-service');
+
+module.exports = defineConfig({
     outputDir: '../backend/wwwroot',
 
     css: {
         loaderOptions: {
             sass: {
-                prependData: `@import 'src/style/global-inject.scss';`,
+                sassOptions: {
+                    additionalData: `@import 'src/style/global-inject.scss';`,
+                }
             },
         },
     },
@@ -17,7 +21,6 @@ module.exports = {
                 changeOrigin: true,
             }
         },
-        disableHostCheck: true,
     },
 
     pwa: {
@@ -30,4 +33,4 @@ module.exports = {
             orientation: 'portrait',
         },
     },
-}
+});

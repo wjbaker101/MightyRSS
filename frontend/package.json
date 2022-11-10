@@ -3,25 +3,26 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "co:login": "aws codeartifact login --tool npm --repository npm-libs --domain wjb --domain-owner 144953083930",
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build"
     },
     "dependencies": {
-        "axios": "^0.21.1",
-        "core-js": "^3.16.0",
-        "dayjs": "^1.10.6",
+        "axios": "^1.1.3",
+        "core-js": "^3.26.0",
+        "dayjs": "^1.11.6",
         "immortal-db": "^1.1.0",
         "register-service-worker": "^1.7.1",
-        "vue": "^3.1.5"
+        "vue": "^3.2.44"
     },
     "devDependencies": {
-        "@vue/cli-plugin-babel": "^4.5.13",
-        "@vue/cli-plugin-pwa": "~4.5.0",
-        "@vue/cli-plugin-typescript": "^4.5.13",
-        "@vue/cli-service": "^4.5.13",
-        "@vue/compiler-sfc": "^3.1.5",
-        "sass": "^1.36.0",
-        "sass-loader": "^8.0.2",
-        "typescript": "^4.1.6"
+        "@vue/cli-plugin-babel": "^5.0.8",
+        "@vue/cli-plugin-pwa": "~5.0.8",
+        "@vue/cli-plugin-typescript": "^5.0.8",
+        "@vue/cli-service": "^5.0.8",
+        "@vue/compiler-sfc": "^3.2.44",
+        "sass": "^1.56.1",
+        "sass-loader": "^13.2.0",
+        "typescript": "^4.8.4"
     }
 }
