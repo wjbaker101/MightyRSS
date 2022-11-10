@@ -11,49 +11,34 @@
     </a>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
-
-import { UseRss } from '@/use/Rss.use';
 
 import { FeedArticle } from '@/types/FeedArticle.type';
 
-export default defineComponent({
-    name: 'ArticleComponent',
+const props = defineProps<{
+    article: FeedArticle;
+}>();
 
-    props: {
-        article: {
-            type: Object as PropType<FeedArticle>,
-            required: true,
-        },
-    },
+const getFormattedDate = function (date: Dayjs): string {
+    const now = dayjs();
 
-    setup(props) {
-        const getFormattedDate = function (date: Dayjs) {
-            const now = dayjs();
+    if (date.month() === now.month() && date.year() === now.year())
+        return date.format('dddd Do');
 
-            if (date.month() === now.month() && date.year() === now.year())
-                return date.format('dddd Do');
+    if (date.year() !== now.year())
+        return date.format('dddd Do MMMM YYYY');
 
-            if (date.year() !== now.year())
-                return date.format('dddd Do MMMM YYYY');
+    return date.format('dddd Do MMMM');
+};
 
-            return date.format('dddd Do MMMM');
-        };
+const displayPublishedAt = computed<string>(() => {
+    const date = props.article.publishedAt;
 
-        const displayPublishedAt = computed<string>(() => {
-            const date = props.article.publishedAt;
+    const formattedDate = getFormattedDate(date);
 
-            const formattedDate = getFormattedDate(date);
-
-            return `${formattedDate} (${date.fromNow()})`;
-        });
-
-        return {
-            displayPublishedAt,
-        }
-    },
+    return `${formattedDate} (${date.fromNow()})`;
 });
 </script>
 

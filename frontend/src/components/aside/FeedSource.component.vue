@@ -8,40 +8,27 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-
+<script setup lang="ts">
 import { feedService } from '@/service/Feed.service';
 import { UseRss } from '@/use/Rss.use';
 
 import { FeedSource } from '@/types/FeedSource.type';
 
-export default defineComponent({
-    name: 'FeedSourceComponent',
+const props = defineProps<{
+    source: FeedSource;
+}>();
 
-    props: {
-        source: {
-            type: Object as PropType<FeedSource>,
-            required: true,
-        },
-    },
+const useRss = UseRss();
 
-    setup(props) {
-        const useRss = UseRss();
+const onDelete = async function (): Promise<void> {
+    await feedService.deleteFeedSource(props.source.reference);
 
-        return {
-            async onDelete() {
-                await feedService.deleteFeedSource(props.source.reference);
+    if (useRss.articles.value === null)
+        return;
 
-                if (useRss.articles.value === null)
-                    return;
-
-                useRss.articles.value = useRss.articles.value
-                    .filter(x => x.source.reference !== props.source.reference);
-            },
-        }
-    },
-});
+    useRss.articles.value = useRss.articles.value
+        .filter(x => x.source.reference !== props.source.reference);
+};
 </script>
 
 <style lang="scss">

@@ -11,50 +11,33 @@
     </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 
 import HiddenTextBoxComponent from '@/components/HiddenTextBox.component.vue';
 
 import { FeedSource } from '@/types/FeedSource.type';
 import { feedApi } from '@/api/feed/Feed.api';
 
-export default defineComponent({
-    name: 'ManageFeedComponent',
+const props = defineProps<{
+    feed: FeedSource;
+}>();
 
-    components: {
-        HiddenTextBoxComponent,
+const displayTitle = computed<string>({
+    get() {
+        return props.feed.titleAlias ?? props.feed.title;
     },
-
-    props: {
-        feed: {
-            type: Object as PropType<FeedSource>,
-            required: true,
-        },
-    },
-
-    setup(props) {
-        const displayTitle = computed<string>({
-            get() {
-                return props.feed.titleAlias ?? props.feed.title;
-            },
-            set(title) {
-                props.feed.titleAlias = title;
-            },
-        });
-
-        return {
-            displayTitle,
-
-            async onTitleFinish(newTitle: string) {
-                await feedApi.updateFeedSource(props.feed.reference, {
-                    collection: props.feed.collection,
-                    title: newTitle,
-                });
-            },
-        }
+    set(title) {
+        props.feed.titleAlias = title;
     },
 });
+
+const onTitleFinish = async function (newTitle: string): Promise<void> {
+    await feedApi.updateFeedSource(props.feed.reference, {
+        collection: props.feed.collection,
+        title: newTitle,
+    });
+};
 </script>
 
 <style lang="scss">

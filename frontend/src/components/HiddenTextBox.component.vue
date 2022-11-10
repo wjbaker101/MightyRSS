@@ -12,53 +12,37 @@
     >
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 
-export default defineComponent({
-    name: 'HiddenTextBoxComponent',
+const props = defineProps<{
+    modelValue: string;
+}>();
 
-    props: {
-        modelValue: {
-            type: String,
-            required: true,
-        },
-    },
+const emit = defineEmits(['update:modelValue', 'finish']);
 
-    emits: [
-        'update:modelValue',
-        'finish',
-    ],
+const element = ref<HTMLInputElement | null>(null);
 
-    setup(props, context) {
-        const element = ref<HTMLInputElement | null>(null);
+const oldValue = ref<string>(props.modelValue);
+const newValue = ref<string>(props.modelValue);
 
-        const oldValue = ref<string>(props.modelValue);
-        const newValue = ref<string>(props.modelValue);
+const oninput = function(event: InputEvent): void {
+    if (event.target === null || element.value === null)
+        return;
 
-        return {
-            element,
+    emit('update:modelValue', element.value.value);
 
-            oninput(event: InputEvent) {
-                if (event.target === null || element.value === null)
-                    return;
+    newValue.value = element.value.value;
+};
 
-                context.emit('update:modelValue', element.value.value);
+const onBlur = function (): void {
+    if (oldValue.value === newValue.value)
+        return;
 
-                newValue.value = element.value.value;
-            },
+    emit('finish', newValue.value);
 
-            onBlur() {
-                if (oldValue.value === newValue.value)
-                    return;
-
-                context.emit('finish', newValue.value);
-
-                oldValue.value = newValue.value;
-            },
-        }
-    },
-});
+    oldValue.value = newValue.value;
+};
 </script>
 
 <style lang="scss">

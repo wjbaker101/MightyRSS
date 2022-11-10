@@ -25,7 +25,7 @@
     </SideModalContentComponent>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 
 import SideModalContentComponent from '@/components/modal/SideModalContent.component.vue';
@@ -39,88 +39,72 @@ import { UseUserMessage } from '@/use/UserMessage.use';
 
 import { FeedSource } from '@/types/FeedSource.type';
 
-export default defineComponent({
-    name: 'ManageFeedsModalComponent',
+const emit = defineEmits(['close']);
 
-    components: {
-        SideModalContentComponent,
-        UserMessageComponent,
-        ManageFeedComponent,
-    },
+const useRss = UseRss();
+const useLoginToken = UseLoginToken();
+const useUserMessage = UseUserMessage();
 
-    setup(_, { emit }) {
-        const useRss = UseRss();
-        const useLoginToken = UseLoginToken();
-        const useUserMessage = UseUserMessage();
+const feeds = useRss.feeds;
 
-        const feeds = useRss.feeds;
+const newFeed = ref<string>('');
+const newFeedUserMessage = ref<string>('');
 
-        const newFeed = ref<string>('');
-        const newFeedUserMessage = ref<string>('');
+const feedsByCollection = computed<Record<string, Array<FeedSource>> | null>(() => {
+    if (feeds.value === null)
+        return null;
 
-        const feedsByCollection = computed<Record<string, Array<FeedSource>> | null>(() => {
-            if (feeds.value === null)
-                return null;
+    const value: Record<string, Array<FeedSource>> = {};
 
-            const value: Record<string, Array<FeedSource>> = {};
+    const feedsForDisplay = feeds.value
+        .sort((a, b) => a.title.localeCompare(b.title));
 
-            const feedsForDisplay = feeds.value
-                .sort((a, b) => a.title.localeCompare(b.title));
+    for (const feed of feedsForDisplay) {
+        const collection = feed.collection ?? 'mighty-rss-no-collection';
 
-            for (const feed of feedsForDisplay) {
-                const collection = feed.collection ?? 'mighty-rss-no-collection';
-
-                if (collection in value) {
-                    value[collection].push(feed);
-                    continue;
-                }
-
-                value[collection] = [ feed ];
-            }
-
-            return value;
-        });
-
-        const sharedAction = function () {
-            emit('close');
-        };
-
-        return {
-            newFeed,
-            newFeedUserMessage,
-            feedsByCollection,
-
-            onClose() {
-                sharedAction();
-            },
-
-            async onAddFeed() {
-                if (newFeed.value.length < 5) {
-                    useUserMessage.set(newFeedUserMessage, 'Please enter a valid feed URL and try again.');
-                    return;
-                }
-
-                const addFeedResponse = await feedService.addFeedSource({
-                    url: newFeed.value,
-                });
-
-                if (addFeedResponse instanceof Error) {
-                    useUserMessage.set(newFeedUserMessage, addFeedResponse.message);
-                    return;
-                }
-
-                useRss.articles.value = useRss.articles.value?.concat(addFeedResponse) ?? null;
-
-                newFeed.value = '';
-            },
-
-            onLogOut() {
-                useLoginToken.clear();
-                emit('close');
-            },
+        if (collection in value) {
+            value[collection].push(feed);
+            continue;
         }
-    },
+
+        value[collection] = [ feed ];
+    }
+
+    return value;
 });
+
+const sharedAction = function (): void {
+    emit('close');
+};
+
+const onClose = function (): void {
+    sharedAction();
+};
+
+const onAddFeed = async function (): Promise<void> {
+    if (newFeed.value.length < 5) {
+        useUserMessage.set(newFeedUserMessage, 'Please enter a valid feed URL and try again.');
+        return;
+    }
+
+    const addFeedResponse = await feedService.addFeedSource({
+        url: newFeed.value,
+    });
+
+    if (addFeedResponse instanceof Error) {
+        useUserMessage.set(newFeedUserMessage, addFeedResponse.message);
+        return;
+    }
+
+    useRss.articles.value = useRss.articles.value?.concat(addFeedResponse) ?? null;
+
+    newFeed.value = '';
+};
+
+const onLogOut = function (): void {
+    useLoginToken.clear();
+    emit('close');
+};
 </script>
 
 <style lang="scss">

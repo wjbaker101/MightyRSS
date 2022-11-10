@@ -18,8 +18,8 @@
     </aside>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 
 import FeedSourceComponent from '@/components/aside/FeedSource.component.vue';
 
@@ -27,30 +27,16 @@ import { UseRss } from '@/use/Rss.use';
 
 import { FeedSource } from '@/types/FeedSource.type';
 
-export default defineComponent({
-    name: 'AsideComponent',
+const useRss = UseRss();
 
-    components: {
-        FeedSourceComponent,
-    },
+const feeds = useRss.feeds;
 
-    setup() {
-        const useRss = UseRss();
+const feedsForDisplay = computed<Array<FeedSource> | null>(() => {
+    if (feeds.value === null)
+        return null;
 
-        const feeds = useRss.feeds;
-
-        const feedsForDisplay = computed<Array<FeedSource> | null>(() => {
-            if (feeds.value === null)
-                return null;
-
-            return feeds.value
-                .sort((a, b) => a.title.localeCompare(b.title));
-        });
-
-        return {
-            feedsForDisplay,
-        }
-    },
+    return feeds.value
+        .sort((a, b) => a.title.localeCompare(b.title));
 });
 </script>
 

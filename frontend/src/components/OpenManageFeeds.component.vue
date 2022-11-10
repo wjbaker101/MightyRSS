@@ -6,31 +6,17 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
+<script setup lang="ts">
 import CogIcon from '@/components/icons/CogIcon.vue';
 import ManageFeedsModalComponent from '@/components/modal/content/manage-feeds/ManageFeeds.modal.component.vue';
 
 import { Event, eventService } from '@/service/Event.service';
 
-export default defineComponent({
-    name: 'OpenManageFeedsComponent',
-
-    components: {
-        CogIcon,
-    },
-
-    setup() {
-        return {
-            onClick() {
-                eventService.publish(Event.OPEN_MODAL, {
-                    content: ManageFeedsModalComponent,
-                });
-            },
-        }
-    },
-});
+const onClick = function (): void {
+    eventService.publish(Event.OPEN_MODAL, {
+        content: ManageFeedsModalComponent,
+    });
+};
 </script>
 
 <style lang="scss">

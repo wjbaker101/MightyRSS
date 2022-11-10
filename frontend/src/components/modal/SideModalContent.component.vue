@@ -11,38 +11,22 @@
     <ModalBackdropComponent :isVisible="isOpen" @close="$emit('close')" />
 </template>
 
-<script lang="ts">
-import { defineComponent, watch } from 'vue';
+<script setup lang="ts">
+import { watch } from 'vue';
 
 import ModalBackdropComponent from '@/components/modal/ModalBackdrop.component.vue';
 
-export default defineComponent({
-    name: 'SideModalContentComponent',
+const props = defineProps<{
+    isOpen: boolean;
+}>();
 
-    components: {
-        ModalBackdropComponent,
-    },
+const emit = defineEmits(['open', 'close']);
 
-    emits: [
-        'open',
-        'close',
-    ],
+watch(() => props.isOpen, () => {
+    if (!props.isOpen)
+        return;
 
-    props: {
-        isOpen: {
-            type: Boolean,
-            required: true,
-        },
-    },
-
-    setup(props, { emit }) {
-        watch(() => props.isOpen, () => {
-            if (!props.isOpen)
-                return;
-
-            emit('open');
-        });
-    },
+    emit('open');
 });
 </script>
 

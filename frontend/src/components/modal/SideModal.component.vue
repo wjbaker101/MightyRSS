@@ -8,49 +8,37 @@
     />
 </template>
 
-<script lang="ts">
-import { DefineComponent, defineComponent, onMounted, onUnmounted, ref, shallowRef } from 'vue';
+<script setup lang="ts">
+import { DefineComponent, onMounted, onUnmounted, ref, shallowRef } from 'vue';
 
 import { Event, eventService } from '@/service/Event.service';
 
-export default defineComponent({
-    name: 'SideModalComponent',
+const isOpen = ref<boolean>(false);
+const content = shallowRef<DefineComponent | null>(null);
+const contentProps = ref<any>();
 
-    setup() {
-        const isOpen = ref<boolean>(false);
-        const content = shallowRef<DefineComponent | null>(null);
-        const contentProps = ref<any>();
+const onOpenModal = function (details: any): void {
+    contentProps.value = details.props;
+    content.value = details.content;
+    isOpen.value = true;
+};
 
-        const onOpenModal = function (details: any) {
-            contentProps.value = details.props;
-            content.value = details.content;
-            isOpen.value = true;
-        };
+const onCloseModal = function (): void {
+    isOpen.value = false;
+};
 
-        const onCloseModal = function () {
-            isOpen.value = false;
-        };
+const onClose = function (): void {
+    eventService.publish(Event.CLOSE_MODAL);
+};
 
-        onMounted(() => {
-            eventService.subscribe(Event.OPEN_MODAL, onOpenModal);
-            eventService.subscribe(Event.CLOSE_MODAL, onCloseModal);
-        });
+onMounted(() => {
+    eventService.subscribe(Event.OPEN_MODAL, onOpenModal);
+    eventService.subscribe(Event.CLOSE_MODAL, onCloseModal);
+});
 
-        onUnmounted(() => {
-            eventService.unsubscribe(Event.OPEN_MODAL, onOpenModal);
-            eventService.unsubscribe(Event.CLOSE_MODAL, onCloseModal);
-        });
-
-        return {
-            isOpen,
-            content,
-            contentProps,
-
-            onClose() {
-                eventService.publish(Event.CLOSE_MODAL);
-            },
-        }
-    },
+onUnmounted(() => {
+    eventService.unsubscribe(Event.OPEN_MODAL, onOpenModal);
+    eventService.unsubscribe(Event.CLOSE_MODAL, onCloseModal);
 });
 </script>
 

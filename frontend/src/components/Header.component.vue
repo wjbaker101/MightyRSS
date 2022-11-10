@@ -9,24 +9,14 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
+<script setup lang="ts">
 import { UseRss } from '@/use/Rss.use';
 
-export default defineComponent({
-    name: 'HeaderComponent',
+const useRss = UseRss();
 
-    setup() {
-        const useRss = UseRss();
-
-        return {
-            async refreshFeed() {
-                await useRss.load();
-            },
-        }
-    },
-});
+const refreshFeed = async function (): Promise<void> {
+    await useRss.load();
+};
 </script>
 
 <style lang="scss">

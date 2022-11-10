@@ -28,8 +28,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 
 import UserMessageComponent from '@/components/UserMessage.component.vue';
 
@@ -38,87 +38,67 @@ import { cacheService, CacheKey } from '@/service/Cache.service';
 import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 
-export default defineComponent({
-    name: 'LoginComponent',
+const emit = defineEmits(['login']);
 
-    components: {
-        UserMessageComponent,
-    },
+const useLoginToken = UseLoginToken();
+const useUserMessage = UseUserMessage();
 
-    emits: [
-        'login',
-    ],
+const loginToken = useLoginToken.loginToken;
 
-    setup(_, { emit }) {
-        const useLoginToken = UseLoginToken();
-        const useUserMessage = UseUserMessage();
+const usernameInput = ref<HTMLInputElement | null>(null);
+const passwordInput = ref<HTMLInputElement | null>(null);
 
-        const loginToken = useLoginToken.loginToken;
+const username = ref<string>('');
+const password = ref<string>('');
+const userMessage = ref<string>('');
 
-        const usernameInput = ref<HTMLInputElement | null>(null);
-        const passwordInput = ref<HTMLInputElement | null>(null);
+const logIn = async function (): Promise<void> {
+    if (username.value.length < 3) {
+        useUserMessage.set(userMessage, 'Username is not valid, please try again.');
+        return;
+    }
+    if (password.value.length < 3) {
+        useUserMessage.set(userMessage, 'Password is not valid, please try again.');
+        return;
+    }
 
-        const username = ref<string>('');
-        const password = ref<string>('');
-        const userMessage = ref<string>('');
+    const logInResponse = await authService.logIn({
+        username: username.value,
+        password: password.value,
+    });
+    if (logInResponse instanceof Error) {
+        useUserMessage.set(userMessage, logInResponse.message);
+        return;
+    }
 
-        const logIn = async function () {
-            if (username.value.length < 3) {
-                useUserMessage.set(userMessage, 'Username is not valid, please try again.');
-                return;
-            }
-            if (password.value.length < 3) {
-                useUserMessage.set(userMessage, 'Password is not valid, please try again.');
-                return;
-            }
+    loginToken.value = logInResponse;
 
-            const logInResponse = await authService.logIn({
-                username: username.value,
-                password: password.value,
-            });
-            if (logInResponse instanceof Error) {
-                useUserMessage.set(userMessage, logInResponse.message);
-                return;
-            }
+    await cacheService.set(CacheKey.LOGIN_TOKEN, loginToken.value);
 
-            loginToken.value = logInResponse;
+    emit('login');
+};
 
-            await cacheService.set(CacheKey.LOGIN_TOKEN, loginToken.value);
+const onLogIn = async function (): Promise<void> {
+    await logIn();
+};
 
-            emit('login');
-        };
+const onUsernameEnter = async function (): Promise<void> {
+    if (password.value.length === 0) {
+        passwordInput.value?.focus();
+        return;
+    }
 
-        return {
-            usernameInput,
-            passwordInput,
-            username,
-            password,
-            userMessage,
+    await logIn();
+};
 
-            async onLogIn() {
-                await logIn();
-            },
+const onPasswordEnter = async function (): Promise<void> {
+    if (username.value.length === 0) {
+        usernameInput.value?.focus();
+        return;
+    }
 
-            async onUsernameEnter() {
-                if (password.value.length === 0) {
-                    passwordInput.value?.focus();
-                    return;
-                }
-
-                await logIn();
-            },
-
-            async onPasswordEnter() {
-                if (username.value.length === 0) {
-                    usernameInput.value?.focus();
-                    return;
-                }
-
-                await logIn();
-            },
-        }
-    },
-});
+    await logIn();
+};
 </script>
 
 <style lang="scss">

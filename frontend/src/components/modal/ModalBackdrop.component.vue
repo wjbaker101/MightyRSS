@@ -8,33 +8,20 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+defineProps<{
+    isVisible: boolean;
+    zIndex?: {
+        type: Number,
+        default: 11,
+    };
+}>();
 
-export default defineComponent({
-    name: 'ModalBackdropComponent',
+const emit = defineEmits(['close']);
 
-    emits: [
-        'close',
-    ],
-
-    props: {
-        isVisible: Boolean,
-        zIndex: {
-            type: Number,
-            required: false,
-            default: 11,
-        },
-    },
-
-    setup(_, { emit }) {
-        return {
-            onClose() {
-                emit('close');
-            },
-        }
-    },
-});
+const onClose = function (): void {
+    emit('close');
+};
 </script>
 
 <style lang="scss">

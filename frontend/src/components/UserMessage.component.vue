@@ -4,19 +4,10 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-    name: 'UserMessageComponent',
-
-    props: {
-        message: {
-            type: String,
-            required: true,
-        },
-    },
-});
+<script setup lang="ts">
+defineProps<{
+    message: string;
+}>();
 </script>
 
 <style lang="scss">

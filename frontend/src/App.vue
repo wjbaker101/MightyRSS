@@ -13,8 +13,8 @@
     <OpenManageFeedsComponent />
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted } from 'vue';
+<script setup lang="ts">
+import { onMounted } from 'vue';
 
 import AsideComponent from '@/components/aside/Aside.component.vue';
 import HeaderComponent from '@/components/Header.component.vue';
@@ -27,39 +27,18 @@ import { authService } from '@/service/Auth.service';
 import { UseRss } from '@/use/Rss.use';
 import { UseLoginToken } from '@/use/LoginToken.use';
 
-export default defineComponent({
-    name: 'App',
+const useRss = UseRss();
+const useLoginToken = UseLoginToken();
 
-    components: {
-        AsideComponent,
-        HeaderComponent,
-        ArticlesFeedComponent,
-        SideModalComponent,
-        LoginComponent,
-        OpenManageFeedsComponent,
-    },
+const loginToken = useLoginToken.loginToken;
 
-    setup() {
-        const useRss = UseRss();
-        const useLoginToken = UseLoginToken();
+const onLogin = async function (): Promise<void> {
+    await useRss.load();
+};
 
-        const loadFeed = useRss.load;
-        const loginToken = useLoginToken.loginToken;
-
-        onMounted(async () => {
-            await authService.loadCache();
-            await loadFeed();
-        });
-
-        return {
-            loadFeed,
-            loginToken,
-
-            async onLogin() {
-                await loadFeed();
-            },
-        }
-    },
+onMounted(async () => {
+    await authService.loadCache();
+    await useRss.load();
 });
 </script>
 
