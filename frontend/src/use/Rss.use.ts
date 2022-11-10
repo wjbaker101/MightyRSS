@@ -2,11 +2,11 @@ import { ref, watch } from 'vue';
 
 import { feedService } from '@/service/Feed.service';
 
-import { FeedArticle } from '@/types/FeedArticle.type';
-import { FeedSource } from '@/types/FeedSource.type';
+import { IFeedArticle } from '@/model/FeedArticle.type';
+import { IFeedSource } from '@/model/FeedSource.type';
 
-const articles = ref<Array<FeedArticle> | null>(null);
-const feeds = ref<Array<FeedSource> | null>(null);
+const articles = ref<Array<IFeedArticle> | null>(null);
+const feeds = ref<Array<IFeedSource> | null>(null);
 
 watch(articles, (value) => {
     if (value === null) {
@@ -14,7 +14,7 @@ watch(articles, (value) => {
         return;
     }
 
-    const uniqueFeeds = new Map<string, FeedSource>();
+    const uniqueFeeds = new Map<string, IFeedSource>();
     for (const article of value) {
         const feed = article.source;
 

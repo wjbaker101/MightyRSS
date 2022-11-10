@@ -44,7 +44,7 @@ import ArticleComponent from '@/components/Article.component.vue';
 
 import { UseRss } from '@/use/Rss.use';
 
-import { FeedArticle } from '@/types/FeedArticle.type';
+import { FeedArticle } from '@/model/FeedArticle.type';
 
 const useRss = UseRss();
 

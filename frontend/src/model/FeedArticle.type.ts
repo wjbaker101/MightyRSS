@@ -1,10 +1,10 @@
 import { Dayjs } from 'dayjs';
 
-import { FeedSource } from '@/types/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.type';
 
-export interface FeedArticle {
+export interface IFeedArticle {
     url: string;
-    source: FeedSource;
+    source: IFeedSource;
     title: string;
     summary: string;
     author: string;

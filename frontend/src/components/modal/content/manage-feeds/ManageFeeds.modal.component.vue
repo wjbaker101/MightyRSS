@@ -37,7 +37,7 @@ import { UseRss } from '@/use/Rss.use';
 import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 
-import { FeedSource } from '@/types/FeedSource.type';
+import { FeedSource } from '@/model/FeedSource.type';
 
 const emit = defineEmits(['close']);
 

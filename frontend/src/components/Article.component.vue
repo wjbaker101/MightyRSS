@@ -15,7 +15,7 @@
 import { computed } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
 
-import { FeedArticle } from '@/types/FeedArticle.type';
+import { FeedArticle } from '@/model/FeedArticle.type';
 
 const props = defineProps<{
     article: FeedArticle;

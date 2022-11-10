@@ -25,7 +25,7 @@ import FeedSourceComponent from '@/components/aside/FeedSource.component.vue';
 
 import { UseRss } from '@/use/Rss.use';
 
-import { FeedSource } from '@/types/FeedSource.type';
+import { FeedSource } from '@/model/FeedSource.type';
 
 const useRss = UseRss();
 

@@ -16,7 +16,7 @@ import { computed } from 'vue';
 
 import HiddenTextBoxComponent from '@/components/HiddenTextBox.component.vue';
 
-import { FeedSource } from '@/types/FeedSource.type';
+import { FeedSource } from '@/model/FeedSource.type';
 import { feedApi } from '@/api/feed/Feed.api';
 
 const props = defineProps<{

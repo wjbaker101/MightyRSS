@@ -1,4 +1,4 @@
-export interface FeedSource {
+export interface IFeedSource {
     reference: string;
     title: string;
     description: string;

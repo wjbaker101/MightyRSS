@@ -3,11 +3,11 @@ import dayjs from 'dayjs';
 import { feedApi } from '@/api/feed/Feed.api';
 
 import { AddFeedSourceRequest } from '@/api/feed/types/AddFeedSource.type';
-import { FeedArticle } from '@/types/FeedArticle.type';
+import { IFeedArticle } from '@/model/FeedArticle.type';
 
 class FeedService {
 
-    async getFeed(): Promise<Array<FeedArticle> | Error> {
+    async getFeed(): Promise<Array<IFeedArticle> | Error> {
         const getFeedResponse = await feedApi.getFeed();
 
         if (getFeedResponse instanceof Error)
@@ -33,7 +33,7 @@ class FeedService {
             .flat();
     }
 
-    async addFeedSource(request: AddFeedSourceRequest): Promise<Array<FeedArticle> | Error> {
+    async addFeedSource(request: AddFeedSourceRequest): Promise<Array<IFeedArticle> | Error> {
         const addFeedSourceResponse = await feedApi.addFeedSource(request);
 
         if (addFeedSourceResponse instanceof Error)
