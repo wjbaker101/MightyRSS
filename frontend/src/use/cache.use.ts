@@ -1,5 +1,5 @@
 export const Keys: Record<string, string> = {
-
+    LOGIN_TOKEN: 'LOGIN_TOKEN',
 };
 
 interface ICacheItem<T> {

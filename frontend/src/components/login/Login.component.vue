@@ -37,8 +37,11 @@ import { authService } from '@/service/Auth.service';
 import { cacheService, CacheKey } from '@/service/Cache.service';
 import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
+import { useAppData } from '@/use/app-data.use';
 
 const emit = defineEmits(['login']);
+
+const appData = useAppData();
 
 const useLoginToken = UseLoginToken();
 const useUserMessage = UseUserMessage();
@@ -61,6 +64,8 @@ const logIn = async function (): Promise<void> {
         useUserMessage.set(userMessage, 'Password is not valid, please try again.');
         return;
     }
+
+    await appData.auth.logIn(username.value, password.value);
 
     const logInResponse = await authService.logIn({
         username: username.value,
