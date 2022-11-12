@@ -1,13 +1,12 @@
 <template>
     <div class="open-manage-feeds-component">
         <div @click="onClick">
-            <CogIcon />
+            <IconComponent icon="settings" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import CogIcon from '@/components/icons/CogIcon.vue';
 import ManageFeedsModalComponent from '@/components/modal/content/manage-feeds/ManageFeeds.modal.component.vue';
 
 import { Event, eventService } from '@/service/Event.service';
