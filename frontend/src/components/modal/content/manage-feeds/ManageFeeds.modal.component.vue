@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import SideModalContentComponent from '@/components/modal/SideModalContent.component.vue';
 import UserMessageComponent from '@/components/UserMessage.component.vue';
@@ -37,7 +37,7 @@ import { UseRss } from '@/use/Rss.use';
 import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 
-import { FeedSource } from '@/model/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.type';
 
 const emit = defineEmits(['close']);
 
@@ -50,11 +50,11 @@ const feeds = useRss.feeds;
 const newFeed = ref<string>('');
 const newFeedUserMessage = ref<string>('');
 
-const feedsByCollection = computed<Record<string, Array<FeedSource>> | null>(() => {
+const feedsByCollection = computed<Record<string, Array<IFeedSource>> | null>(() => {
     if (feeds.value === null)
         return null;
 
-    const value: Record<string, Array<FeedSource>> = {};
+    const value: Record<string, Array<IFeedSource>> = {};
 
     const feedsForDisplay = feeds.value
         .sort((a, b) => a.title.localeCompare(b.title));
