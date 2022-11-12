@@ -31,5 +31,9 @@ export const useCache = function () {
             localStorage.setItem(key, JSON.stringify(cacheItem));
         },
 
+        clear(key: string): void {
+            localStorage.removeItem(key);
+        },
+
     };
 };
