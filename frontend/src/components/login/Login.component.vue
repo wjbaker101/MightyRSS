@@ -35,10 +35,10 @@ import UserMessageComponent from '@/components/UserMessage.component.vue';
 
 import { UseUserMessage } from '@/use/UserMessage.use';
 import { useAppData } from '@/use/app-data.use';
-
-const emit = defineEmits(['login']);
+import { useEvents } from '@/use/events.use';
 
 const appData = useAppData();
+const events = useEvents();
 
 const useUserMessage = UseUserMessage();
 
@@ -60,8 +60,7 @@ const logIn = async function (): Promise<void> {
     }
 
     await appData.auth.logIn(username.value, password.value);
-
-    emit('login');
+    events.publish('ON_LOG_IN', {});
 };
 
 const onLogIn = async function (): Promise<void> {
