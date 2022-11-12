@@ -28,6 +28,7 @@ export const useAppData = function () {
 
             logOut(): void {
                 loginToken.value = null;
+                cache.clear(Keys.LOGIN_TOKEN);
             },
         },
 
