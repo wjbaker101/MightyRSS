@@ -1,4 +1,4 @@
-export const Keys: Record<string, string> = {
+export const CacheKey: Record<string, string> = {
     LOGIN_TOKEN: 'LOGIN_TOKEN',
 };
 

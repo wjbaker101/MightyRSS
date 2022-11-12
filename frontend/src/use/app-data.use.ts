@@ -1,11 +1,11 @@
 import { readonly, ref } from 'vue';
 
 import { authApi } from '@/api/auth/Auth.api';
-import { Keys, useCache } from '@/use/cache.use';
+import { CacheKey, useCache } from '@/use/cache.use';
 
 const cache = useCache();
 
-const loginToken = ref<string | null>(cache.get(Keys.LOGIN_TOKEN));
+const loginToken = ref<string | null>(cache.get(CacheKey.LOGIN_TOKEN));
 
 export const useAppData = function () {
     return {
@@ -23,12 +23,12 @@ export const useAppData = function () {
 
                 loginToken.value = result.jwtToken;
 
-                cache.set(Keys.LOGIN_TOKEN, loginToken.value);
+                cache.set(CacheKey.LOGIN_TOKEN, loginToken.value);
             },
 
             logOut(): void {
                 loginToken.value = null;
-                cache.clear(Keys.LOGIN_TOKEN);
+                cache.clear(CacheKey.LOGIN_TOKEN);
             },
         },
 
