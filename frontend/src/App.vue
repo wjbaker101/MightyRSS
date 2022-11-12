@@ -36,7 +36,8 @@ const onLogin = async function (): Promise<void> {
 };
 
 onMounted(async () => {
-    await useRss.load();
+    if (loginToken.value !== null)
+        await useRss.load();
 });
 </script>
 
