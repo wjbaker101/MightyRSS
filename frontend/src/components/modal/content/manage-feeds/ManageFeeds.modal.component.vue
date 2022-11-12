@@ -34,15 +34,15 @@ import ManageFeedComponent from '@/components/modal/content/manage-feeds/ManageF
 
 import { feedService } from '@/service/Feed.service';
 import { UseRss } from '@/use/Rss.use';
-import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
+import { useAppData } from '@/use/app-data.use';
 
 import { IFeedSource } from '@/model/FeedSource.type';
 
 const emit = defineEmits(['close']);
 
+const appData = useAppData();
 const useRss = UseRss();
-const useLoginToken = UseLoginToken();
 const useUserMessage = UseUserMessage();
 
 const feeds = useRss.feeds;
@@ -102,7 +102,7 @@ const onAddFeed = async function (): Promise<void> {
 };
 
 const onLogOut = function (): void {
-    useLoginToken.clear();
+    appData.auth.logOut();
     emit('close');
 };
 </script>

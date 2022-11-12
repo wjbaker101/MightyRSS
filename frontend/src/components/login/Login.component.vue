@@ -33,9 +33,6 @@ import { ref } from 'vue';
 
 import UserMessageComponent from '@/components/UserMessage.component.vue';
 
-import { authService } from '@/service/Auth.service';
-import { cacheService, CacheKey } from '@/service/Cache.service';
-import { UseLoginToken } from '@/use/LoginToken.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 import { useAppData } from '@/use/app-data.use';
 
@@ -43,10 +40,7 @@ const emit = defineEmits(['login']);
 
 const appData = useAppData();
 
-const useLoginToken = UseLoginToken();
 const useUserMessage = UseUserMessage();
-
-const loginToken = useLoginToken.loginToken;
 
 const usernameInput = ref<HTMLInputElement | null>(null);
 const passwordInput = ref<HTMLInputElement | null>(null);
@@ -66,19 +60,6 @@ const logIn = async function (): Promise<void> {
     }
 
     await appData.auth.logIn(username.value, password.value);
-
-    const logInResponse = await authService.logIn({
-        username: username.value,
-        password: password.value,
-    });
-    if (logInResponse instanceof Error) {
-        useUserMessage.set(userMessage, logInResponse.message);
-        return;
-    }
-
-    loginToken.value = logInResponse;
-
-    await cacheService.set(CacheKey.LOGIN_TOKEN, loginToken.value);
 
     emit('login');
 };

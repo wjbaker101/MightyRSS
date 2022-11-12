@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { UseLoginToken } from '@/use/LoginToken.use';
+import { useAppData } from '@/use/app-data.use';
 
-const useLoginToken = UseLoginToken();
+const appData = useAppData();
 
 const UNAUTHORISED = 401;
 
@@ -16,7 +16,7 @@ class ResponseHelper {
     handleError(error: any): Error {
         if (axios.isAxiosError(error)) {
             if (error.response?.status === UNAUTHORISED)
-                useLoginToken.clear();
+                appData.auth.logOut();
 
             return new Error(error.message);
         }

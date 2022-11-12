@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { ApiResultResponse, responseHelper } from '@/api/ResponseHelper';
-import { UseLoginToken } from '@/use/LoginToken.use';
+import { useAppData } from '@/use/app-data.use';
 
 import { AddFeedSourceRequest, AddFeedSourceResponse } from '@/api/feed/types/AddFeedSource.type';
 import { GetFeedResponse } from '@/api/feed/types/GetFeed.type';
@@ -12,7 +12,7 @@ class FeedApi {
     private api: AxiosInstance;
 
     constructor() {
-        const useLoginToken = UseLoginToken();
+        const appData = useAppData();
 
         this.api = axios.create({
             baseURL: '/api/feed',
@@ -20,7 +20,7 @@ class FeedApi {
 
         this.api.interceptors.request.use((config: AxiosRequestConfig) => {
             config.headers = {
-                'Authorisation': useLoginToken.loginToken.value,
+                'Authorisation': appData.auth.loginToken.value,
             };
 
             return config;

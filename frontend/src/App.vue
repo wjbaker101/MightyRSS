@@ -23,21 +23,19 @@ import SideModalComponent from '@/components/modal/SideModal.component.vue';
 import LoginComponent from '@/components/login/Login.component.vue';
 import OpenManageFeedsComponent from '@/components/OpenManageFeeds.component.vue';
 
-import { authService } from '@/service/Auth.service';
 import { UseRss } from '@/use/Rss.use';
-import { UseLoginToken } from '@/use/LoginToken.use';
+import { useAppData } from '@/use/app-data.use';
 
+const appData = useAppData();
 const useRss = UseRss();
-const useLoginToken = UseLoginToken();
 
-const loginToken = useLoginToken.loginToken;
+const loginToken = appData.auth.loginToken;
 
 const onLogin = async function (): Promise<void> {
     await useRss.load();
 };
 
 onMounted(async () => {
-    await authService.loadCache();
     await useRss.load();
 });
 </script>
