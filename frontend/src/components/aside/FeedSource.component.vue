@@ -1,8 +1,8 @@
 <template>
     <div class="feed-source-component flex flex-vertical">
         <div>
-            <a :href="source.websiteUrl" rel="noopener noreferrer" target="_blank">
-                {{ (source.titleAlias ?? source.title) }}
+            <a :href="feedSource.websiteUrl" rel="noopener noreferrer" target="_blank">
+                {{ (feedSource.titleAlias ?? feedSource.title) }}
             </a>
         </div>
     </div>
@@ -14,7 +14,7 @@ import { useRss } from '@/use/rss.use';
 import { IFeedSource } from '@/model/FeedSource.type';
 
 const props = defineProps<{
-    source: IFeedSource;
+    feedSource: IFeedSource;
 }>();
 
 const rss = useRss();
@@ -22,7 +22,7 @@ const rss = useRss();
 const feed = rss.feed;
 
 const onDelete = async function (): Promise<void> {
-    await rss.deleteSource(props.source.reference);
+    await rss.deleteSource(props.feedSource.reference);
 };
 </script>
 

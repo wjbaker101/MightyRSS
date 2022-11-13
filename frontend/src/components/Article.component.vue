@@ -15,10 +15,10 @@
 import { computed } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
 
-import { FeedArticle } from '@/model/FeedArticle.type';
+import { IFeedArticle } from '@/model/FeedArticle.type';
 
 const props = defineProps<{
-    article: FeedArticle;
+    article: IFeedArticle;
 }>();
 
 const getFormattedDate = function (date: Dayjs): string {

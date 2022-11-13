@@ -15,7 +15,7 @@
             <div :key="`collection-${collection}`" v-for="(feeds, collection) in feedsByCollection">
                 <h3>{{ collection === 'mighty-rss-no-collection' ? 'Not in a Collection' : collection }}</h3>
                 <div>
-                    <ManageFeedComponent :key="feed.reference" v-for="feed in feeds" :feed="feed" />
+                    <ManageFeedComponent :key="feed.reference" v-for="feed in feeds" :feed-source="feed" />
                 </div>
             </div>
         </section>

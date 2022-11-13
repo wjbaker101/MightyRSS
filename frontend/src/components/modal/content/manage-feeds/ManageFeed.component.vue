@@ -3,7 +3,7 @@
         <div>
             <HiddenTextBoxComponent v-model="displayTitle" @finish="onTitleFinish" />
             <br>
-            <small>{{ feed.rssUrl }}</small>
+            <small>{{ feedSource.rssUrl }}</small>
         </div>
         <div class="delete-feed flex-auto" @click="onDelete">
             &times;
@@ -22,29 +22,29 @@ import { useRss } from '@/use/rss.use';
 import { IFeedSource } from '@/model/FeedSource.type';
 
 const props = defineProps<{
-    feed: IFeedSource;
+    feedSource: IFeedSource;
 }>();
 
 const rss = useRss();
 
 const displayTitle = computed<string>({
     get() {
-        return props.feed.titleAlias ?? props.feed.title;
+        return props.feedSource.titleAlias ?? props.feedSource.title;
     },
     set(title) {
-        props.feed.titleAlias = title;
+        props.feedSource.titleAlias = title;
     },
 });
 
 const onTitleFinish = async function (newTitle: string): Promise<void> {
-    await feedApi.updateFeedSource(props.feed.reference, {
-        collection: props.feed.collection,
+    await feedApi.updateFeedSource(props.feedSource.reference, {
+        collection: props.feedSource.collection,
         title: newTitle,
     });
 };
 
 const onDelete = async function (): Promise<void> {
-    await rss.deleteSource(props.feed.reference);
+    await rss.deleteSource(props.feedSource.reference);
 };
 </script>
 

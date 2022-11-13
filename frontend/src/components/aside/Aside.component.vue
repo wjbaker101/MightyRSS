@@ -11,7 +11,7 @@
                 <FeedSourceComponent
                     :key="feed.reference"
                     v-for="feed in feeds"
-                    :source="feed"
+                    :feed-source="feed"
                 />
             </section>
         </div>
