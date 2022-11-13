@@ -11,10 +11,10 @@
 <script setup lang="ts">
 import { useRss } from '@/use/rss.use';
 
-import { FeedSource } from '@/model/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.type';
 
 const props = defineProps<{
-    source: FeedSource;
+    source: IFeedSource;
 }>();
 
 const rss = useRss();

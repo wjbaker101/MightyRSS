@@ -42,7 +42,7 @@ import dayjs from 'dayjs';
 
 import ArticleComponent from '@/components/Article.component.vue';
 
-import { FeedArticle } from '@/model/FeedArticle.type';
+import { IFeedArticle } from '@/model/FeedArticle.type';
 import { useRss } from '@/use/rss.use';
 
 const rss = useRss();
@@ -51,7 +51,7 @@ const articles = rss.feed;
 
 const isArticlesExpanded = ref<boolean>(false);
 
-const articlesForDisplay = computed<Array<FeedArticle> | null>(() => {
+const articlesForDisplay = computed<Array<IFeedArticle> | null>(() => {
     if (articles.value === null)
         return null;
 
@@ -66,21 +66,21 @@ const articlesForDisplay = computed<Array<FeedArticle> | null>(() => {
         });
 });
 
-const articlesToday = computed<Array<FeedArticle> | null>(() => {
+const articlesToday = computed<Array<IFeedArticle> | null>(() => {
     if (articlesForDisplay.value === null)
         return null;
 
     return articlesForDisplay.value.filter(x => x.publishedAt.isToday());
 });
 
-const articlesYesterday = computed<Array<FeedArticle> | null>(() => {
+const articlesYesterday = computed<Array<IFeedArticle> | null>(() => {
     if (articlesForDisplay.value === null)
         return null;
 
     return articlesForDisplay.value.filter(x => x.publishedAt.isYesterday());
 });
 
-const articlesPrevious = computed<Array<FeedArticle> | null>(() => {
+const articlesPrevious = computed<Array<IFeedArticle> | null>(() => {
     if (articlesForDisplay.value === null)
         return null;
 

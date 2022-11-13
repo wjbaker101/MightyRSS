@@ -25,13 +25,13 @@ import FeedSourceComponent from '@/components/aside/FeedSource.component.vue';
 
 import { useRss } from '@/use/rss.use';
 
-import { FeedSource } from '@/model/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.type';
 
 const rss = useRss();
 
 const feeds = rss.sources;
 
-const feedsForDisplay = computed<Array<FeedSource> | null>(() => {
+const feedsForDisplay = computed<Array<IFeedSource> | null>(() => {
     if (feeds.value === null)
         return null;
 
