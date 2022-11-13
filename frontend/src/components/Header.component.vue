@@ -10,12 +10,12 @@
 </template>
 
 <script setup lang="ts">
-import { UseRss } from '@/use/Rss.use';
+import { useRss } from '@/use/rss.use';
 
-const useRss = UseRss();
+const rss = useRss();
 
 const refreshFeed = async function (): Promise<void> {
-    await useRss.load();
+    await rss.refresh();
 };
 </script>
 

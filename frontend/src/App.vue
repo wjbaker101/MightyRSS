@@ -23,24 +23,23 @@ import SideModalComponent from '@/components/modal/SideModal.component.vue';
 import LoginComponent from '@/components/login/Login.component.vue';
 import OpenManageFeedsComponent from '@/components/OpenManageFeeds.component.vue';
 
-import { UseRss } from '@/use/Rss.use';
 import { useAppData } from '@/use/app-data.use';
 import { useEvents } from '@/use/events.use';
+import { useRss } from '@/use/rss.use';
 
 const appData = useAppData();
+const rss = useRss();
 const events = useEvents();
-
-const useRss = UseRss();
 
 const loginToken = appData.auth.loginToken;
 
 events.subscribe('ON_LOG_IN', async () => {
-    await useRss.load();
+    rss.refresh();
 });
 
 onMounted(async () => {
     if (loginToken.value !== null)
-        await useRss.load();
+        rss.refresh();
 });
 </script>
 

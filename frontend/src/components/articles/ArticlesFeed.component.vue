@@ -42,13 +42,12 @@ import dayjs from 'dayjs';
 
 import ArticleComponent from '@/components/Article.component.vue';
 
-import { UseRss } from '@/use/Rss.use';
-
 import { FeedArticle } from '@/model/FeedArticle.type';
+import { useRss } from '@/use/rss.use';
 
-const useRss = UseRss();
+const rss = useRss();
 
-const articles = useRss.articles;
+const articles = rss.feed;
 
 const isArticlesExpanded = ref<boolean>(false);
 

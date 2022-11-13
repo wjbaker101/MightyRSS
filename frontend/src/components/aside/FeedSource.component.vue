@@ -9,8 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { feedService } from '@/service/Feed.service';
-import { UseRss } from '@/use/Rss.use';
+import { useRss } from '@/use/rss.use';
 
 import { FeedSource } from '@/model/FeedSource.type';
 
@@ -18,16 +17,12 @@ const props = defineProps<{
     source: FeedSource;
 }>();
 
-const useRss = UseRss();
+const rss = useRss();
+
+const feed = rss.feed;
 
 const onDelete = async function (): Promise<void> {
-    await feedService.deleteFeedSource(props.source.reference);
-
-    if (useRss.articles.value === null)
-        return;
-
-    useRss.articles.value = useRss.articles.value
-        .filter(x => x.source.reference !== props.source.reference);
+    await rss.deleteSource(props.source.reference);
 };
 </script>
 

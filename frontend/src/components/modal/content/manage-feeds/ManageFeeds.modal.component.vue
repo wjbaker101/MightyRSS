@@ -32,8 +32,7 @@ import SideModalContentComponent from '@/components/modal/SideModalContent.compo
 import UserMessageComponent from '@/components/UserMessage.component.vue';
 import ManageFeedComponent from '@/components/modal/content/manage-feeds/ManageFeed.component.vue';
 
-import { feedService } from '@/service/Feed.service';
-import { UseRss } from '@/use/Rss.use';
+import { useRss } from '@/use/rss.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 import { useAppData } from '@/use/app-data.use';
 
@@ -42,10 +41,11 @@ import { IFeedSource } from '@/model/FeedSource.type';
 const emit = defineEmits(['close']);
 
 const appData = useAppData();
-const useRss = UseRss();
+const rss = useRss();
 const useUserMessage = UseUserMessage();
 
-const feeds = useRss.feeds;
+const feed = rss.feed;
+const feeds = rss.sources;
 
 const newFeed = ref<string>('');
 const newFeedUserMessage = ref<string>('');
@@ -87,16 +87,7 @@ const onAddFeed = async function (): Promise<void> {
         return;
     }
 
-    const addFeedResponse = await feedService.addFeedSource({
-        url: newFeed.value,
-    });
-
-    if (addFeedResponse instanceof Error) {
-        useUserMessage.set(newFeedUserMessage, addFeedResponse.message);
-        return;
-    }
-
-    useRss.articles.value = useRss.articles.value?.concat(addFeedResponse) ?? null;
+    await rss.addSource(newFeed.value);
 
     newFeed.value = '';
 };
