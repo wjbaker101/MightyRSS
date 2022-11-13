@@ -40,15 +40,17 @@ export const useRss = function () {
                 })))
                 .flat();
 
-            const uniqueFeeds = new Map<string, IFeedSource>();
-            for (const article of feed.value) {
-                const feed = article.source;
-
-                if (!uniqueFeeds.has(feed.reference))
-                    uniqueFeeds.set(feed.reference, feed);
-            }
-
-            feedSources.value = [ ...uniqueFeeds.values() ];
+            feedSources.value = result.sources
+                .map(x => ({
+                    reference: x.reference,
+                    title: x.title,
+                    description: x.description,
+                    rssUrl: x.rssUrl,
+                    websiteUrl: x.websiteUrl,
+                    collection: x.collection,
+                    titleAlias: x.titleAlias,
+                }))
+                .sort((a, b) => (a.titleAlias ?? a.title).localeCompare(b.titleAlias ?? b.title));
         },
 
         async addSource(url: string): Promise<void> {
