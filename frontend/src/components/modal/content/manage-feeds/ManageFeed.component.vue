@@ -16,12 +16,16 @@ import { computed } from 'vue';
 
 import HiddenTextBoxComponent from '@/components/HiddenTextBox.component.vue';
 
-import { FeedSource } from '@/model/FeedSource.type';
 import { feedApi } from '@/api/feed/Feed.api';
+import { useRss } from '@/use/rss.use';
+
+import { IFeedSource } from '@/model/FeedSource.type';
 
 const props = defineProps<{
-    feed: FeedSource;
+    feed: IFeedSource;
 }>();
+
+const rss = useRss();
 
 const displayTitle = computed<string>({
     get() {
@@ -37,6 +41,10 @@ const onTitleFinish = async function (newTitle: string): Promise<void> {
         collection: props.feed.collection,
         title: newTitle,
     });
+};
+
+const onDelete = async function (): Promise<void> {
+    await rss.deleteSource(props.feed.reference);
 };
 </script>
 
