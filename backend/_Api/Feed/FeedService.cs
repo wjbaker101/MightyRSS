@@ -67,6 +67,10 @@ public sealed class FeedService: IFeedService
             unitOfWork.FeedSources.Save(feedSource);
         }
 
+        var existingUserFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedSource.Reference);
+        if (existingUserFeedSource.IsSuccess)
+            return Result<AddFeedSourceResponse>.Failure("Feed source could not be added as it already exists.");
+
         var userFeedSource = new UserDataFeedSourceRecord
         {
             User = user,
