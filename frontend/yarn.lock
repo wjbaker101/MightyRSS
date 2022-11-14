@@ -1908,18 +1908,18 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
-"@wjb/styling@^1.0.13", "@wjb/styling@^1.0.3":
+"@wjb/styling@^1.0.13":
   version "1.0.13"
   resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/@wjb/styling/-/styling-1.0.13.tgz#cfb91285b1cc8611b859e72747200aa2f8cb4064"
   integrity sha512-b+nYkJT/a8sTLc+Ec0QwScEZASeC1MAmkdA2Gbz9r2x7f37dTovPAnka9w9mA8FnZ7sEEsnXIx7/ezmYg3gazQ==
 
-"@wjb/vue@^1.0.46":
-  version "1.0.46"
-  resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/@wjb/vue/-/vue-1.0.46.tgz#25d2a5dfbd161ea5b0e450a7d33e980dc1f9a3f3"
-  integrity sha512-mSfIi8PihHie65tFthB0r46idchUs/MDC+csPd9Hc1PHBitNxLdrLU0O+Yi+PYt6XAxqYLLdIGgVAa9qkEll9Q==
+"@wjb/vue@^1.0.49":
+  version "1.0.49"
+  resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/@wjb/vue/-/vue-1.0.49.tgz#f35d5c65b8d90bec9da2dab0ad3d8809df1d67cb"
+  integrity sha512-VKDGWlWOEr90d4Hd7WR0Y47OuGfx7bvXIhd4Jb1Bw9DNCDWD685MQLkrbzbCCoZckR8Vra54INvDT8ABR9LKcQ==
   dependencies:
-    "@wjb/styling" "^1.0.3"
-    vue "^3.2.36"
+    "@wjb/styling" "^1.0.13"
+    vue "^3.2.45"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -6108,17 +6108,6 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue@^3.2.36:
-  version "3.2.45"
-  resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/vue/-/vue-3.2.45.tgz#94a116784447eb7dbd892167784619fef379b3c8"
-  integrity sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA==
-  dependencies:
-    "@vue/compiler-dom" "3.2.45"
-    "@vue/compiler-sfc" "3.2.45"
-    "@vue/runtime-dom" "3.2.45"
-    "@vue/server-renderer" "3.2.45"
-    "@vue/shared" "3.2.45"
-
 vue@^3.2.44:
   version "3.2.44"
   resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/vue/-/vue-3.2.44.tgz#57581fcc753b8187aae9cf90254f9fa88f7b8ffd"
@@ -6129,6 +6118,17 @@ vue@^3.2.44:
     "@vue/runtime-dom" "3.2.44"
     "@vue/server-renderer" "3.2.44"
     "@vue/shared" "3.2.44"
+
+vue@^3.2.45:
+  version "3.2.45"
+  resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/vue/-/vue-3.2.45.tgz#94a116784447eb7dbd892167784619fef379b3c8"
+  integrity sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA==
+  dependencies:
+    "@vue/compiler-dom" "3.2.45"
+    "@vue/compiler-sfc" "3.2.45"
+    "@vue/runtime-dom" "3.2.45"
+    "@vue/server-renderer" "3.2.45"
+    "@vue/shared" "3.2.45"
 
 watchpack@^2.4.0:
   version "2.4.0"
