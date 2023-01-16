@@ -23,7 +23,9 @@ public sealed class PasswordHelper : IPasswordHelper
     {
         var toHash = password + salt + _pepper;
 
-        return Convert.ToBase64String(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(toHash)));
+        using var hasher = SHA256.Create();
+
+        return Convert.ToBase64String(hasher.ComputeHash(Encoding.UTF8.GetBytes(toHash)));
     }
 
     public bool IsMatch(string expectedPassword, string password, Guid salt)
