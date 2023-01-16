@@ -60,6 +60,7 @@ public sealed class AuthService : IAuthService
         var user = new UserRecord
         {
             Reference = userReference,
+            CreatedAt = DateTime.UtcNow,
             Username = request.Username,
             Password = hashedPassword,
             PasswordSalt = passwordSalt
