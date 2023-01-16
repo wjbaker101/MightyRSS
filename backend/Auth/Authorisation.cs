@@ -9,13 +9,6 @@ namespace MightyRSS.Auth;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class Authorisation : Attribute, IAuthorizationFilter
 {
-    private readonly IRequestContext _requestContext;
-
-    public Authorisation(IRequestContext requestContext)
-    {
-        _requestContext = requestContext;
-    }
-
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var authHeader = context.HttpContext.Request.Headers["Authorisation"];
@@ -40,6 +33,8 @@ public sealed class Authorisation : Attribute, IAuthorizationFilter
 
         unitOfWork.Commit();
 
-        _requestContext.User = user;
+        var requestContext = context.HttpContext.RequestServices.GetRequiredService<IRequestContext>();
+
+        requestContext.User = user;
     }
 }
