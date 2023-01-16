@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MightyRSS._Api.Feed.Types;
 using MightyRSS.Auth;
-using System;
 using NetApiLibs.Api;
+using System;
 
 namespace MightyRSS._Api.Feed;
 
@@ -18,7 +18,7 @@ public sealed class FeedController : ApiController
 
     [HttpPost]
     [Route("")]
-    [ServiceFilter(typeof(Authorisation))]
+    [Authorisation]
     public IActionResult AddFeedSource([FromServices] IRequestContext requestContext, [FromBody] AddFeedSourceRequest request)
     {
         var result = _feedService.AddFeedSource(requestContext.User, request);
@@ -28,7 +28,7 @@ public sealed class FeedController : ApiController
 
     [HttpGet]
     [Route("")]
-    [ServiceFilter(typeof(Authorisation))]
+    [Authorisation]
     public IActionResult GetFeed([FromServices] IRequestContext requestContext)
     {
         var result = _feedService.GetFeed(requestContext.User);
@@ -38,7 +38,7 @@ public sealed class FeedController : ApiController
 
     [HttpDelete]
     [Route("source/{reference:guid}")]
-    [ServiceFilter(typeof(Authorisation))]
+    [Authorisation]
     public IActionResult DeleteFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference)
     {
         var result = _feedService.DeleteFeedSource(requestContext.User, reference);
@@ -48,7 +48,7 @@ public sealed class FeedController : ApiController
 
     [HttpPost]
     [Route("source/{reference:guid}/collection")]
-    [ServiceFilter(typeof(Authorisation))]
+    [Authorisation]
     public IActionResult AddFeedToCollection([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] AddFeedToCollectionRequest request)
     {
         var result = _feedService.AddFeedToCollection(requestContext.User, reference, request);
@@ -58,7 +58,7 @@ public sealed class FeedController : ApiController
 
     [HttpPut]
     [Route("source/{reference:guid}")]
-    [ServiceFilter(typeof(Authorisation))] 
+    [Authorisation]
     public IActionResult UpdateFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] UpdateFeedSourceRequest request)
     {
         var result = _feedService.UpdateFeedSource(requestContext.User, reference, request);
