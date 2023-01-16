@@ -16,7 +16,7 @@ public sealed class UserRecordMap : ClassMap<UserRecord>
 {
     public UserRecordMap()
     {
-        Schema("auth");
+        Schema("mighty_rss");
         Table("user");
         Id(x => x.Id, "id").GeneratedBy.SequenceIdentity("user_id_seq");
         Map(x => x.Reference, "reference");

@@ -31,8 +31,8 @@ public sealed class FeedSourceRecordMap : ClassMap<FeedSourceRecord>
 {
     public FeedSourceRecordMap()
     {
-        Schema("feed");
-        Table("source");
+        Schema("mighty_rss");
+        Table("feed_source");
         Id(x => x.Id, "id").GeneratedBy.SequenceIdentity("source_id_seq");
         Map(x => x.Reference, "reference");
         Map(x => x.Title, "title");
