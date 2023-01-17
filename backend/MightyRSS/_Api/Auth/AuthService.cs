@@ -1,7 +1,6 @@
 ﻿using Data.Records;
 using Data.UoW;
 using MightyRSS._Api.Auth.Types;
-using MightyRSS.Auth.Types;
 using NetApiLibs.Type;
 using System;
 
@@ -86,10 +85,7 @@ public sealed class AuthService : IAuthService
         if (!_passwordService.IsMatch(user.Password, request.Password, user.PasswordSalt))
             return null;
 
-        var jwtToken = _loginTokenService.CreateToken(new AuthClaims
-        {
-            UserReference = user.Reference
-        });
+        var jwtToken = _loginTokenService.CreateToken(user.Reference);
 
         unitOfWork.Commit();
 
