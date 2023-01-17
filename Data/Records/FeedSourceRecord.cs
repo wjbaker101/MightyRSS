@@ -7,21 +7,21 @@ public class FeedSourceRecord
 {
     public virtual long Id { get; init; }
     public virtual Guid Reference { get; set; }
-    public virtual string Title { get; set; }
-    public virtual string Description { get; set; }
-    public virtual string RssUrl { get; set; }
-    public virtual string WebsiteUrl { get; set; }
-    public virtual List<Article> Articles { get; set; }
-    public virtual DateTime ArticlesUpdatedAt { get; set; }
+    public virtual string Title { get; set; } = null!;
+    public virtual string Description { get; set; } = null!;
+    public virtual string RssUrl { get; set; } = null!;
+    public virtual string WebsiteUrl { get; set; } = null!;
+    public virtual List<Article>? Articles { get; set; }
+    public virtual DateTime? ArticlesUpdatedAt { get; set; }
 
     public sealed class Article
     {
-        public string Url { get; set; }
-        public string Title { get; set; }
-        public string Summary { get; set; }
-        public string Author { get; set; }
-        public DateTime? PublishedAt { get; set; }
-        public string PublishedAtAsString { get; set; }
+        public string Url { get; set; } = null!;
+        public string Title { get; set; } = null!;
+        public string Summary { get; set; } = null!;
+        public string Author { get; set; } = null!;
+        public DateTime? PublishedAt { get; set; } = null!;
+        public string PublishedAtAsString { get; set; } = null!;
     }
 }
 

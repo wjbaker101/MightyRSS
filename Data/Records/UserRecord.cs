@@ -7,8 +7,8 @@ public class UserRecord
     public virtual long Id { get; init; }
     public virtual Guid Reference { get; set; }
     public virtual DateTime CreatedAt { get; init; }
-    public virtual string Username { get; set; }
-    public virtual string Password { get; set; }
+    public virtual string Username { get; set; } = null!;
+    public virtual string Password { get; set; } = null!;
     public virtual Guid PasswordSalt { get; set; }
 }
 
