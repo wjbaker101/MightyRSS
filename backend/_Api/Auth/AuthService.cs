@@ -5,7 +5,6 @@ using MightyRSS.Auth;
 using MightyRSS.Auth.Types;
 using NetApiLibs.Type;
 using System;
-using System.Net;
 
 namespace MightyRSS._Api.Auth;
 
@@ -36,9 +35,9 @@ public sealed class AuthService : IAuthService
     {
         using var unitOfWork = _mightyUnitOfWork.Create();
 
-        var user = unitOfWork.Users.GetByReference(reference);
-        if (user == null)
-            return Result<GetUserResponse>.Failure("User with the given reference could not be found.", HttpStatusCode.NotFound);
+        var userResult = unitOfWork.Users.GetByReference(reference);
+        if (!userResult.TrySuccess(out var user))
+            return Result<GetUserResponse>.FromFailure(userResult);
 
         unitOfWork.Commit();
 
@@ -81,9 +80,10 @@ public sealed class AuthService : IAuthService
     {
         using var unitOfWork = _mightyUnitOfWork.Create();
 
-        var user = unitOfWork.Users.GetByUsername(request.Username);
-        if (user == null)
-            return Result<LogInResponse>.Failure("User with the given username could not be found, please check and try again.", HttpStatusCode.Unauthorized);
+        var userResult = unitOfWork.Users.GetByUsername(request.Username);
+        if (!userResult.TrySuccess(out var user))
+            return Result<LogInResponse>.FromFailure(userResult);
+
         if (!_passwordHelper.IsMatch(user.Password, request.Password, user.PasswordSalt))
             return null;
 

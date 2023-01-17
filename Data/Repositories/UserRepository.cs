@@ -1,13 +1,14 @@
 ﻿using Data.Records;
 using Data.UoW;
+using NetApiLibs.Type;
 using NHibernate;
 
 namespace Data.Repositories;
 
 public interface IUserRepository : IRepository<UserRecord>
 {
-    UserRecord GetByReference(Guid reference);
-    UserRecord GetByUsername(string username);
+    Result<UserRecord> GetByReference(Guid reference);
+    Result<UserRecord> GetByUsername(string username);
 }
 
 public sealed class UserRepository : Repository<UserRecord>, IUserRepository
@@ -16,17 +17,27 @@ public sealed class UserRepository : Repository<UserRecord>, IUserRepository
     {
     }
 
-    public UserRecord GetByReference(Guid reference)
+    public Result<UserRecord> GetByReference(Guid reference)
     {
-        return Session
+        var user = Session
             .Query<UserRecord>()
             .SingleOrDefault(x => x.Reference == reference);
+
+        if (user == null)
+            return Result<UserRecord>.Failure($"Unable to find user with reference: {reference}.");
+
+        return user;
     }
 
-    public UserRecord GetByUsername(string username)
+    public Result<UserRecord> GetByUsername(string username)
     {
-        return Session
+        var user = Session
             .Query<UserRecord>()
             .SingleOrDefault(x => x.Username.ToLower() == username.ToLower());
+
+        if (user == null)
+            return Result<UserRecord>.Failure($"Unable to find user with username: {username}.");
+
+        return user;
     }
 }

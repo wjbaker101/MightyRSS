@@ -24,8 +24,8 @@ public sealed class Authorisation : Attribute, IAuthorizationFilter
         var unitOfWorkFactory = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWorkFactory<IMightyUnitOfWork>>();
         using var unitOfWork = unitOfWorkFactory.Create();
 
-        var user = unitOfWork.Users.GetByReference(authClaims.UserReference);
-        if (user == null)
+        var userResult = unitOfWork.Users.GetByReference(authClaims.UserReference);
+        if (userResult.IsFailure)
         {
             context.Result = new UnauthorizedResult();
             return;
@@ -35,6 +35,6 @@ public sealed class Authorisation : Attribute, IAuthorizationFilter
 
         var requestContext = context.HttpContext.RequestServices.GetRequiredService<IRequestContext>();
 
-        requestContext.User = user;
+        requestContext.User = userResult.Value;
     }
 }
