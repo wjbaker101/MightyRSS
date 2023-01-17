@@ -16,7 +16,8 @@ public sealed class Authorisation : Attribute, IAuthorizationFilter
 
         var loginTokenService = context.HttpContext.RequestServices.GetRequiredService<ILoginTokenService>();
 
-        if (!loginTokenService.TryParseToken(authHeader, out var authClaims))
+        var userReferenceResult = loginTokenService.GetUserReferenceByToken(authHeader);
+        if (userReferenceResult.IsFailure)
         {
             context.Result = new UnauthorizedResult();
             return;
@@ -25,7 +26,7 @@ public sealed class Authorisation : Attribute, IAuthorizationFilter
         var unitOfWorkFactory = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWorkFactory<IMightyUnitOfWork>>();
         using var unitOfWork = unitOfWorkFactory.Create();
 
-        var userResult = unitOfWork.Users.GetByReference(authClaims.UserReference);
+        var userResult = unitOfWork.Users.GetByReference(userReferenceResult.Value);
         if (userResult.IsFailure)
         {
             context.Result = new UnauthorizedResult();
