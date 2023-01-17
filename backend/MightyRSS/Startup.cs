@@ -34,13 +34,13 @@ public sealed class Startup
 
         services.AddScoped<IRequestContext, RequestContext>();
         services.AddScoped<Authorisation>();
-        services.AddSingleton<IJwtHelper, JwtHelper>();
 
         services.AddSingleton<IApiDatabase, ApiDatabase>();
         services.AddSingleton<IUnitOfWorkFactory<IMightyUnitOfWork>, MightyUnitOfWorkFactory>();
 
-        services.AddSingleton<IPasswordHelper, PasswordHelper>();
         services.AddSingleton<IAuthService, AuthService>();
+        services.AddSingleton<IPasswordHelper, PasswordHelper>();
+        services.AddSingleton<ILoginTokenService, LoginTokenService>();
 
         services.AddSingleton<IFeedReaderService, FeedReaderService>();
         services.AddSingleton<IFeedService, FeedService>();

@@ -19,16 +19,16 @@ public sealed class AuthService : IAuthService
 {
     private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWork;
     private readonly IPasswordHelper _passwordHelper;
-    private readonly IJwtHelper _jwtHelper;
+    private readonly ILoginTokenService _loginTokenService;
 
     public AuthService(
         IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWork,
         IPasswordHelper passwordHelper,
-        IJwtHelper jwtHelper)
+        ILoginTokenService loginTokenService)
     {
         _mightyUnitOfWork = mightyUnitOfWork;
         _passwordHelper = passwordHelper;
-        _jwtHelper = jwtHelper;
+        _loginTokenService = loginTokenService;
     }
 
     public Result<GetUserResponse> GetUser(Guid reference)
@@ -87,7 +87,7 @@ public sealed class AuthService : IAuthService
         if (!_passwordHelper.IsMatch(user.Password, request.Password, user.PasswordSalt))
             return null;
 
-        var jwtToken = _jwtHelper.CreateToken(new AuthClaims
+        var jwtToken = _loginTokenService.CreateToken(new AuthClaims
         {
             UserReference = user.Reference
         });

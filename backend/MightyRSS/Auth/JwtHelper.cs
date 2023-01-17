@@ -1,25 +1,25 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using MightyRSS.Auth.Types;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using MightyRSS.Auth.Types;
 
 namespace MightyRSS.Auth;
 
-public interface IJwtHelper
+public interface ILoginTokenService
 {
     string CreateToken(AuthClaims authClaims);
     bool TryParseToken(string jwtToken, out AuthClaims authClaims);
 }
 
-public sealed class JwtHelper : IJwtHelper
+public sealed class LoginTokenService : ILoginTokenService
 {
     private readonly SecurityKey _securityKey;
 
-    public JwtHelper()
+    public LoginTokenService()
     {
         _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("d41a1136-3314-42e3-a56f-881ad059e20b"));
     }

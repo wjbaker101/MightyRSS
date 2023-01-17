@@ -13,9 +13,9 @@ public sealed class Authorisation : Attribute, IAuthorizationFilter
     {
         var authHeader = context.HttpContext.Request.Headers["Authorisation"];
 
-        var jwtHelper = context.HttpContext.RequestServices.GetRequiredService<IJwtHelper>();
+        var loginTokenService = context.HttpContext.RequestServices.GetRequiredService<ILoginTokenService>();
 
-        if (!jwtHelper.TryParseToken(authHeader, out var authClaims))
+        if (!loginTokenService.TryParseToken(authHeader, out var authClaims))
         {
             context.Result = new UnauthorizedResult();
             return;
