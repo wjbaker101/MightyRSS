@@ -33,8 +33,8 @@ public sealed class FeedService : IFeedService
     {
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
-        var feedSource = unitOfWork.FeedSources.GetByRssUrl(request.Url);
-        if (feedSource == null)
+        var feedSourceResult = unitOfWork.FeedSources.GetByRssUrl(request.Url);
+        if (!feedSourceResult.TrySuccess(out var feedSource))
         {
             var feedDetailsResult = _feedReaderService.Read(request.Url, null);
             if (feedDetailsResult.IsFailure)

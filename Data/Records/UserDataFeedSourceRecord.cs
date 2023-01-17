@@ -7,8 +7,8 @@ public class UserDataFeedSourceRecord
     public virtual long Id { get; init; }
     public virtual UserRecord User { get; set; }
     public virtual FeedSourceRecord FeedSource { get; set; }
-    public virtual string Collection { get; set; }
-    public virtual string Title { get; set; }
+    public virtual string? Collection { get; set; }
+    public virtual string? Title { get; set; }
 }
 
 public sealed class UserDataFeedSourceRecordMap : ClassMap<UserDataFeedSourceRecord>
