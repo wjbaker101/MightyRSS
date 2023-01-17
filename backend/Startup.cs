@@ -1,3 +1,6 @@
+using Core.Settings;
+using Data;
+using Data.UoW;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,9 +9,6 @@ using Microsoft.Extensions.Hosting;
 using MightyRSS._Api.Auth;
 using MightyRSS._Api.Feed;
 using MightyRSS.Auth;
-using MightyRSS.Data;
-using MightyRSS.Data.UoW;
-using MightyRSS.Settings;
 
 namespace MightyRSS;
 

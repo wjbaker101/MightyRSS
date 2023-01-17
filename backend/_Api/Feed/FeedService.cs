@@ -1,10 +1,9 @@
-﻿using MightyRSS._Api.Feed.Types;
-using MightyRSS.Data.Records;
-using MightyRSS.Data.UoW;
+﻿using Data.Records;
+using Data.UoW;
+using MightyRSS._Api.Feed.Types;
 using NetApiLibs.Type;
 using System;
 using System.Linq;
-using System.Net;
 
 namespace MightyRSS._Api.Feed;
 
@@ -17,7 +16,7 @@ public interface IFeedService
     Result UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request);
 }
 
-public sealed class FeedService: IFeedService
+public sealed class FeedService : IFeedService
 {
     private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWorkFactory;
     private readonly IFeedReaderService _feedReaderService;

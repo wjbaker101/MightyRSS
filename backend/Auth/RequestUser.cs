@@ -1,4 +1,4 @@
-﻿using MightyRSS.Data.Records;
+﻿using Data.Records;
 
 namespace MightyRSS.Auth;
 

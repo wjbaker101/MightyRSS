@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Core.Settings;
+using Data.Records;
+using Data.UoW;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MightyRSS._Api.Feed;
-using MightyRSS.Data.Records;
-using MightyRSS.Data.UoW;
-using MightyRSS.Settings;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
