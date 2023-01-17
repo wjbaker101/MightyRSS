@@ -5,7 +5,7 @@ namespace Data.Records;
 public class UserRecord
 {
     public virtual long Id { get; init; }
-    public virtual Guid Reference { get; set; }
+    public virtual Guid Reference { get; init; }
     public virtual DateTime CreatedAt { get; init; }
     public virtual string Username { get; set; } = null!;
     public virtual string Password { get; set; } = null!;

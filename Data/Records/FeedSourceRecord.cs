@@ -6,7 +6,7 @@ namespace Data.Records;
 public class FeedSourceRecord
 {
     public virtual long Id { get; init; }
-    public virtual Guid Reference { get; set; }
+    public virtual Guid Reference { get; init; }
     public virtual string Title { get; set; } = null!;
     public virtual string Description { get; set; } = null!;
     public virtual string RssUrl { get; set; } = null!;

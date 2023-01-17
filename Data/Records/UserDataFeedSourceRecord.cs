@@ -5,8 +5,8 @@ namespace Data.Records;
 public class UserDataFeedSourceRecord
 {
     public virtual long Id { get; init; }
-    public virtual UserRecord User { get; set; } = null!;
-    public virtual FeedSourceRecord FeedSource { get; set; } = null!;
+    public virtual UserRecord User { get; init; } = null!;
+    public virtual FeedSourceRecord FeedSource { get; init; } = null!;
     public virtual string? Collection { get; set; }
     public virtual string? Title { get; set; }
 }
