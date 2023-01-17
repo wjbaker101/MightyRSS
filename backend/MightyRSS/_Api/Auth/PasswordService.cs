@@ -4,17 +4,17 @@ using System.Text;
 
 namespace MightyRSS._Api.Auth;
 
-public interface IPasswordHelper
+public interface IPasswordService
 {
     string HashPassword(string password, Guid salt);
     bool IsMatch(string expectedPassword, string password, Guid salt);
 }
 
-public sealed class PasswordHelper : IPasswordHelper
+public sealed class PasswordService : IPasswordService
 {
     private readonly Guid _pepper;
 
-    public PasswordHelper()
+    public PasswordService()
     {
         _pepper = Guid.Parse("523b683b-df54-4deb-a9f6-c0e0e99654b1");
     }

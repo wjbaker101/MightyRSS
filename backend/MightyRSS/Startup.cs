@@ -39,7 +39,7 @@ public sealed class Startup
         services.AddSingleton<IUnitOfWorkFactory<IMightyUnitOfWork>, MightyUnitOfWorkFactory>();
 
         services.AddSingleton<IAuthService, AuthService>();
-        services.AddSingleton<IPasswordHelper, PasswordHelper>();
+        services.AddSingleton<IPasswordService, PasswordService>();
         services.AddSingleton<ILoginTokenService, LoginTokenService>();
 
         services.AddSingleton<IFeedReaderService, FeedReaderService>();

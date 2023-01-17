@@ -1,7 +1,6 @@
 ﻿using Data.Records;
 using Data.UoW;
 using MightyRSS._Api.Auth.Types;
-using MightyRSS.Auth;
 using MightyRSS.Auth.Types;
 using NetApiLibs.Type;
 using System;
@@ -18,16 +17,16 @@ public interface IAuthService
 public sealed class AuthService : IAuthService
 {
     private readonly IUnitOfWorkFactory<IMightyUnitOfWork> _mightyUnitOfWork;
-    private readonly IPasswordHelper _passwordHelper;
+    private readonly IPasswordService _passwordService;
     private readonly ILoginTokenService _loginTokenService;
 
     public AuthService(
         IUnitOfWorkFactory<IMightyUnitOfWork> mightyUnitOfWork,
-        IPasswordHelper passwordHelper,
+        IPasswordService passwordService,
         ILoginTokenService loginTokenService)
     {
         _mightyUnitOfWork = mightyUnitOfWork;
-        _passwordHelper = passwordHelper;
+        _passwordService = passwordService;
         _loginTokenService = loginTokenService;
     }
 
@@ -52,7 +51,7 @@ public sealed class AuthService : IAuthService
     {
         var userReference = Guid.NewGuid();
         var passwordSalt = Guid.NewGuid();
-        var hashedPassword = _passwordHelper.HashPassword(request.Password, passwordSalt);
+        var hashedPassword = _passwordService.HashPassword(request.Password, passwordSalt);
 
         using var unitOfWork = _mightyUnitOfWork.Create();
 
@@ -84,7 +83,7 @@ public sealed class AuthService : IAuthService
         if (!userResult.TrySuccess(out var user))
             return Result<LogInResponse>.FromFailure(userResult);
 
-        if (!_passwordHelper.IsMatch(user.Password, request.Password, user.PasswordSalt))
+        if (!_passwordService.IsMatch(user.Password, request.Password, user.PasswordSalt))
             return null;
 
         var jwtToken = _loginTokenService.CreateToken(new AuthClaims
