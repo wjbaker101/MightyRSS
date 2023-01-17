@@ -7,7 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
-namespace MightyRSS.Auth;
+namespace MightyRSS._Api.Auth;
 
 public interface ILoginTokenService
 {
