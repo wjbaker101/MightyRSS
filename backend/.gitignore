@@ -10,8 +10,8 @@
 *.userosscache
 *.sln.docstates
 
-/appsettings.Development.Secrets.json
-/appsettings.Secrets.json
+/MightyRSS/appsettings.Development.Secrets.json
+/MightyRSS/appsettings.Secrets.json
 
 wwwroot
 
