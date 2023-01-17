@@ -42,11 +42,11 @@ public sealed class AuthService : IAuthService
 
         unitOfWork.Commit();
 
-        return Result<GetUserResponse>.Of(new GetUserResponse
+        return new GetUserResponse
         {
             Reference = user.Reference,
             Username = user.Username
-        });
+        };
     }
 
     public Result<CreateUserResponse> CreateUser(CreateUserRequest request)
@@ -70,11 +70,11 @@ public sealed class AuthService : IAuthService
 
         unitOfWork.Commit();
 
-        return Result<CreateUserResponse>.Of(new CreateUserResponse
+        return new CreateUserResponse
         {
             Reference = user.Reference,
             Username = user.Username
-        }, HttpStatusCode.Created);
+        };
     }
 
     public Result<LogInResponse> LogIn(LogInRequest request)
@@ -94,9 +94,9 @@ public sealed class AuthService : IAuthService
 
         unitOfWork.Commit();
 
-        return Result<LogInResponse>.Of(new LogInResponse
+        return new LogInResponse
         {
             JwtToken = jwtToken
-        });
+        };
     }
 }

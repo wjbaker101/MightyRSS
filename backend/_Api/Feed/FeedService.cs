@@ -83,7 +83,7 @@ public sealed class FeedService: IFeedService
 
         unitOfWork.Commit();
 
-        return Result<AddFeedSourceResponse>.Of(new AddFeedSourceResponse
+        return new AddFeedSourceResponse
         {
             Reference = feedSource.Reference,
             Title = feedSource.Title,
@@ -100,7 +100,7 @@ public sealed class FeedService: IFeedService
                 PublishedAt = x.PublishedAt,
                 PublishedAtAsString = x.PublishedAtAsString
             })
-        });
+        };
     }
 
     public Result<GetFeedResponse> GetFeed(UserRecord user)
@@ -111,7 +111,7 @@ public sealed class FeedService: IFeedService
 
         unitOfWork.Commit();
 
-        return Result<GetFeedResponse>.Of(new GetFeedResponse
+        return new GetFeedResponse
         {
             Sources = feedSources.ConvertAll(source => new GetFeedResponse.FeedSource
             {
@@ -132,7 +132,7 @@ public sealed class FeedService: IFeedService
                     PublishedAtAsString = article.PublishedAtAsString
                 })
             })
-        });
+        };
     }
 
     public Result DeleteFeedSource(UserRecord user, Guid reference)
@@ -147,7 +147,7 @@ public sealed class FeedService: IFeedService
 
         unitOfWork.Commit();
 
-        return Result.Success(HttpStatusCode.NoContent);
+        return Result.Success();
     }
 
     public Result AddFeedToCollection(UserRecord user, Guid feedReference, AddFeedToCollectionRequest request)
@@ -182,6 +182,6 @@ public sealed class FeedService: IFeedService
 
         unitOfWork.Commit();
 
-        return Result.Success(HttpStatusCode.Created);
+        return Result.Success();
     }
 }
