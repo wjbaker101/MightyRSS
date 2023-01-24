@@ -7,43 +7,43 @@ using System.Net;
 
 namespace Data.Repositories;
 
-public interface IUserFeedSourceRepository : IRepository<UserDataFeedSourceRecord>
+public interface IUserFeedSourceRepository : IRepository<UserFeedSourceRecord>
 {
-    List<UserDataFeedSourceRecord> GetAll();
-    Result<UserDataFeedSourceRecord> GetByUserAndFeedSourceReference(UserRecord user, Guid reference);
-    List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user);
+    List<UserFeedSourceRecord> GetAll();
+    Result<UserFeedSourceRecord> GetByUserAndFeedSourceReference(UserRecord user, Guid reference);
+    List<UserFeedSourceRecord> GetFeedSources(UserRecord user);
 }
 
-public sealed class UserFeedSourceRepository : Repository<UserDataFeedSourceRecord>, IUserFeedSourceRepository
+public sealed class UserFeedSourceRepository : Repository<UserFeedSourceRecord>, IUserFeedSourceRepository
 {
     public UserFeedSourceRepository(ISession session) : base(session)
     {
     }
 
-    public List<UserDataFeedSourceRecord> GetAll()
+    public List<UserFeedSourceRecord> GetAll()
     {
         return Session
-            .Query<UserDataFeedSourceRecord>()
+            .Query<UserFeedSourceRecord>()
             .Fetch(x => x.FeedSource)
             .ToList();
     }
 
-    public Result<UserDataFeedSourceRecord> GetByUserAndFeedSourceReference(UserRecord user, Guid reference)
+    public Result<UserFeedSourceRecord> GetByUserAndFeedSourceReference(UserRecord user, Guid reference)
     {
         var userFeedSource = Session
-            .Query<UserDataFeedSourceRecord>()
+            .Query<UserFeedSourceRecord>()
             .SingleOrDefault(x => x.User == user && x.FeedSource.Reference == reference);
 
         if (userFeedSource == null)
-            return Result<UserDataFeedSourceRecord>.Failure("The feed source could not be found in your feed.", HttpStatusCode.NotFound);
+            return Result<UserFeedSourceRecord>.Failure("The feed source could not be found in your feed.", HttpStatusCode.NotFound);
 
         return userFeedSource;
     }
 
-    public List<UserDataFeedSourceRecord> GetFeedSources(UserRecord user)
+    public List<UserFeedSourceRecord> GetFeedSources(UserRecord user)
     {
         return Session
-            .Query<UserDataFeedSourceRecord>()
+            .Query<UserFeedSourceRecord>()
             .Fetch(x => x.FeedSource)
             .Where(x => x.User == user)
             .ToList();

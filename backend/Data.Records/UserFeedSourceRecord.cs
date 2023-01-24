@@ -3,7 +3,7 @@ using FluentNHibernate.Mapping;
 
 namespace Data.Records;
 
-public class UserDataFeedSourceRecord : IApiRecord
+public class UserFeedSourceRecord : IApiRecord
 {
     public virtual long Id { get; init; }
     public virtual required UserRecord User { get; init; }
@@ -12,9 +12,9 @@ public class UserDataFeedSourceRecord : IApiRecord
     public virtual required string? Title { get; set; }
 }
 
-public sealed class UserDataFeedSourceRecordMap : ClassMap<UserDataFeedSourceRecord>
+public sealed class UserFeedSourceRecordMap : ClassMap<UserFeedSourceRecord>
 {
-    public UserDataFeedSourceRecordMap()
+    public UserFeedSourceRecordMap()
     {
         Schema("mighty_rss");
         Table("user_feed_source");

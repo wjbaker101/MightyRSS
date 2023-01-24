@@ -70,7 +70,7 @@ public sealed class FeedService : IFeedService
         if (existingUserFeedSource.IsSuccess)
             return Result<AddFeedSourceResponse>.Failure("Feed source could not be added as it already exists.");
 
-        var userFeedSource = new UserDataFeedSourceRecord
+        var userFeedSource = new UserFeedSourceRecord
         {
             User = user,
             FeedSource = feedSource,
