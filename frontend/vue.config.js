@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service');
 
 module.exports = defineConfig({
-    outputDir: '../backend/wwwroot',
+    outputDir: '../backend/MightyRSS/wwwroot',
 
     css: {
         loaderOptions: {
