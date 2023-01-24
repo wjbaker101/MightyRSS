@@ -2,6 +2,6 @@
 
 public sealed class UserModel
 {
-    public Guid Reference { get; init; }
-    public string Username { get; init; } = null!;
+    public required Guid Reference { get; init; }
+    public required string Username { get; init; }
 }

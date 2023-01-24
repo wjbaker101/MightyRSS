@@ -1,8 +1,10 @@
-﻿namespace Core.Models.Mappers;
+﻿using Data.Records;
 
-public static class UserModelMapper
+namespace Core.Models.Mappers;
+
+public static class UserMapper
 {
-    public static UserModel Map(UserModel user)
+    public static UserModel Map(UserRecord user)
     {
         return new UserModel
         {
