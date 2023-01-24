@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using MightyRSS.Auth;
+using MightyRSS.Types;
 using System;
 
 namespace MightyRSS._Api.Auth.Attributes;

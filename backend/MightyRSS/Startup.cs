@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using MightyRSS._Api.Auth;
 using MightyRSS._Api.Auth.Attributes;
 using MightyRSS._Api.Feed;
-using MightyRSS.Auth;
+using MightyRSS.Types;
 
 namespace MightyRSS;
 

@@ -1,6 +1,6 @@
 ﻿using Data.Records;
 
-namespace MightyRSS.Auth;
+namespace MightyRSS.Types;
 
 public interface IRequestContext
 {
@@ -9,5 +9,5 @@ public interface IRequestContext
 
 public sealed class RequestContext : IRequestContext
 {
-    public UserRecord User { get; set; }
+    public required UserRecord User { get; set; }
 }
