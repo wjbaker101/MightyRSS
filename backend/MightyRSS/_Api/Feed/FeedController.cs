@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MightyRSS._Api.Auth.Attributes;
 using MightyRSS._Api.Feed.Types;
 using MightyRSS.Auth;
 using NetApiLibs.Api;

@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using MightyRSS._Api.Auth;
+using MightyRSS.Auth;
 using System;
 
-namespace MightyRSS.Auth;
+namespace MightyRSS._Api.Auth.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class Authorisation : Attribute, IAuthorizationFilter
