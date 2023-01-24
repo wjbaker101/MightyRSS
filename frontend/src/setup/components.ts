@@ -1,7 +1,11 @@
-import { App } from 'vue';
+import { Plugin } from 'vue';
 
 import IconComponent from '@wjb/vue/component/IconComponent.vue';
 
-export const setupComponents = function (app: App<Element>): void {
-    app.component('IconComponent', IconComponent);
+export const components: Plugin = {
+
+    install(app) {
+        app.component('IconComponent', IconComponent);
+    },
+
 };
