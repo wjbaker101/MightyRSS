@@ -5,6 +5,7 @@ using System;
 
 namespace MightyRSS._Api.Auth;
 
+[ApiController]
 [Route("api/auth")]
 public sealed class AuthController : ApiController
 {

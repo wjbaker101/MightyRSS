@@ -7,6 +7,7 @@ using System;
 
 namespace MightyRSS._Api.Feed;
 
+[ApiController]
 [Route("api/feed")]
 public sealed class FeedController : ApiController
 {
