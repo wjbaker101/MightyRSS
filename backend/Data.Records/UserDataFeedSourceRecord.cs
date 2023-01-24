@@ -6,10 +6,10 @@ namespace Data.Records;
 public class UserDataFeedSourceRecord : IApiRecord
 {
     public virtual long Id { get; init; }
-    public virtual UserRecord User { get; init; } = null!;
-    public virtual FeedSourceRecord FeedSource { get; init; } = null!;
-    public virtual string? Collection { get; set; }
-    public virtual string? Title { get; set; }
+    public virtual required UserRecord User { get; init; }
+    public virtual required FeedSourceRecord FeedSource { get; init; }
+    public virtual required string? Collection { get; set; }
+    public virtual required string? Title { get; set; }
 }
 
 public sealed class UserDataFeedSourceRecordMap : ClassMap<UserDataFeedSourceRecord>

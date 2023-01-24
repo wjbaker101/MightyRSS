@@ -6,11 +6,11 @@ namespace Data.Records;
 public class UserRecord : IApiRecord
 {
     public virtual long Id { get; init; }
-    public virtual Guid Reference { get; init; }
-    public virtual DateTime CreatedAt { get; init; }
-    public virtual string Username { get; set; } = null!;
-    public virtual string Password { get; set; } = null!;
-    public virtual Guid PasswordSalt { get; set; }
+    public virtual required Guid Reference { get; init; }
+    public virtual required DateTime CreatedAt { get; init; }
+    public virtual required string Username { get; set; }
+    public virtual required string Password { get; set; }
+    public virtual required Guid PasswordSalt { get; set; }
 }
 
 public sealed class UserRecordMap : ClassMap<UserRecord>

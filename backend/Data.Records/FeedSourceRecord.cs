@@ -6,22 +6,22 @@ namespace Data.Records;
 public class FeedSourceRecord : IApiRecord
 {
     public virtual long Id { get; init; }
-    public virtual Guid Reference { get; init; }
-    public virtual string Title { get; set; } = null!;
-    public virtual string Description { get; set; } = null!;
-    public virtual string RssUrl { get; set; } = null!;
-    public virtual string WebsiteUrl { get; set; } = null!;
-    public virtual List<Article>? Articles { get; set; }
-    public virtual DateTime? ArticlesUpdatedAt { get; set; }
+    public virtual required Guid Reference { get; init; }
+    public virtual required string Title { get; set; }
+    public virtual required string Description { get; set; }
+    public virtual required string RssUrl { get; set; }
+    public virtual required string WebsiteUrl { get; set; }
+    public virtual required List<Article>? Articles { get; set; }
+    public virtual required DateTime? ArticlesUpdatedAt { get; set; }
 
     public sealed class Article
     {
-        public string Url { get; set; } = null!;
-        public string Title { get; set; } = null!;
-        public string Summary { get; set; } = null!;
-        public string Author { get; set; } = null!;
-        public DateTime? PublishedAt { get; set; } = null!;
-        public string PublishedAtAsString { get; set; } = null!;
+        public required string Url { get; set; }
+        public required string Title { get; set; }
+        public required string Summary { get; set; }
+        public required string Author { get; set; }
+        public required DateTime? PublishedAt { get; set; }
+        public required string PublishedAtAsString { get; set; }
     }
 }
 
