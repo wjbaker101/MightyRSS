@@ -1,10 +1,10 @@
 ﻿using CodeHollow.FeedReader;
-using MightyRSS._Api.Feed.Types;
+using MightyRSS.Api.Feed.Types;
 using NetApiLibs.Type;
 using System;
 using System.Linq;
 
-namespace MightyRSS._Api.Feed;
+namespace MightyRSS.Api.Feed;
 
 public interface IFeedReaderService
 {

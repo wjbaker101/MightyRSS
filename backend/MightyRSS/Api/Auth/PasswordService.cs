@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace MightyRSS._Api.Auth;
+namespace MightyRSS.Api.Auth;
 
 public interface IPasswordService
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MightyRSS._Api.Auth.Types;
+﻿namespace MightyRSS.Api.Auth.Types;
 
 public sealed class LogInRequest
 {

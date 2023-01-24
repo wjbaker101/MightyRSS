@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MightyRSS._Api.Feed.Types;
+namespace MightyRSS.Api.Feed.Types;
 
 public sealed class AddFeedSourceRequest
 {

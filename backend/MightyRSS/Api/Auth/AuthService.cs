@@ -1,10 +1,10 @@
 ﻿using Data.Records;
 using Data.UoW;
-using MightyRSS._Api.Auth.Types;
+using MightyRSS.Api.Auth.Types;
 using NetApiLibs.Type;
 using System;
 
-namespace MightyRSS._Api.Auth;
+namespace MightyRSS.Api.Auth;
 
 public interface IAuthService
 {

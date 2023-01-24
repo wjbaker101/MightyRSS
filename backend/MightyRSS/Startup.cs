@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MightyRSS._Api.Auth;
-using MightyRSS._Api.Auth.Attributes;
-using MightyRSS._Api.Feed;
+using MightyRSS.Api.Auth;
+using MightyRSS.Api.Auth.Attributes;
+using MightyRSS.Api.Feed;
 using MightyRSS.Types;
 
 namespace MightyRSS;

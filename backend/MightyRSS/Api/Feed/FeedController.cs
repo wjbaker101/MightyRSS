@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MightyRSS._Api.Auth.Attributes;
-using MightyRSS._Api.Feed.Types;
+using MightyRSS.Api.Auth.Attributes;
+using MightyRSS.Api.Feed.Types;
 using MightyRSS.Types;
 using NetApiLibs.Api;
 using System;
 
-namespace MightyRSS._Api.Feed;
+namespace MightyRSS.Api.Feed;
 
 [ApiController]
 [Route("api/feed")]

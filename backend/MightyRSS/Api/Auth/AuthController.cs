@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MightyRSS._Api.Auth.Types;
+using MightyRSS.Api.Auth.Types;
 using NetApiLibs.Api;
 using System;
 
-namespace MightyRSS._Api.Auth;
+namespace MightyRSS.Api.Auth;
 
 [ApiController]
 [Route("api/auth")]

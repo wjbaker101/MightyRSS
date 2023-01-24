@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MightyRSS.Types;
 using System;
 
-namespace MightyRSS._Api.Auth.Attributes;
+namespace MightyRSS.Api.Auth.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class Authorisation : Attribute, IAuthorizationFilter

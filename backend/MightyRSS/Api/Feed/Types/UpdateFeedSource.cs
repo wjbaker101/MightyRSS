@@ -1,4 +1,4 @@
-﻿namespace MightyRSS._Api.Feed.Types;
+﻿namespace MightyRSS.Api.Feed.Types;
 
 public sealed class UpdateFeedSourceRequest
 {
