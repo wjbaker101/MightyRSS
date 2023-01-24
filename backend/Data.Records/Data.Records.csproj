@@ -7,7 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Data.Records\Data.Records.csproj" />
+	  <PackageReference Include="FluentNHibernate" Version="3.1.0" />
+	  <PackageReference Include="Npgsql" Version="7.0.1" />
+	  <PackageReference Include="Utf8Json" Version="1.3.7" />
 	</ItemGroup>
 
 </Project>

@@ -1,8 +1,8 @@
-﻿using System.Data;
-using NHibernate.SqlTypes;
+﻿using NHibernate.SqlTypes;
 using NpgsqlTypes;
+using System.Data;
 
-namespace Data.Types;
+namespace Data.Records.Types;
 
 public sealed class NpgsqlExtendedSqlType : SqlType
 {

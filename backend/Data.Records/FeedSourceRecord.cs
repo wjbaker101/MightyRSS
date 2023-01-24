@@ -1,9 +1,9 @@
-﻿using Data.Types;
+﻿using Data.Records.Types;
 using FluentNHibernate.Mapping;
 
 namespace Data.Records;
 
-public class FeedSourceRecord
+public class FeedSourceRecord : IApiRecord
 {
     public virtual long Id { get; init; }
     public virtual Guid Reference { get; init; }

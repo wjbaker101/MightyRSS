@@ -1,4 +1,5 @@
 ﻿using Core.Settings;
+using Data.Records;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Microsoft.Extensions.Options;
@@ -29,7 +30,7 @@ public sealed class ApiDatabase : IApiDatabase
                 .Database(databaseSettings.Database)
                 .Username(databaseSettings.Username)
                 .Password(databaseSettings.Password)))
-            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ApiDatabase>())
+            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<_Records>())
             .BuildSessionFactory();
     }
 

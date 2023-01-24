@@ -1,8 +1,9 @@
-﻿using FluentNHibernate.Mapping;
+﻿using Data.Records.Types;
+using FluentNHibernate.Mapping;
 
 namespace Data.Records;
 
-public class UserDataFeedSourceRecord
+public class UserDataFeedSourceRecord : IApiRecord
 {
     public virtual long Id { get; init; }
     public virtual UserRecord User { get; init; } = null!;
