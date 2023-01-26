@@ -2,10 +2,10 @@
     <div class="configuration-view">
         <HeaderComponent />
         <div class="content-width">
-            <div class="user-details content-container flex align-items-center">
+            <div v-if="user !== null" class="user-details content-container flex align-items-center">
                 <div class="flex-2">
                     <h2>Currently logged in as:</h2>
-                    <p>TestUsername</p>
+                    <p>{{ user.username }}</p>
                 </div>
                 <div class="text-centered">
                     <strong class="feed-count">5</strong> feeds
@@ -16,7 +16,20 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+
 import HeaderComponent from '@/components/Header.component.vue';
+
+import { userApi } from '@/api/user/user.api';
+import { IUser } from '@/model/User.model';
+
+const user = ref<IUser | null>(null);
+
+onMounted(async () => {
+    const result = await userApi.getSelf();
+
+    user.value = result;
+});
 </script>
 
 <style lang="scss">
