@@ -2,4 +2,6 @@
 
 :root {
     @include setup-variables();
+
+    --wjb-border-radius: 0.5rem;
 }

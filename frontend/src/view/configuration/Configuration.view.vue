@@ -75,9 +75,9 @@ onMounted(async () => {
     }
 
     .feed-source {
-        padding: 0.25rem;
-        border-radius: 0.25rem;
-        border-right: 3px solid #999;
+        padding: 0.25rem 0.5rem;
+        border-radius: calc(var(--wjb-border-radius) / 2);
+        border-left: 2px solid var(--wjb-primary);
 
         &:hover {
             background-color: rgba(0, 0, 0, 0.05);
