@@ -7,8 +7,8 @@
                     <h2>Currently logged in as:</h2>
                     <p>{{ user.username }}</p>
                 </div>
-                <div class="text-centered">
-                    <strong class="feed-count">5</strong> feeds
+                <div v-if="configuration !== null" class="text-centered">
+                    <strong class="feed-count">{{ configuration.collections.flatMap(x => x.feedSources).length }}</strong> feeds
                 </div>
             </div>
         </div>
@@ -21,14 +21,20 @@ import { onMounted, ref } from 'vue';
 import HeaderComponent from '@/components/Header.component.vue';
 
 import { userApi } from '@/api/user/user.api';
+
 import { IUser } from '@/model/User.model';
+import { IGetConfigurationDto } from '@/api/configuration/dtos/GetConfiguration.dto';
+import { configurationApi } from '@/api/configuration/configuration.api';
 
 const user = ref<IUser | null>(null);
+const configuration = ref<IGetConfigurationDto | null>(null);
 
 onMounted(async () => {
     const result = await userApi.getSelf();
-
     user.value = result;
+
+    const configurationResult = await configurationApi.getConfiguration();
+    configuration.value = configurationResult;
 });
 </script>
 
