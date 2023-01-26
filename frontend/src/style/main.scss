@@ -11,4 +11,6 @@
 @import 'main/elements/inputs';
 @import 'main/elements/section';
 
-@import 'main/layouts/flex';
+.flex-vertical {
+    flex-direction: row;
+}

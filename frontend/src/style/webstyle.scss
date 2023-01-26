@@ -1,0 +1,5 @@
+@use '~@wjb/styling/setup-variables' as *;
+
+:root {
+    @include setup-variables();
+}
