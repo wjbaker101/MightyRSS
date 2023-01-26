@@ -1,4 +1,6 @@
-﻿namespace MightyRSS.Api.User.Types;
+﻿using Core.Models;
+
+namespace MightyRSS.Api.User.Types;
 
 public sealed class GetSelfResponse
 {
