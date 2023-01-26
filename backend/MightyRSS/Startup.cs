@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MightyRSS.Api.Auth;
 using MightyRSS.Api.Auth.Attributes;
+using MightyRSS.Api.Configuration;
 using MightyRSS.Api.Feed;
 using MightyRSS.Types;
 
@@ -42,6 +43,8 @@ public sealed class Startup
         services.AddSingleton<IAuthService, AuthService>();
         services.AddSingleton<IPasswordService, PasswordService>();
         services.AddSingleton<ILoginTokenService, LoginTokenService>();
+
+        services.AddSingleton<IConfigurationService, ConfigurationService>();
 
         services.AddSingleton<IFeedReaderService, FeedReaderService>();
         services.AddSingleton<IFeedService, FeedService>();
