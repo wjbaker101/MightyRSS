@@ -11,6 +11,18 @@
                     <strong class="feed-count">{{ configuration.collections.flatMap(x => x.feedSources).length }}</strong> feeds
                 </div>
             </div>
+            <div v-if="configuration !== null" class="collections-details">
+                <div v-for="collection in configuration.collections">
+                    <h3>{{ collection.collection ?? 'Not in a Collection' }}</h3>
+                    <div class="feed-source" v-for="feedSource in collection.feedSources">
+                        <strong>
+                            <a :href="feedSource.feedSource.websiteUrl" target="_blank" rel="nofollow noreferrer">
+                                {{ feedSource.userFeedSource.titleAlias ?? feedSource.feedSource.title }}
+                            </a>
+                        </strong>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -50,6 +62,12 @@ onMounted(async () => {
     .user-details {
         .feed-count {
             font-size: 2rem;
+        }
+    }
+
+    .feed-source {
+        & + .feed-source {
+            margin-top: 0.25rem;
         }
     }
 }
