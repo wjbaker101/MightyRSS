@@ -66,6 +66,14 @@ onMounted(async () => {
     }
 
     .feed-source {
+        padding: 0.25rem;
+        border-radius: 0.25rem;
+        border-right: 3px solid #999;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
         & + .feed-source {
             margin-top: 0.25rem;
         }
