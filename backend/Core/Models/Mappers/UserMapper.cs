@@ -9,6 +9,7 @@ public static class UserMapper
         return new UserModel
         {
             Reference = user.Reference,
+            CreatedAt = user.CreatedAt,
             Username = user.Username
         };
     }
