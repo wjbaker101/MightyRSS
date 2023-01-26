@@ -1,6 +1,13 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-const routes: Array<RouteRecordRaw> = [];
+import FeedView from '@/view/feed/Feed.view.vue';
+
+const routes: Array<RouteRecordRaw> = [
+    {
+        path: '/',
+        component: FeedView,
+    },
+];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
