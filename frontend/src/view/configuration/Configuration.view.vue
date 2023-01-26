@@ -14,12 +14,17 @@
             <div v-if="configuration !== null" class="collections-details">
                 <div v-for="collection in configuration.collections">
                     <h3>{{ collection.collection ?? 'Not in a Collection' }}</h3>
-                    <div class="feed-source" v-for="feedSource in collection.feedSources">
+                    <div class="feed-source flex align-items-center" v-for="feedSource in collection.feedSources">
                         <strong>
-                            <a :href="feedSource.feedSource.websiteUrl" target="_blank" rel="nofollow noreferrer">
+                            <a :href="feedSource.feedSource.websiteUrl" target="_blank" rel="nofollow noreferrer" :title="feedSource.feedSource.description">
                                 {{ feedSource.userFeedSource.titleAlias ?? feedSource.feedSource.title }}
                             </a>
                         </strong>
+                        <div class="flex-auto">
+                            <div class="delete-feed-source">
+                                <IconComponent icon="cross" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,6 +81,15 @@ onMounted(async () => {
 
         & + .feed-source {
             margin-top: 0.25rem;
+        }
+    }
+
+    .delete-feed-source {
+        cursor: pointer;
+        opacity: 0.2;
+
+        &:hover {
+            opacity: 1;
         }
     }
 }
