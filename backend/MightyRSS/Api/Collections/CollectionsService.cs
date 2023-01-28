@@ -11,6 +11,7 @@ namespace MightyRSS.Api.Collections;
 public interface ICollectionsService
 {
     Result<CreateCollectionResponse> CreateCollection(IRequestContext requestContext, CreateCollectionRequest request);
+    Result<UpdateCollectionResponse> UpdateCollection(IRequestContext requestContext, Guid collectionReference, UpdateCollectionRequest request);
     Result<GetCollectionsResponse> GetCollections(IRequestContext requestContext);
 }
 
@@ -38,6 +39,29 @@ public sealed class CollectionsService : ICollectionsService
         unitOfWork.Commit();
 
         return new CreateCollectionResponse
+        {
+            Collection = CollectionMapper.Map(collection)
+        };
+    }
+
+    public Result<UpdateCollectionResponse> UpdateCollection(IRequestContext requestContext, Guid collectionReference, UpdateCollectionRequest request)
+    {
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+
+        var collectionResult = unitOfWork.Collections.GetByReference(collectionReference);
+        if (!collectionResult.TrySuccess(out var collection))
+            return Result<UpdateCollectionResponse>.FromFailure(collectionResult);
+
+        if (collection.User.Reference != requestContext.User.Reference)
+            return Result<UpdateCollectionResponse>.Failure("Cannot update a collection that you do not own.");
+
+        collection.Name = request.Name;
+
+        unitOfWork.Collections.Update(collection);
+
+        unitOfWork.Commit();
+
+        return new UpdateCollectionResponse
         {
             Collection = CollectionMapper.Map(collection)
         };
