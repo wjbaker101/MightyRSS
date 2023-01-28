@@ -4,11 +4,11 @@ namespace Data.Records;
 
 public class CollectionRecord
 {
-    public long Id { get; init; }
-    public required Guid Reference { get; init; }
-    public required DateTime CreatedAt { get; init; }
-    public required UserRecord User { get; init; }
-    public required string Name { get; init; }
+    public virtual long Id { get; init; }
+    public virtual required Guid Reference { get; init; }
+    public virtual required DateTime CreatedAt { get; init; }
+    public virtual required UserRecord User { get; init; }
+    public virtual required string Name { get; init; }
 }
 
 public sealed class CollectionRecordMap : ClassMap<CollectionRecord>
