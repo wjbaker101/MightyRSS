@@ -26,4 +26,14 @@ public sealed class CollectionsController : ApiController
 
         return ToApiResponse(result);
     }
+
+    [HttpGet]
+    [Route("")]
+    [Authorisation]
+    public IActionResult GetCollections([FromServices] IRequestContext requestContext)
+    {
+        var result = _collectionsService.GetCollections(requestContext);
+
+        return ToApiResponse(result);
+    }
 }

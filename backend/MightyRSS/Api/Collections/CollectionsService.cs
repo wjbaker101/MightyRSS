@@ -11,6 +11,7 @@ namespace MightyRSS.Api.Collections;
 public interface ICollectionsService
 {
     Result<CreateCollectionResponse> CreateCollection(IRequestContext requestContext, CreateCollectionRequest request);
+    Result<GetCollectionsResponse> GetCollections(IRequestContext requestContext);
 }
 
 public sealed class CollectionsService : ICollectionsService
@@ -39,6 +40,20 @@ public sealed class CollectionsService : ICollectionsService
         return new CreateCollectionResponse
         {
             Collection = CollectionMapper.Map(collection)
+        };
+    }
+
+    public Result<GetCollectionsResponse> GetCollections(IRequestContext requestContext)
+    {
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+
+        var collections = unitOfWork.Collections.GetByUser(requestContext.User);
+
+        unitOfWork.Commit();
+
+        return new GetCollectionsResponse
+        {
+            Collections = collections.ConvertAll(CollectionMapper.Map)
         };
     }
 }

@@ -8,6 +8,7 @@ namespace Data.Repositories;
 public interface ICollectionRepository : IRepository<CollectionRecord>
 {
     Result<CollectionRecord> GetByReference(Guid collectionReference);
+    List<CollectionRecord> GetByUser(UserRecord user);
 }
 
 public sealed class CollectionRepository : Repository<CollectionRecord>, ICollectionRepository
@@ -26,5 +27,13 @@ public sealed class CollectionRepository : Repository<CollectionRecord>, ICollec
             return Result<CollectionRecord>.Failure($"Unable to find collection with reference: {collectionReference}.");
 
         return collection;
+    }
+
+    public List<CollectionRecord> GetByUser(UserRecord user)
+    {
+        return Session
+            .Query<CollectionRecord>()
+            .Where(x => x.User == user)
+            .ToList();
     }
 }
