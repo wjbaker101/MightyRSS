@@ -8,7 +8,7 @@ public class CollectionRecord
     public virtual required Guid Reference { get; init; }
     public virtual required DateTime CreatedAt { get; init; }
     public virtual required UserRecord User { get; init; }
-    public virtual required string Name { get; init; }
+    public virtual required string Name { get; set; }
 }
 
 public sealed class CollectionRecordMap : ClassMap<CollectionRecord>
