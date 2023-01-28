@@ -75,7 +75,7 @@ onMounted(async () => {
     }
 
     .feed-source {
-        padding: 0.25rem 0.5rem;
+        padding: 0 0.5rem;
         border-radius: calc(var(--wjb-border-radius) / 2);
         border-left: 2px solid var(--wjb-primary);
 
