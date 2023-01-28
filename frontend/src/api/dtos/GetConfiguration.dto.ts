@@ -1,4 +1,4 @@
-import { IFeedSource } from '@/model/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.model';
 import { IUserFeedSource } from '@/model/UserFeedSource.model';
 
 export interface IGetConfigurationDto {

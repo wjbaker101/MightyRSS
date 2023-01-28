@@ -19,7 +19,7 @@ import HiddenTextBoxComponent from '@/components/HiddenTextBox.component.vue';
 import { feedApi } from '@/api/feed/Feed.api';
 import { useRss } from '@/use/rss.use';
 
-import { IFeedSource } from '@/model/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.model';
 
 const props = defineProps<{
     feedSource: IFeedSource;

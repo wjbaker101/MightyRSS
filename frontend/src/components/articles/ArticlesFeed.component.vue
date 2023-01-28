@@ -42,7 +42,7 @@ import dayjs from 'dayjs';
 
 import ArticleComponent from '@/components/Article.component.vue';
 
-import { IFeedArticle } from '@/model/FeedArticle.type';
+import { IFeedArticle } from '@/model/FeedArticle.model';
 import { useRss } from '@/use/rss.use';
 
 const rss = useRss();

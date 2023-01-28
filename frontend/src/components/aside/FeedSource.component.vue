@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { useRss } from '@/use/rss.use';
 
-import { IFeedSource } from '@/model/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.model';
 
 const props = defineProps<{
     feedSource: IFeedSource;

@@ -1,6 +1,6 @@
 import { Dayjs } from 'dayjs';
 
-import { IFeedSource } from '@/model/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.model';
 
 export interface IFeedArticle {
     url: string;

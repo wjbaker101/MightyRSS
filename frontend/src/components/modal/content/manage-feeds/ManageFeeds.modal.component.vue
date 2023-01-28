@@ -36,7 +36,7 @@ import { useRss } from '@/use/rss.use';
 import { UseUserMessage } from '@/use/UserMessage.use';
 import { useAppData } from '@/use/app-data.use';
 
-import { IFeedSource } from '@/model/FeedSource.type';
+import { IFeedSource } from '@/model/FeedSource.model';
 
 const emit = defineEmits(['close']);
 

@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 
 import { feedApi } from '@/api/feed/Feed.api';
 
-import { IFeedArticle } from '@/model/FeedArticle.type';
-import { IFeedSource } from '@/model/FeedSource.type';
+import { IFeedArticle } from '@/model/FeedArticle.model';
+import { IFeedSource } from '@/model/FeedSource.model';
 
 const feed = ref<Array<IFeedArticle> | null>(null);
 const feedSources = ref<Array<IFeedSource> | null>(null);
