@@ -43,7 +43,6 @@ import { onMounted, ref } from 'vue';
 
 import HeaderComponent from '@/components/Header.component.vue';
 
-import { userApi } from '@/api/user/user.api';
 import { apiClient } from '@/api/api-client';
 
 import { IUser } from '@/model/User.model';
@@ -53,7 +52,7 @@ const user = ref<IUser | null>(null);
 const configuration = ref<IGetConfigurationDto | null>(null);
 
 onMounted(async () => {
-    const result = await userApi.getSelf();
+    const result = await apiClient.user.getSelf();
     user.value = result;
 
     const configurationResult = await apiClient.configuration.get();

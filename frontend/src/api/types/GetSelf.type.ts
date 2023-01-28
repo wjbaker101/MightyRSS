@@ -1,4 +1,4 @@
-import { IApiUser } from './_ApiUser.type';
+import { IApiUser } from './ApiUser.type';
 
 export interface IGetSelfResponse {
     user: IApiUser;

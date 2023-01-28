@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import dayjs from 'dayjs';
 
 import { useAppData } from '@/use/app-data.use';
 import { ApiResultResponse } from './ResponseHelper';
@@ -6,10 +7,13 @@ import { ApiResultResponse } from './ResponseHelper';
 import { IGetConfigurationDto } from './dtos/GetConfiguration.dto';
 import { IGetConfigurationResponse } from './types/GetConfiguration.type';
 
+import { IUser } from '@/model/User.model';
+import { IGetSelfResponse } from './types/GetSelf.type';
+
 const appData = useAppData();
 
 const api = axios.create({
-    baseURL: '/api/configuration',
+    baseURL: '/api',
 });
 
 api.interceptors.request.use((config: AxiosRequestConfig) => {
@@ -25,7 +29,7 @@ export const apiClient = {
     configuration: {
 
         async get(): Promise<IGetConfigurationDto> {
-            const response = await api.get<ApiResultResponse<IGetConfigurationResponse>>('');
+            const response = await api.get<ApiResultResponse<IGetConfigurationResponse>>('/configuration');
 
             const collections = response.data.result.collections;
 
@@ -48,6 +52,22 @@ export const apiClient = {
                         },
                     })),
                 })),
+            };
+        },
+
+    },
+
+    user: {
+
+        async getSelf(): Promise<IUser> {
+            const response = await api.get<ApiResultResponse<IGetSelfResponse>>('/users');
+
+            const user = response.data.result.user;
+
+            return {
+                reference: user.reference,
+                createdAt: dayjs(user.createdAt),
+                username: user.username,
             };
         },
 
