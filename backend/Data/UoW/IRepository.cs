@@ -1,13 +1,14 @@
 ﻿using NHibernate;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Data.UoW;
 
-public interface IRepository<in TRecord>
+public interface IRepository<TRecord>
 {
-    void Save(TRecord record);
-    void SaveMany(IEnumerable<TRecord> records);
-    void Update(TRecord record);
-    void UpdateMany(IEnumerable<TRecord> records);
+    TRecord Save(TRecord record);
+    IEnumerable<TRecord> SaveMany(IEnumerable<TRecord> records);
+    TRecord Update(TRecord record);
+    IEnumerable<TRecord> UpdateMany(IEnumerable<TRecord> records);
     void Delete(TRecord record);
     void DeleteMany(IEnumerable<TRecord> records);
 }
@@ -21,26 +22,34 @@ public abstract class Repository<TRecord>
         Session = session;
     }
 
-    public void Save(TRecord record)
+    public TRecord Save(TRecord record)
     {
         Session.Save(record);
+        return record;
     }
 
-    public void SaveMany(IEnumerable<TRecord> records)
+    [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+    public IEnumerable<TRecord> SaveMany(IEnumerable<TRecord> records)
     {
         foreach (var record in records)
             Save(record);
+
+        return records;
     }
 
-    public void Update(TRecord record)
+    public TRecord Update(TRecord record)
     {
         Session.Update(record);
+        return record;
     }
 
-    public void UpdateMany(IEnumerable<TRecord> records)
+    [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+    public IEnumerable<TRecord> UpdateMany(IEnumerable<TRecord> records)
     {
         foreach (var record in records)
             Update(record);
+
+        return records;
     }
 
     public void Delete(TRecord record)
