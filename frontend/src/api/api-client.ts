@@ -9,6 +9,8 @@ import { IGetConfigurationResponse } from './types/GetConfiguration.type';
 
 import { IUser } from '@/model/User.model';
 import { IGetSelfResponse } from './types/GetSelf.type';
+import { ICollection } from '@/model/Collection.model';
+import { IGetCollectionsResponse } from './types/GetCollections.type';
 
 const appData = useAppData();
 
@@ -69,6 +71,22 @@ export const apiClient = {
                 createdAt: dayjs(user.createdAt),
                 username: user.username,
             };
+        },
+
+    },
+
+    collections: {
+
+        async get(): Promise<Array<ICollection>> {
+            const response = await api.get<ApiResultResponse<IGetCollectionsResponse>>('/collections');
+
+            const collections = response.data.result.collections;
+
+            return collections.map<ICollection>(x => ({
+                reference: x.reference,
+                createdAt: dayjs(x.createdAt),
+                name: x.name,
+            }));
         },
 
     },
