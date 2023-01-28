@@ -5,12 +5,12 @@ using NHibernate;
 
 namespace Data.Repositories;
 
-public interface ICollectionRepository : IRepository<FeedSourceRecord>
+public interface ICollectionRepository : IRepository<CollectionRecord>
 {
     Result<CollectionRecord> GetByReference(Guid collectionReference);
 }
 
-public sealed class CollectionRepository : Repository<FeedSourceRecord>, ICollectionRepository
+public sealed class CollectionRepository : Repository<CollectionRecord>, ICollectionRepository
 {
     public CollectionRepository(ISession session) : base(session)
     {
