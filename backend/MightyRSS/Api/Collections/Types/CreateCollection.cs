@@ -1,4 +1,6 @@
-﻿namespace MightyRSS.Api.Collections.Types;
+﻿using Core.Models;
+
+namespace MightyRSS.Api.Collections.Types;
 
 public sealed class CreateCollectionRequest
 {
@@ -7,4 +9,5 @@ public sealed class CreateCollectionRequest
 
 public sealed class CreateCollectionResponse
 {
+    public required CollectionModel Collection { get; init; }
 }
