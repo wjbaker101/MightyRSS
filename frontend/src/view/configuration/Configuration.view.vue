@@ -33,6 +33,9 @@
                         </div>
                     </div>
                 </div>
+                <div v-for="collection in collections">
+                    <h3>{{ collection.name }}:</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -47,9 +50,11 @@ import { apiClient } from '@/api/api-client';
 
 import { IUser } from '@/model/User.model';
 import { IGetConfigurationDto } from '@/api/dtos/GetConfiguration.dto';
+import { ICollection } from '@/model/Collection.model';
 
 const user = ref<IUser | null>(null);
 const configuration = ref<IGetConfigurationDto | null>(null);
+const collections = ref<Array<ICollection> | null>(null);
 
 onMounted(async () => {
     const result = await apiClient.user.getSelf();
@@ -57,6 +62,9 @@ onMounted(async () => {
 
     const configurationResult = await apiClient.configuration.get();
     configuration.value = configurationResult;
+
+    const _collections = await apiClient.collections.get();
+    collections.value = _collections;
 });
 </script>
 
