@@ -12,11 +12,15 @@ public sealed class Authorisation : Attribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        var authHeader = context.HttpContext.Request.Headers["Authorisation"];
+        if (!context.HttpContext.Request.Headers.TryGetValue("Authorisation", out var authHeader))
+        {
+            context.Result = new UnauthorizedResult();
+            return;
+        }
 
         var loginTokenService = context.HttpContext.RequestServices.GetRequiredService<ILoginTokenService>();
 
-        var userReferenceResult = loginTokenService.GetUserReferenceByToken(authHeader);
+        var userReferenceResult = loginTokenService.GetUserReferenceByToken(authHeader.ToString());
         if (userReferenceResult.IsFailure)
         {
             context.Result = new UnauthorizedResult();
