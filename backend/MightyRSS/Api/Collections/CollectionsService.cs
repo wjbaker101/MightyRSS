@@ -79,6 +79,7 @@ public sealed class CollectionsService : ICollectionsService
 
         return new GetCollectionsResponse
         {
+            FeedSourceCount = collections.SelectMany(x => x).Count(),
             Collections = collections
                 .OrderBy(x => x.Key?.Name)
                 .ConvertAll(grouping => new GetCollectionsResponse.CollectionDetails
