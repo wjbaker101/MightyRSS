@@ -34,7 +34,7 @@ public sealed class AuthService : IAuthService
             return Result<LogInResponse>.FromFailure(userResult);
 
         if (!_passwordService.IsMatch(user.Password, request.Password, user.PasswordSalt))
-            return null;
+            return Result<LogInResponse>.Failure("Incorrect password, please try again.");
 
         var jwtToken = _loginTokenService.CreateToken(user.Reference);
 
