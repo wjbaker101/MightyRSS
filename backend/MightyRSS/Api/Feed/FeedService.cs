@@ -102,22 +102,16 @@ public sealed class FeedService : IFeedService
     {
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
-        var feedSources = unitOfWork.UserFeedSources.GetFeedSources(user);
+        var userFeedSources = unitOfWork.UserFeedSources.GetFeedSources(user);
 
         unitOfWork.Commit();
 
         return new GetFeedResponse
         {
-            Sources = feedSources.ConvertAll(source => new GetFeedResponse.FeedSource
+            Sources = userFeedSources.ConvertAll(userFeedSource => new GetFeedResponse.FeedSourceDetails
             {
-                Reference = source.FeedSource.Reference,
-                Title = source.FeedSource.Title,
-                Description = source.FeedSource.Description,
-                RssUrl = source.FeedSource.RssUrl,
-                WebsiteUrl = source.FeedSource.WebsiteUrl,
-                Collection = source.Collection,
-                TitleAlias = source.Title,
-                Articles = source.FeedSource.Articles.ConvertAll(article => new GetFeedResponse.FeedArticle
+                FeedSource = FeedSourceMapper.Map(userFeedSource.FeedSource, userFeedSource),
+                Articles = userFeedSource.FeedSource.Articles.ConvertAll(article => new GetFeedResponse.FeedArticle
                 {
                     Url = article.Url,
                     Title = article.Title,
