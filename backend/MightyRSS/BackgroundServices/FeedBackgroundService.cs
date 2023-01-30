@@ -3,7 +3,7 @@ using Data.Records;
 using Data.UoW;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using MightyRSS.Api.Feed;
+using MightyRSS.Api.FeedSources;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

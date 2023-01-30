@@ -4,7 +4,7 @@ using NetApiLibs.Type;
 using System;
 using System.Linq;
 
-namespace MightyRSS.Api.Feed;
+namespace MightyRSS.Api.FeedSources;
 
 public interface IFeedReaderService
 {

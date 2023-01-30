@@ -2,17 +2,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace MightyRSS.Api.Feed.Types;
+namespace MightyRSS.Api.FeedSources.Types;
 
-public sealed class AddFeedSourceRequest
+public sealed class GetFeedResponse
 {
-    public required string Url { get; init; }
-}
+    public required List<FeedSourceDetails> Sources { get; init; }
 
-public sealed class AddFeedSourceResponse
-{
-    public required FeedSourceModel FeedSource { get; init; }
-    public required List<FeedArticle> Articles { get; init; }
+    public sealed class FeedSourceDetails
+    {
+        public required FeedSourceModel FeedSource { get; init; }
+        public required List<FeedArticle> Articles { get; init; }
+    }
 
     public sealed class FeedArticle
     {

@@ -1,8 +1,7 @@
 ﻿using Core.Models.Mappers;
 using Data.Records;
 using Data.UoW;
-using MightyRSS.Api.Feed;
-using MightyRSS.Api.Feed.Types;
+using MightyRSS.Api.FeedSources.Types;
 using NetApiLibs.Type;
 using System;
 using System.Linq;
