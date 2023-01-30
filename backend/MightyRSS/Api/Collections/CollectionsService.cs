@@ -3,8 +3,10 @@ using Data.Records;
 using Data.UoW;
 using MightyRSS.Api.Collections.Types;
 using MightyRSS.Types;
+using NetApiLibs.Extension;
 using NetApiLibs.Type;
 using System;
+using System.Linq;
 
 namespace MightyRSS.Api.Collections;
 
@@ -77,7 +79,15 @@ public sealed class CollectionsService : ICollectionsService
 
         return new GetCollectionsResponse
         {
-            Collections = collections.ConvertAll(CollectionMapper.Map)
+            Collections = collections
+                .OrderBy(x => x.Key?.Name)
+                .ConvertAll(grouping => new GetCollectionsResponse.CollectionDetails
+                {
+                    Collection = grouping.Key == null ? null : CollectionMapper.Map(grouping.Key),
+                    FeedSources = grouping
+                        .OrderBy(x => x.Title ?? x.FeedSource.Title)
+                        .ConvertAll(x => FeedSourceMapper.Map(x.FeedSource, x))
+                })
         };
     }
 }

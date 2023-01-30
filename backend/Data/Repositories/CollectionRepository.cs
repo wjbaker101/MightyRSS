@@ -8,7 +8,7 @@ namespace Data.Repositories;
 public interface ICollectionRepository : IRepository<CollectionRecord>
 {
     Result<CollectionRecord> GetByReference(Guid collectionReference);
-    List<CollectionRecord> GetByUser(UserRecord user);
+    List<IGrouping<CollectionRecord?, UserFeedSourceRecord>> GetByUser(UserRecord user);
 }
 
 public sealed class CollectionRepository : Repository<CollectionRecord>, ICollectionRepository
@@ -29,11 +29,12 @@ public sealed class CollectionRepository : Repository<CollectionRecord>, ICollec
         return collection;
     }
 
-    public List<CollectionRecord> GetByUser(UserRecord user)
+    public List<IGrouping<CollectionRecord?, UserFeedSourceRecord>> GetByUser(UserRecord user)
     {
         return Session
-            .Query<CollectionRecord>()
+            .Query<UserFeedSourceRecord>()
             .Where(x => x.User == user)
+            .GroupBy(x => x.CollectionRecord)
             .ToList();
     }
 }
