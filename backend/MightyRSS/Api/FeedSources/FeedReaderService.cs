@@ -1,5 +1,5 @@
 ﻿using CodeHollow.FeedReader;
-using MightyRSS.Api.Feed.Types;
+using MightyRSS.Api.FeedSources.Types;
 using NetApiLibs.Type;
 using System;
 using System.Linq;
