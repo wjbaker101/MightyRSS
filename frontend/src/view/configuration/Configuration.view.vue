@@ -52,8 +52,8 @@ const user = ref<IUser | null>(null);
 const collections = ref<IGetCollectionsDto | null>(null);
 
 onMounted(async () => {
-    const result = await apiClient.user.getSelf();
-    user.value = result;
+    const _user = await apiClient.user.getSelf();
+    user.value = _user;
 
     const _collections = await apiClient.collections.get();
     collections.value = _collections;
