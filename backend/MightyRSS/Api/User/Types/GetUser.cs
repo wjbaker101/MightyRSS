@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MightyRSS.Api.Auth.Types;
+namespace MightyRSS.Api.User.Types;
 
 public sealed class GetUserResponse
 {

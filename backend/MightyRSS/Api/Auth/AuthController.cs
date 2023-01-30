@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MightyRSS.Api.Auth.Types;
 using NetApiLibs.Api;
-using System;
 
 namespace MightyRSS.Api.Auth;
 
@@ -14,24 +13,6 @@ public sealed class AuthController : ApiController
     public AuthController(IAuthService authService)
     {
         _authService = authService;
-    }
-
-    [HttpGet]
-    [Route("user/{reference:guid}")]
-    public IActionResult GetUser([FromRoute] Guid reference)
-    {
-        var result = _authService.GetUser(reference);
-
-        return ToApiResponse(result);
-    }
-
-    [HttpPost]
-    [Route("user")]
-    public IActionResult CreateUser([FromBody] CreateUserRequest request)
-    {
-        var result = _authService.CreateUser(request);
-
-        return ToApiResponse(result);
     }
 
     [HttpPost]
