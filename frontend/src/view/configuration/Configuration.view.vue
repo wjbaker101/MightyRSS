@@ -14,7 +14,7 @@
             <div class="flex align-items-center">
                 <h1>Collections</h1>
                 <div class="flex-auto">
-                    <strong class="feed-count">{{ collections.collections.flatMap(x => x.feedSources).length }}</strong> feeds
+                    <strong class="feed-count">{{ collections.feedSourceCount }}</strong> feeds
                 </div>
             </div>
             <div class="collections-details">

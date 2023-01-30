@@ -53,10 +53,11 @@ export const apiClient = {
         async get(): Promise<IGetCollectionsDto> {
             const response = await api.get<ApiResultResponse<IGetCollectionsResponse>>('/collections');
 
-            const collections = response.data.result.collections;
+            const result = response.data.result;
 
             return {
-                collections: collections.map(x => ({
+                feedSourceCount: result.feedSourceCount,
+                collections: result.collections.map(x => ({
                     collection: x.collection === null ? null : collectionMapper.map(x.collection),
                     feedSources: x.feedSources.map(feedSourceMapper.map),
                 })),
