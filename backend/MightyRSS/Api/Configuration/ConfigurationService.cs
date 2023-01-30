@@ -37,7 +37,7 @@ public sealed class ConfigurationService : IConfigurationService
                 Collection = collection.Key,
                 FeedSources = collection.ConvertAll(userFeedSource => new GetConfigurationResponse.FeedSourceDetails
                 {
-                    FeedSource = FeedSourceMapper.Map(userFeedSource.FeedSource),
+                    FeedSource = FeedSourceMapper.Map(userFeedSource.FeedSource, userFeedSource),
                     UserFeedSource = UserFeedSourceMapper.Map(userFeedSource)
                 })
             })
