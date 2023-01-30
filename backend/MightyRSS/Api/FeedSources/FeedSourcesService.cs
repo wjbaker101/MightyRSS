@@ -12,7 +12,7 @@ public interface IFeedSourcesService
 {
     Result<AddFeedSourceResponse> AddFeedSource(UserRecord user, AddFeedSourceRequest request);
     Result<UpdateFeedSourceResponse> UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request);
-    Result DeleteFeedSource(UserRecord user, Guid reference);
+    Result<DeleteFeedSourceResponse> DeleteFeedSource(UserRecord user, Guid reference);
 }
 
 public sealed class FeedSourcesService : IFeedSourcesService
@@ -112,18 +112,18 @@ public sealed class FeedSourcesService : IFeedSourcesService
         return new UpdateFeedSourceResponse();
     }
 
-    public Result DeleteFeedSource(UserRecord user, Guid reference)
+    public Result<DeleteFeedSourceResponse> DeleteFeedSource(UserRecord user, Guid reference)
     {
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
         var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, reference);
         if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
-            return Result.FromFailure(userFeedSourceResult);
+            return Result<DeleteFeedSourceResponse>.FromFailure(userFeedSourceResult);
 
         unitOfWork.UserFeedSources.Delete(userFeedSource);
 
         unitOfWork.Commit();
 
-        return Result.Success();
+        return new DeleteFeedSourceResponse();
     }
 }
