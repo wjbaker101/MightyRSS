@@ -67,12 +67,12 @@ export const useRss = function () {
                 author: x.author,
                 publishedAt: dayjs(x.publishedAt ?? x.publishedAtAsString),
                 source: {
-                    reference: result.reference,
-                    title: result.title,
-                    description: result.description,
-                    rssUrl: result.rssUrl,
-                    websiteUrl: result.websiteUrl,
-                    collection: result.collection,
+                    reference: result.feedSource.reference,
+                    title: result.feedSource.title,
+                    description: result.feedSource.description,
+                    rssUrl: result.feedSource.rssUrl,
+                    websiteUrl: result.feedSource.websiteUrl,
+                    collection: result.feedSource.collection,
                     titleAlias: null,
                 },
             }));

@@ -1,22 +1,19 @@
+import { IApiFeedSource } from '@/api/_shared/ApiFeedSource.type';
+
 export interface AddFeedSourceRequest {
-    url: string;
+    readonly url: string;
 }
 
 export interface AddFeedSourceResponse {
-    reference: string;
-    title: string;
-    description: string;
-    rssUrl: string;
-    websiteUrl: string;
-    collection: string;
-    articles: Array<FeedArticle>;
+    readonly feedSource: IApiFeedSource;
+    readonly articles: Array<FeedArticle>;
 }
 
 export interface FeedArticle {
-    url: string;
-    title: string;
-    summary: string;
-    author: string;
-    publishedAt: string;
-    publishedAtAsString: string;
+    readonly url: string;
+    readonly title: string;
+    readonly summary: string;
+    readonly author: string;
+    readonly publishedAt: string;
+    readonly publishedAtAsString: string;
 }
