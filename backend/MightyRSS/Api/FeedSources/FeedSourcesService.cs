@@ -72,7 +72,8 @@ public sealed class FeedSourcesService : IFeedSourcesService
             User = user,
             FeedSource = feedSource,
             Collection = null,
-            Title = feedSource.Title
+            Title = feedSource.Title,
+            CollectionRecord = null
         };
 
         unitOfWork.UserFeedSources.Save(userFeedSource);

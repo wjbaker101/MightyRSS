@@ -10,6 +10,7 @@ public class UserFeedSourceRecord : IApiRecord
     public virtual required FeedSourceRecord FeedSource { get; init; }
     public virtual required string? Collection { get; set; }
     public virtual required string? Title { get; set; }
+    public virtual required CollectionRecord? CollectionRecord { get; set; }
 }
 
 public sealed class UserFeedSourceRecordMap : ClassMap<UserFeedSourceRecord>
@@ -23,5 +24,6 @@ public sealed class UserFeedSourceRecordMap : ClassMap<UserFeedSourceRecord>
         References(x => x.FeedSource, "feed_source_id");
         Map(x => x.Collection, "collection");
         Map(x => x.Title, "title");
+        References(x => x.CollectionRecord, "collection_id");
     }
 }
