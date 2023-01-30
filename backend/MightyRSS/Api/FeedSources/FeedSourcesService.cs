@@ -11,8 +11,8 @@ namespace MightyRSS.Api.FeedSources;
 public interface IFeedSourcesService
 {
     Result<AddFeedSourceResponse> AddFeedSource(UserRecord user, AddFeedSourceRequest request);
+    Result<UpdateFeedSourceResponse> UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request);
     Result DeleteFeedSource(UserRecord user, Guid reference);
-    Result UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request);
 }
 
 public sealed class FeedSourcesService : IFeedSourcesService
@@ -94,6 +94,24 @@ public sealed class FeedSourcesService : IFeedSourcesService
         };
     }
 
+    public Result<UpdateFeedSourceResponse> UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request)
+    {
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+
+        var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
+        if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
+            return Result<UpdateFeedSourceResponse>.FromFailure(userFeedSourceResult);
+
+        userFeedSource.Collection = request.Collection;
+        userFeedSource.Title = request.Title;
+
+        unitOfWork.UserFeedSources.Update(userFeedSource);
+
+        unitOfWork.Commit();
+
+        return new UpdateFeedSourceResponse();
+    }
+
     public Result DeleteFeedSource(UserRecord user, Guid reference)
     {
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
@@ -103,24 +121,6 @@ public sealed class FeedSourcesService : IFeedSourcesService
             return Result.FromFailure(userFeedSourceResult);
 
         unitOfWork.UserFeedSources.Delete(userFeedSource);
-
-        unitOfWork.Commit();
-
-        return Result.Success();
-    }
-
-    public Result UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request)
-    {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
-
-        var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
-        if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
-            return Result.FromFailure(userFeedSourceResult);
-
-        userFeedSource.Collection = request.Collection;
-        userFeedSource.Title = request.Title;
-
-        unitOfWork.UserFeedSources.Update(userFeedSource);
 
         unitOfWork.Commit();
 

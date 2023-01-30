@@ -2,6 +2,10 @@
 
 public sealed class UpdateFeedSourceRequest
 {
-    public string Collection { get; init; }
-    public string Title { get; init; }
+    public required string Collection { get; init; }
+    public required string Title { get; init; }
+}
+
+public sealed class UpdateFeedSourceResponse
+{
 }

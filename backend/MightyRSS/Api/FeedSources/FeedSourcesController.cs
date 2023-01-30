@@ -28,22 +28,22 @@ public sealed class FeedSourcesController : ApiController
         return ToApiResponse(result);
     }
 
-    [HttpDelete]
-    [Route("source/{reference:guid}")]
-    [Authorisation]
-    public IActionResult DeleteFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference)
-    {
-        var result = _feedSourcesService.DeleteFeedSource(requestContext.User, reference);
-
-        return ToApiResponse(result);
-    }
-
     [HttpPut]
     [Route("source/{reference:guid}")]
     [Authorisation]
     public IActionResult UpdateFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] UpdateFeedSourceRequest request)
     {
         var result = _feedSourcesService.UpdateFeedSource(requestContext.User, reference, request);
+
+        return ToApiResponse(result);
+    }
+
+    [HttpDelete]
+    [Route("source/{reference:guid}")]
+    [Authorisation]
+    public IActionResult DeleteFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference)
+    {
+        var result = _feedSourcesService.DeleteFeedSource(requestContext.User, reference);
 
         return ToApiResponse(result);
     }
