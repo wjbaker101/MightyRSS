@@ -11,6 +11,7 @@ using MightyRSS.Api.Auth.Attributes;
 using MightyRSS.Api.Collections;
 using MightyRSS.Api.Configuration;
 using MightyRSS.Api.Feed;
+using MightyRSS.Api.FeedSources;
 using MightyRSS.Api.User;
 using MightyRSS.Types;
 
@@ -50,8 +51,10 @@ public sealed class Startup
 
         services.AddSingleton<IConfigurationService, ConfigurationService>();
 
-        services.AddSingleton<IFeedReaderService, FeedReaderService>();
         services.AddSingleton<IFeedService, FeedService>();
+
+        services.AddSingleton<IFeedSourcesService, FeedSourcesService>();
+        services.AddSingleton<IFeedReaderService, FeedReaderService>();
 
         services.AddSingleton<IUserService, UserService>();
 

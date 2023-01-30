@@ -18,16 +18,6 @@ public sealed class FeedController : ApiController
         _feedService = feedService;
     }
 
-    [HttpPost]
-    [Route("")]
-    [Authorisation]
-    public IActionResult AddFeedSource([FromServices] IRequestContext requestContext, [FromBody] AddFeedSourceRequest request)
-    {
-        var result = _feedService.AddFeedSource(requestContext.User, request);
-
-        return ToApiResponse(result);
-    }
-
     [HttpGet]
     [Route("")]
     [Authorisation]
@@ -38,32 +28,12 @@ public sealed class FeedController : ApiController
         return ToApiResponse(result);
     }
 
-    [HttpDelete]
-    [Route("source/{reference:guid}")]
-    [Authorisation]
-    public IActionResult DeleteFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference)
-    {
-        var result = _feedService.DeleteFeedSource(requestContext.User, reference);
-
-        return ToApiResponse(result);
-    }
-
     [HttpPost]
     [Route("source/{reference:guid}/collection")]
     [Authorisation]
     public IActionResult AddFeedToCollection([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] AddFeedToCollectionRequest request)
     {
         var result = _feedService.AddFeedToCollection(requestContext.User, reference, request);
-
-        return ToApiResponse(result);
-    }
-
-    [HttpPut]
-    [Route("source/{reference:guid}")]
-    [Authorisation]
-    public IActionResult UpdateFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] UpdateFeedSourceRequest request)
-    {
-        var result = _feedService.UpdateFeedSource(requestContext.User, reference, request);
 
         return ToApiResponse(result);
     }
