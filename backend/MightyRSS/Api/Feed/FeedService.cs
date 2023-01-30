@@ -3,14 +3,12 @@ using Data.Records;
 using Data.UoW;
 using MightyRSS.Api.Feed.Types;
 using NetApiLibs.Type;
-using System;
 
 namespace MightyRSS.Api.Feed;
 
 public interface IFeedService
 {
     Result<GetFeedResponse> GetFeed(UserRecord user);
-    Result AddFeedToCollection(UserRecord user, Guid feedReference, AddFeedToCollectionRequest request);
 }
 
 public sealed class FeedService : IFeedService
@@ -46,22 +44,5 @@ public sealed class FeedService : IFeedService
                 })
             })
         };
-    }
-
-    public Result AddFeedToCollection(UserRecord user, Guid feedReference, AddFeedToCollectionRequest request)
-    {
-        var unitOfWork = _mightyUnitOfWorkFactory.Create();
-
-        var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
-        if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
-            return Result.FromFailure(userFeedSourceResult);
-
-        userFeedSource.Collection = request.Collection;
-
-        unitOfWork.UserFeedSources.Update(userFeedSource);
-
-        unitOfWork.Commit();
-
-        return Result.Success();
     }
 }
