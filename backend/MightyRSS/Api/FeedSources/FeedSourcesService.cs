@@ -4,7 +4,6 @@ using Data.UoW;
 using MightyRSS.Api.FeedSources.Types;
 using NetApiLibs.Type;
 using System;
-using System.Linq;
 
 namespace MightyRSS.Api.FeedSources;
 
@@ -46,17 +45,15 @@ public sealed class FeedSourcesService : IFeedSourcesService
                 Description = feedDetails.Description,
                 RssUrl = feedDetails.RssUrl,
                 WebsiteUrl = feedDetails.WebsiteUrl,
-                Articles = feedDetails.Articles
-                    .Select(x => new FeedSourceRecord.Article
-                    {
-                        Url = x.Url,
-                        Title = x.Title,
-                        Summary = x.Summary,
-                        PublishedAt = x.PublishedAt,
-                        PublishedAtAsString = x.PublishedAtAsString,
-                        Author = x.Author
-                    })
-                    .ToList(),
+                Articles = feedDetails.Articles.ConvertAll(x => new FeedSourceRecord.Article
+                {
+                    Url = x.Url,
+                    Title = x.Title,
+                    Summary = x.Summary,
+                    PublishedAt = x.PublishedAt,
+                    PublishedAtAsString = x.PublishedAtAsString,
+                    Author = x.Author
+                }),
                 ArticlesUpdatedAt = DateTime.UtcNow
             };
 
