@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MightyRSS.Api.FeedSources.Types;
+namespace MightyRSS.Api.Feed.Types;
 
 public sealed class GetFeedResponse
 {
