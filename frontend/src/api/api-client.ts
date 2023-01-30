@@ -11,6 +11,10 @@ import { IUser } from '@/model/User.model';
 import { IGetSelfResponse } from './types/GetSelf.type';
 import { ICollection } from '@/model/Collection.model';
 import { IGetCollectionsResponse } from './types/GetCollections.type';
+import { IGetCollectionsDto } from './dtos/GetCollections.dto';
+import { collectionMapper } from './_shared/mapper/collection.mapper';
+import { IFeedSource } from '@/model/FeedSource.model';
+import { feedSourceMapper } from './_shared/mapper/feed-source.mapper';
 
 const appData = useAppData();
 
@@ -27,37 +31,6 @@ api.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 export const apiClient = {
-
-    configuration: {
-
-        async get(): Promise<IGetConfigurationDto> {
-            const response = await api.get<ApiResultResponse<IGetConfigurationResponse>>('/configuration');
-
-            const collections = response.data.result.collections;
-
-            return {
-                collections: collections.map(collection => ({
-                    collection: collection.collection,
-                    feedSources: collection.feedSources.map(({ feedSource, userFeedSource }) => ({
-                        feedSource: {
-                            reference: feedSource.reference,
-                            title: feedSource.title,
-                            description: feedSource.description,
-                            rssUrl: feedSource.rssUrl,
-                            websiteUrl: feedSource.websiteUrl,
-                            collection: feedSource.collection,
-                            titleAlias: feedSource.titleAlias,
-                        },
-                        userFeedSource: {
-                            collection: userFeedSource.collection,
-                            titleAlias: userFeedSource.titleAlias,
-                        },
-                    })),
-                })),
-            };
-        },
-
-    },
 
     user: {
 
@@ -77,16 +50,17 @@ export const apiClient = {
 
     collections: {
 
-        async get(): Promise<Array<ICollection>> {
+        async get(): Promise<IGetCollectionsDto> {
             const response = await api.get<ApiResultResponse<IGetCollectionsResponse>>('/collections');
 
             const collections = response.data.result.collections;
 
-            return collections.map<ICollection>(x => ({
-                reference: x.reference,
-                createdAt: dayjs(x.createdAt),
-                name: x.name,
-            }));
+            return {
+                collections: collections.map(x => ({
+                    collection: x.collection === null ? null : collectionMapper.map(x.collection),
+                    feedSources: x.feedSources.map(feedSourceMapper.map),
+                })),
+            };
         },
 
     },
