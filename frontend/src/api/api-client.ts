@@ -4,16 +4,11 @@ import dayjs from 'dayjs';
 import { useAppData } from '@/use/app-data.use';
 import { ApiResultResponse } from './ResponseHelper';
 
-import { IGetConfigurationDto } from './dtos/GetConfiguration.dto';
-import { IGetConfigurationResponse } from './types/GetConfiguration.type';
-
 import { IUser } from '@/model/User.model';
 import { IGetSelfResponse } from './types/GetSelf.type';
-import { ICollection } from '@/model/Collection.model';
 import { IGetCollectionsResponse } from './types/GetCollections.type';
 import { IGetCollectionsDto } from './dtos/GetCollections.dto';
 import { collectionMapper } from './_shared/mapper/collection.mapper';
-import { IFeedSource } from '@/model/FeedSource.model';
 import { feedSourceMapper } from './_shared/mapper/feed-source.mapper';
 
 const appData = useAppData();
