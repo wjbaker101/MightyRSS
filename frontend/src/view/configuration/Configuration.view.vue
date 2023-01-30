@@ -11,8 +11,14 @@
                     <button>Log Out</button>
                 </div>
             </div>
-            <div class="flex align-items-center">
-                <h1>Collections</h1>
+            <div class="flex gap align-items-center">
+                <h1 class="flex-auto">Collections</h1>
+                <div>
+                    <button @click="onNewCollection">
+                        <IconComponent icon="plus" gap="right" />
+                        <span>New Collection</span>
+                    </button>
+                </div>
                 <div class="flex-auto">
                     <strong class="feed-count">{{ collections.feedSourceCount }}</strong> feeds
                 </div>
@@ -42,14 +48,25 @@
 import { onMounted, ref } from 'vue';
 
 import HeaderComponent from '@/components/Header.component.vue';
+import CollectionModalComponent from '@/view/configuration/modal/CollectionModal.component.vue';
 
 import { apiClient } from '@/api/api-client';
+import { useModal } from '@wjb/vue/use/modal.use';
 
 import { IUser } from '@/model/User.model';
 import { IGetCollectionsDto } from '@/api/dtos/GetCollections.dto';
 
+const modal = useModal();
+
 const user = ref<IUser | null>(null);
 const collections = ref<IGetCollectionsDto | null>(null);
+
+const onNewCollection = function (): void {
+    modal.show({
+        component: CollectionModalComponent,
+        componentProps: {},
+    });
+};
 
 onMounted(async () => {
     const _user = await apiClient.user.getSelf();
