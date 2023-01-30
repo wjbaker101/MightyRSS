@@ -1,4 +1,5 @@
-﻿using Data.Records;
+﻿using Core.Models.Mappers;
+using Data.Records;
 using Data.UoW;
 using MightyRSS.Api.Feed.Types;
 using NetApiLibs.Type;
@@ -84,12 +85,7 @@ public sealed class FeedService : IFeedService
 
         return new AddFeedSourceResponse
         {
-            Reference = feedSource.Reference,
-            Title = feedSource.Title,
-            Description = feedSource.Description,
-            RssUrl = feedSource.RssUrl,
-            WebsiteUrl = feedSource.WebsiteUrl,
-            Collection = userFeedSource.Collection,
+            FeedSource = FeedSourceMapper.Map(feedSource, userFeedSource),
             Articles = feedSource.Articles.ConvertAll(x => new AddFeedSourceResponse.FeedArticle
             {
                 Url = x.Url,
