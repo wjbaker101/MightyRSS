@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    transition: none;
 }
 
 body {
@@ -10,8 +11,10 @@ body {
     letter-spacing: 0.5px;
     line-height: 1.6em;
     color: #222;
+    transition: none;
 }
 
 #app {
     padding: 0 1rem;
+    transition: none;
 }
