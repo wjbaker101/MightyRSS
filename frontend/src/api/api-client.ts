@@ -12,6 +12,7 @@ import { collectionMapper } from './_shared/mapper/collection.mapper';
 import { feedSourceMapper } from './_shared/mapper/feed-source.mapper';
 import { ICollection } from '@/model/Collection.model';
 import { ICreateCollectionRequest, ICreateCollectionResponse } from './types/CreateCollection.type';
+import { IUpdateCollectionRequest, IUpdateCollectionResponse } from './types/UpdateCollection.type';
 
 const appData = useAppData();
 
@@ -63,6 +64,18 @@ export const apiClient = {
 
         async add(request: ICreateCollectionRequest): Promise<ICollection> {
             const response = await api.post<ApiResultResponse<ICreateCollectionResponse>>('/collections', request);
+
+            const collection = response.data.result.collection;
+
+            return {
+                reference: collection.reference,
+                createdAt: dayjs(collection.createdAt),
+                name: collection.name,
+            };
+        },
+
+        async update(collectionReference: string, request: IUpdateCollectionRequest): Promise<ICollection> {
+            const response = await api.put<ApiResultResponse<IUpdateCollectionResponse>>(`/collections/${collectionReference}`, request);
 
             const collection = response.data.result.collection;
 

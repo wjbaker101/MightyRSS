@@ -35,6 +35,12 @@ const form = ref<IForm>({
 
 const onSubmit = async function (): Promise<void> {
     if (form.value.reference) {
+        const result = await apiClient.collections.update(form.value.reference, {
+            name: form.value.name,
+        });
+
+        form.value.reference = result.reference;
+        form.value.name = result.name;
     }
     else {
         const result = await apiClient.collections.add({
