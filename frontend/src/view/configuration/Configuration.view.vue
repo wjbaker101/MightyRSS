@@ -8,7 +8,7 @@
                     <p>{{ user.username }}</p>
                 </div>
                 <div class="text-centered">
-                    <button>Log Out</button>
+                    <button @click="onLogOut">Log Out</button>
                 </div>
             </div>
             <div class="flex gap align-items-center">
@@ -51,18 +51,22 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import HeaderComponent from '@/components/Header.component.vue';
 import CollectionModalComponent from '@/view/configuration/modal/CollectionModal.component.vue';
 
 import { apiClient } from '@/api/api-client';
+import { useAppData } from '@/use/app-data.use';
 import { useModal } from '@wjb/vue/use/modal.use';
 
 import { IUser } from '@/model/User.model';
 import { IGetCollectionsDto } from '@/api/dtos/GetCollections.dto';
 import { ICollection } from '@/model/Collection.model';
 
+const appData = useAppData();
 const modal = useModal();
+const router = useRouter();
 
 const user = ref<IUser | null>(null);
 const collections = ref<IGetCollectionsDto | null>(null);
@@ -74,6 +78,11 @@ const onCollection = function (collection?: ICollection): void {
             collection,
         },
     });
+};
+
+const onLogOut = function (): void {
+    appData.auth.logOut();
+    router.push({ path: '/' });
 };
 
 onMounted(async () => {
