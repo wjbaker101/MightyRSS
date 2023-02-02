@@ -15,7 +15,7 @@ import { ICreateCollectionRequest, ICreateCollectionResponse } from './types/Cre
 import { IUpdateCollectionRequest, IUpdateCollectionResponse } from './types/UpdateCollection.type';
 import { IGetFeedResponse } from './types/GetFeed.type';
 import { IAddFeedSourceRequest, IAddFeedSourceResponse } from './types/AddFeedSource.type';
-import { IUpdateFeedSourceRequest } from './types/UpdateFeedSource.type';
+import { IUpdateFeedSourceRequest, IUpdateFeedSourceResponse } from './types/UpdateFeedSource.type';
 
 const appData = useAppData();
 
@@ -120,7 +120,7 @@ export const apiClient = {
             }
         },
 
-        async updateSource(reference: string, request: IUpdateFeedSourceRequest): Promise<IAddFeedSourceResponse | Error> {
+        async updateSource(reference: string, request: IUpdateFeedSourceRequest): Promise<IUpdateFeedSourceResponse | Error> {
             try {
                 const response = await api.put<ApiResultResponse<IAddFeedSourceResponse>>(`/feed/source/${reference}`, request);
 
@@ -133,7 +133,7 @@ export const apiClient = {
 
         async deleteSource(reference: string): Promise<void | Error> {
             try {
-                await api.delete<ApiResultResponse<IAddFeedSourceResponse>>(`/feed/source/${reference}`);
+                await api.delete<ApiResultResponse<void>>(`/feed/source/${reference}`);
             }
             catch (error) {
                 return responseHelper.handleError(error);
