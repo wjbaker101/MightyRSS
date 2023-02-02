@@ -11,7 +11,7 @@ export interface ApiResultResponse<T> {
     responseAt: string;
 }
 
-class ResponseHelper {
+export const responseHelper = {
 
     handleError(error: any): Error {
         if (axios.isAxiosError(error)) {
@@ -22,7 +22,6 @@ class ResponseHelper {
         }
 
         return new Error('Something went wrong.');
-    }
-}
+    },
 
-export const responseHelper = new ResponseHelper();
+};
