@@ -13,9 +13,9 @@ import { feedSourceMapper } from './_shared/mapper/feed-source.mapper';
 import { ICollection } from '@/model/Collection.model';
 import { ICreateCollectionRequest, ICreateCollectionResponse } from './types/CreateCollection.type';
 import { IUpdateCollectionRequest, IUpdateCollectionResponse } from './types/UpdateCollection.type';
-import { GetFeedResponse } from './feed/types/GetFeed.type';
-import { AddFeedSourceRequest, AddFeedSourceResponse } from './feed/types/AddFeedSource.type';
-import { UpdateFeedSourceRequest } from './feed/types/UpdateFeedSource.type';
+import { GetFeedResponse } from './types/GetFeed.type';
+import { AddFeedSourceRequest, AddFeedSourceResponse } from './types/AddFeedSource.type';
+import { UpdateFeedSourceRequest } from './types/UpdateFeedSource.type';
 
 const appData = useAppData();
 
