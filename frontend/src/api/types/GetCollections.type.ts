@@ -1,5 +1,5 @@
 import { IApiFeedSource } from '../_shared/ApiFeedSource.type';
-import { IApiCollection } from './ApiCollection.type';
+import { IApiCollection } from '../_shared/ApiCollection.type';
 
 export interface IGetCollectionsResponse {
     feedSourceCount: number;

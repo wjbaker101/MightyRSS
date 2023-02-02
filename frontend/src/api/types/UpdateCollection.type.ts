@@ -1,4 +1,4 @@
-import { IApiCollection } from './ApiCollection.type';
+import { IApiCollection } from '../_shared/ApiCollection.type';
 
 export interface IUpdateCollectionRequest {
     readonly name: string;

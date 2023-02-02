@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { IApiCollection } from '@/api/types/ApiCollection.type';
+import { IApiCollection } from '@/api/_shared/ApiCollection.type';
 import { ICollection } from '@/model/Collection.model';
 
 export const collectionMapper = {
