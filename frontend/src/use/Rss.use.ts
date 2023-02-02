@@ -1,7 +1,7 @@
 import { readonly, ref } from 'vue';
 import dayjs from 'dayjs';
 
-import { feedApi } from '@/api/feed/Feed.api';
+import { apiClient } from '@/api/api-client';
 
 import { IFeedArticle } from '@/model/FeedArticle.model';
 import { IFeedSource } from '@/model/FeedSource.model';
@@ -17,7 +17,7 @@ export const useRss = function () {
         sources: readonly(feedSources),
 
         async refresh(): Promise<void> {
-            const result = await feedApi.getFeed();
+            const result = await apiClient.feed.get();
             if (result instanceof Error)
                 return;
 
@@ -54,7 +54,7 @@ export const useRss = function () {
         },
 
         async addSource(url: string): Promise<void> {
-            const result = await feedApi.addFeedSource({
+            const result = await apiClient.feed.addSource({
                 url,
             });
             if (result instanceof Error)
@@ -81,7 +81,7 @@ export const useRss = function () {
         },
 
         async deleteSource(reference: string): Promise<void> {
-            const result = await feedApi.deleteFeedSource(reference);
+            const result = await apiClient.feed.deleteSource(reference);
             if (result instanceof Error)
                 return;
 

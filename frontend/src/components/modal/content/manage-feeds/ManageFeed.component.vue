@@ -16,8 +16,8 @@ import { computed } from 'vue';
 
 import HiddenTextBoxComponent from '@/components/HiddenTextBox.component.vue';
 
-import { feedApi } from '@/api/feed/Feed.api';
 import { useRss } from '@/use/rss.use';
+import { apiClient } from '@/api/api-client';
 
 import { IFeedSource } from '@/model/FeedSource.model';
 
@@ -37,7 +37,7 @@ const displayTitle = computed<string>({
 });
 
 const onTitleFinish = async function (newTitle: string): Promise<void> {
-    await feedApi.updateFeedSource(props.feedSource.reference, {
+    await apiClient.feed.updateSource(props.feedSource.reference, {
         collection: props.feedSource.collection,
         title: newTitle,
     });

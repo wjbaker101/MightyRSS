@@ -13,6 +13,9 @@ import { feedSourceMapper } from './_shared/mapper/feed-source.mapper';
 import { ICollection } from '@/model/Collection.model';
 import { ICreateCollectionRequest, ICreateCollectionResponse } from './types/CreateCollection.type';
 import { IUpdateCollectionRequest, IUpdateCollectionResponse } from './types/UpdateCollection.type';
+import { GetFeedResponse } from './feed/types/GetFeed.type';
+import { AddFeedSourceRequest, AddFeedSourceResponse } from './feed/types/AddFeedSource.type';
+import { UpdateFeedSourceRequest } from './feed/types/UpdateFeedSource.type';
 
 const appData = useAppData();
 
@@ -89,6 +92,52 @@ export const apiClient = {
                 createdAt: dayjs(collection.createdAt),
                 name: collection.name,
             };
+        },
+
+    },
+
+    feed: {
+
+        async get(): Promise<GetFeedResponse | Error> {
+            try {
+                const response = await api.get<ApiResultResponse<GetFeedResponse>>('/feed');
+
+                return response.data.result;
+            }
+            catch (error) {
+                return responseHelper.handleError(error);
+            }
+        },
+
+        async addSource(request: AddFeedSourceRequest): Promise<AddFeedSourceResponse | Error> {
+            try {
+                const response = await api.post<ApiResultResponse<AddFeedSourceResponse>>('/feed', request);
+
+                return response.data.result;
+            }
+            catch (error) {
+                return responseHelper.handleError(error);
+            }
+        },
+
+        async updateSource(reference: string, request: UpdateFeedSourceRequest): Promise<AddFeedSourceResponse | Error> {
+            try {
+                const response = await api.put<ApiResultResponse<AddFeedSourceResponse>>(`/feed/source/${reference}`, request);
+
+                return response.data.result;
+            }
+            catch (error) {
+                return responseHelper.handleError(error);
+            }
+        },
+
+        async deleteSource(reference: string): Promise<void | Error> {
+            try {
+                await api.delete<ApiResultResponse<AddFeedSourceResponse>>(`/feed/source/${reference}`);
+            }
+            catch (error) {
+                return responseHelper.handleError(error);
+            }
         },
 
     },
