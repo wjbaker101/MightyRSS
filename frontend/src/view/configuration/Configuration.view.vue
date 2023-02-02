@@ -59,6 +59,7 @@ import { useRouter } from 'vue-router';
 
 import HeaderComponent from '@/components/Header.component.vue';
 import CollectionModalComponent from '@/view/configuration/modal/CollectionModal.component.vue';
+import FeedModalComponent from '@/view/configuration/modal/FeedModal.component.vue';
 
 import { apiClient } from '@/api/api-client';
 import { useAppData } from '@/use/app-data.use';
@@ -75,7 +76,12 @@ const router = useRouter();
 const user = ref<IUser | null>(null);
 const collections = ref<IGetCollectionsDto | null>(null);
 
-const onNewFeed = function (): void {};
+const onNewFeed = function (): void {
+    modal.show({
+        component: FeedModalComponent,
+        componentProps: {},
+    });
+};
 
 const onCollection = function (collection?: ICollection): void {
     modal.show({
