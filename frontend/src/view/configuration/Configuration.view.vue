@@ -14,7 +14,7 @@
             <div class="flex gap align-items-center">
                 <h1 class="flex-auto">Collections</h1>
                 <div>
-                    <button @click="onCollection">
+                    <button @click="onCollection()">
                         <IconComponent icon="plus" gap="right" />
                         <span>New Collection</span>
                     </button>
