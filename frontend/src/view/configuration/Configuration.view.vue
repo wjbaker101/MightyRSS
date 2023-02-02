@@ -12,13 +12,7 @@
                 </div>
             </div>
             <div class="flex gap align-items-center">
-                <h1 class="flex-auto">Collections</h1>
-                <div>
-                    <button @click="onCollection()">
-                        <IconComponent icon="plus" gap="right" />
-                        <span>New Collection</span>
-                    </button>
-                </div>
+                <h1>Collections</h1>
                 <div class="flex-auto">
                     <strong class="feed-count">{{ collections.feedSourceCount }}</strong> feeds
                 </div>
@@ -46,6 +40,16 @@
                 </div>
             </div>
         </div>
+        <div class="controls-container flex flex-vertical gap">
+            <button @click="onNewFeed()">
+                <IconComponent icon="plus" gap="right" />
+                <span>New Feed</span>
+            </button>
+            <button @click="onCollection()">
+                <IconComponent icon="plus" gap="right" />
+                <span>New Collection</span>
+            </button>
+        </div>
     </div>
 </template>
 
@@ -70,6 +74,8 @@ const router = useRouter();
 
 const user = ref<IUser | null>(null);
 const collections = ref<IGetCollectionsDto | null>(null);
+
+const onNewFeed = function (): void {};
 
 const onCollection = function (collection?: ICollection): void {
     modal.show({
@@ -142,6 +148,13 @@ onMounted(async () => {
         &:hover {
             opacity: 1;
         }
+    }
+
+    .controls-container {
+        position: fixed;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
     }
 }
 </style>
