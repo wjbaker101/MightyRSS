@@ -1,4 +1,5 @@
-﻿using Core.Models.Mappers;
+﻿using Core.Models;
+using Core.Models.Mappers;
 using Data.Records;
 using Data.UoW;
 using MightyRSS.Api.Collections.Types;
@@ -6,6 +7,7 @@ using MightyRSS.Types;
 using NetApiLibs.Extension;
 using NetApiLibs.Type;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MightyRSS.Api.Collections;
@@ -74,20 +76,26 @@ public sealed class CollectionsService : ICollectionsService
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
         var collections = unitOfWork.Collections.GetByUser(requestContext.User);
+        var feedSources = unitOfWork.UserFeedSources.GetFeedSources(requestContext.User);
 
         unitOfWork.Commit();
 
+        var lookup = feedSources.ToLookup(x => x.CollectionRecord);
+
         return new GetCollectionsResponse
         {
-            FeedSourceCount = collections.SelectMany(x => x).Count(),
+            FeedSourceCount = feedSources.Count,
             Collections = collections
-                .OrderBy(x => x.Key?.Name)
-                .ConvertAll(grouping => new GetCollectionsResponse.CollectionDetails
+                .Concat(new CollectionRecord?[] { null })
+                .OrderBy(x => x?.Name)
+                .ConvertAll(collection => new GetCollectionsResponse.CollectionDetails
                 {
-                    Collection = grouping.Key == null ? null : CollectionMapper.Map(grouping.Key),
-                    FeedSources = grouping
-                        .OrderBy(x => x.Title ?? x.FeedSource.Title)
-                        .ConvertAll(x => FeedSourceMapper.Map(x.FeedSource, x))
+                    Collection = collection == null ? null : CollectionMapper.Map(collection),
+                    FeedSources = !lookup.Contains(collection)
+                        ? new List<FeedSourceModel>()
+                        : lookup[collection]
+                            .OrderBy(x => x.Title ?? x.FeedSource.Title)
+                            .ConvertAll(x => FeedSourceMapper.Map(x.FeedSource, x))
                 })
         };
     }
