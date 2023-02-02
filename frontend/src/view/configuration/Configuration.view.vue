@@ -99,7 +99,8 @@ const onLogOut = function (): void {
 
 onMounted(async () => {
     const _user = await apiClient.user.getSelf();
-    user.value = _user;
+    if (!(_user instanceof Error))
+        user.value = _user;
 
     const _collections = await apiClient.collections.get();
     collections.value = _collections;

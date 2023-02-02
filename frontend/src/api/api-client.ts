@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import dayjs from 'dayjs';
 
 import { useAppData } from '@/use/app-data.use';
-import { ApiResultResponse } from './ResponseHelper';
+import { ApiResultResponse, responseHelper } from './ResponseHelper';
 
 import { IUser } from '@/model/User.model';
 import { IGetSelfResponse } from './types/GetSelf.type';
@@ -32,16 +32,21 @@ export const apiClient = {
 
     user: {
 
-        async getSelf(): Promise<IUser> {
-            const response = await api.get<ApiResultResponse<IGetSelfResponse>>('/users');
+        async getSelf(): Promise<IUser | Error> {
+            try {
+                const response = await api.get<ApiResultResponse<IGetSelfResponse>>('/users');
 
-            const user = response.data.result.user;
+                const user = response.data.result.user;
 
-            return {
-                reference: user.reference,
-                createdAt: dayjs(user.createdAt),
-                username: user.username,
-            };
+                return {
+                    reference: user.reference,
+                    createdAt: dayjs(user.createdAt),
+                    username: user.username,
+                };
+            }
+            catch (error) {
+                return responseHelper.handleError(error);
+            }
         },
 
     },
