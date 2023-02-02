@@ -13,9 +13,9 @@ import { feedSourceMapper } from './_shared/mapper/feed-source.mapper';
 import { ICollection } from '@/model/Collection.model';
 import { ICreateCollectionRequest, ICreateCollectionResponse } from './types/CreateCollection.type';
 import { IUpdateCollectionRequest, IUpdateCollectionResponse } from './types/UpdateCollection.type';
-import { GetFeedResponse } from './types/GetFeed.type';
-import { AddFeedSourceRequest, AddFeedSourceResponse } from './types/AddFeedSource.type';
-import { UpdateFeedSourceRequest } from './types/UpdateFeedSource.type';
+import { IGetFeedResponse } from './types/GetFeed.type';
+import { IAddFeedSourceRequest, IAddFeedSourceResponse } from './types/AddFeedSource.type';
+import { IUpdateFeedSourceRequest } from './types/UpdateFeedSource.type';
 
 const appData = useAppData();
 
@@ -98,9 +98,9 @@ export const apiClient = {
 
     feed: {
 
-        async get(): Promise<GetFeedResponse | Error> {
+        async get(): Promise<IGetFeedResponse | Error> {
             try {
-                const response = await api.get<ApiResultResponse<GetFeedResponse>>('/feed');
+                const response = await api.get<ApiResultResponse<IGetFeedResponse>>('/feed');
 
                 return response.data.result;
             }
@@ -109,9 +109,9 @@ export const apiClient = {
             }
         },
 
-        async addSource(request: AddFeedSourceRequest): Promise<AddFeedSourceResponse | Error> {
+        async addSource(request: IAddFeedSourceRequest): Promise<IAddFeedSourceResponse | Error> {
             try {
-                const response = await api.post<ApiResultResponse<AddFeedSourceResponse>>('/feed', request);
+                const response = await api.post<ApiResultResponse<IAddFeedSourceResponse>>('/feed', request);
 
                 return response.data.result;
             }
@@ -120,9 +120,9 @@ export const apiClient = {
             }
         },
 
-        async updateSource(reference: string, request: UpdateFeedSourceRequest): Promise<AddFeedSourceResponse | Error> {
+        async updateSource(reference: string, request: IUpdateFeedSourceRequest): Promise<IAddFeedSourceResponse | Error> {
             try {
-                const response = await api.put<ApiResultResponse<AddFeedSourceResponse>>(`/feed/source/${reference}`, request);
+                const response = await api.put<ApiResultResponse<IAddFeedSourceResponse>>(`/feed/source/${reference}`, request);
 
                 return response.data.result;
             }
@@ -133,7 +133,7 @@ export const apiClient = {
 
         async deleteSource(reference: string): Promise<void | Error> {
             try {
-                await api.delete<ApiResultResponse<AddFeedSourceResponse>>(`/feed/source/${reference}`);
+                await api.delete<ApiResultResponse<IAddFeedSourceResponse>>(`/feed/source/${reference}`);
             }
             catch (error) {
                 return responseHelper.handleError(error);

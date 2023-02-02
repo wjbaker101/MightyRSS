@@ -1,15 +1,15 @@
 import { IApiFeedSource } from '@/api/_shared/ApiFeedSource.type';
 
-export interface AddFeedSourceRequest {
+export interface IAddFeedSourceRequest {
     readonly url: string;
 }
 
-export interface AddFeedSourceResponse {
+export interface IAddFeedSourceResponse {
     readonly feedSource: IApiFeedSource;
-    readonly articles: Array<FeedArticle>;
+    readonly articles: Array<IFeedArticle>;
 }
 
-export interface FeedArticle {
+export interface IFeedArticle {
     readonly url: string;
     readonly title: string;
     readonly summary: string;
