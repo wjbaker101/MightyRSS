@@ -1,10 +1,12 @@
 export type EventKey =
-    'ON_LOG_IN';
+    'ON_LOG_IN' |
+    'ON_LOG_OUT';
 
 type EventFunction<T> = (params: T) => void;
 
 const events: Record<EventKey, Array<EventFunction<any>>> = {
     ON_LOG_IN: [],
+    ON_LOG_OUT: [],
 };
 
 export const useEvents = function () {

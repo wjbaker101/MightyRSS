@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 
 import '@/setup/dayjs-extends';
 import '@/setup/service-worker';
+import '@/setup/events';
 
 import App from '@/App.vue';
 import { router } from '@/router/router';

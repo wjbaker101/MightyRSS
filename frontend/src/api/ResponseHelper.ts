@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { useAppData } from '@/use/app-data.use';
+import { useEvents } from '@/use/events.use';
 
-const appData = useAppData();
+const events = useEvents();
 
 const UNAUTHORISED = 401;
 
@@ -16,7 +16,7 @@ class ResponseHelper {
     handleError(error: any): Error {
         if (axios.isAxiosError(error)) {
             if (error.response?.status === UNAUTHORISED)
-                appData.auth.logOut();
+                events.publish('ON_LOG_OUT', {});
 
             return new Error(error.message);
         }
