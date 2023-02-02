@@ -10,6 +10,8 @@ import { IGetCollectionsResponse } from './types/GetCollections.type';
 import { IGetCollectionsDto } from './dtos/GetCollections.dto';
 import { collectionMapper } from './_shared/mapper/collection.mapper';
 import { feedSourceMapper } from './_shared/mapper/feed-source.mapper';
+import { ICollection } from '@/model/Collection.model';
+import { ICreateCollectionRequest, ICreateCollectionResponse } from './types/CreateCollection.type';
 
 const appData = useAppData();
 
@@ -56,6 +58,18 @@ export const apiClient = {
                     collection: x.collection === null ? null : collectionMapper.map(x.collection),
                     feedSources: x.feedSources.map(feedSourceMapper.map),
                 })),
+            };
+        },
+
+        async add(request: ICreateCollectionRequest): Promise<ICollection> {
+            const response = await api.post<ApiResultResponse<ICreateCollectionResponse>>('/collections', request);
+
+            const collection = response.data.result.collection;
+
+            return {
+                reference: collection.reference,
+                createdAt: dayjs(collection.createdAt),
+                name: collection.name,
             };
         },
 

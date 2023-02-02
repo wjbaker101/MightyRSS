@@ -8,13 +8,14 @@
                 </FormInputComponent>
             </FormSectionComponent>
             <FormSectionComponent>
-                <button>{{ form.reference ? 'Update' : 'Create' }}</button>
+                <button @click="onSubmit">{{ form.reference ? 'Update' : 'Create' }}</button>
             </FormSectionComponent>
         </FormComponent>
     </div>
 </template>
 
 <script setup lang="ts">
+import { apiClient } from '@/api/api-client';
 import { ICollection } from '@/model/Collection.model';
 import { ref } from 'vue';
 
@@ -31,6 +32,19 @@ const form = ref<IForm>({
     reference: props.collection?.reference,
     name: props.collection?.name ?? '',
 });
+
+const onSubmit = async function (): Promise<void> {
+    if (form.value.reference) {
+    }
+    else {
+        const result = await apiClient.collections.add({
+            name: form.value.name,
+        });
+
+        form.value.reference = result.reference;
+        form.value.name = result.name;
+    }
+};
 </script>
 
 <style lang="scss">
