@@ -2,21 +2,23 @@ import axios, { AxiosRequestConfig } from 'axios';
 import dayjs from 'dayjs';
 
 import { useAppData } from '@/use/app-data.use';
-import { ApiResultResponse, responseHelper } from './ResponseHelper';
+import { ApiResultResponse, responseHelper } from '@/api/ResponseHelper';
 
 import { IUser } from '@/model/User.model';
-import { IGetSelfResponse } from './types/GetSelf.type';
-import { IGetCollectionsResponse } from './types/GetCollections.type';
-import { IGetCollectionsDto } from './dtos/GetCollections.dto';
-import { collectionMapper } from './_shared/mapper/collection.mapper';
-import { feedSourceMapper } from './_shared/mapper/feed-source.mapper';
 import { ICollection } from '@/model/Collection.model';
-import { ICreateCollectionRequest, ICreateCollectionResponse } from './types/CreateCollection.type';
-import { IUpdateCollectionRequest, IUpdateCollectionResponse } from './types/UpdateCollection.type';
-import { IGetFeedResponse } from './types/GetFeed.type';
-import { IAddFeedSourceRequest, IAddFeedSourceResponse } from './types/AddFeedSource.type';
-import { IUpdateFeedSourceRequest, IUpdateFeedSourceResponse } from './types/UpdateFeedSource.type';
-import { ILogInRequest, ILogInResponse } from './types/LogIn.type';
+
+import { collectionMapper } from '@/api/_shared/mapper/collection.mapper';
+import { feedSourceMapper } from '@/api/_shared/mapper/feed-source.mapper';
+
+import { IGetCollectionsDto } from '@/api/dtos/GetCollections.dto';
+
+import { IGetSelfResponse } from '@/api/types/GetSelf.type';
+import { IGetCollectionsResponse } from '@/api/types/GetCollections.type';
+import { ICreateCollectionRequest, ICreateCollectionResponse } from '@/api/types/CreateCollection.type';
+import { IUpdateCollectionRequest, IUpdateCollectionResponse } from '@/api/types/UpdateCollection.type';
+import { IGetFeedResponse } from '@/api/types/GetFeed.type';
+import { IAddFeedSourceRequest, IAddFeedSourceResponse } from '@/api/types/AddFeedSource.type';
+import { IUpdateFeedSourceRequest, IUpdateFeedSourceResponse } from '@/api/types/UpdateFeedSource.type';
 
 const appData = useAppData();
 

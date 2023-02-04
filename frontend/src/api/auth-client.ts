@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { ApiResultResponse, responseHelper } from './ResponseHelper';
+import { ApiResultResponse, responseHelper } from '@/api/ResponseHelper';
 
-import { ILogInRequest, ILogInResponse } from './types/LogIn.type';
+import { ILogInRequest, ILogInResponse } from '@/api/types/LogIn.type';
 
 const api = axios.create({
     baseURL: '/api',
