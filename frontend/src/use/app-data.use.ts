@@ -1,6 +1,7 @@
 import { readonly, ref } from 'vue';
 
-import { authApi } from '@/api/auth/Auth.api';
+import { authClient } from '@/api/auth-client';
+
 import { CacheKey, useCache } from '@/use/cache.use';
 
 const cache = useCache();
@@ -14,7 +15,7 @@ export const useAppData = function () {
             loginToken: readonly(loginToken),
 
             async logIn(username: string, password: string): Promise<void> {
-                const result = await authApi.logIn({
+                const result = await authClient.logIn({
                     username,
                     password,
                 });
