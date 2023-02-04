@@ -11,7 +11,11 @@
             <div class="aside-placeholder flex-auto"></div>
         </div>
         <SideModalComponent />
-        <OpenManageFeedsComponent />
+        <div class="open-configuration-container">
+            <RouterLink to="/configuration">
+                <IconComponent icon="settings" />
+            </RouterLink>
+        </div>
     </div>
 </template>
 
@@ -23,7 +27,6 @@ import HeaderComponent from '@/components/Header.component.vue';
 import ArticlesFeedComponent from '@/components/articles/ArticlesFeed.component.vue';
 import SideModalComponent from '@/components/modal/SideModal.component.vue';
 import LoginComponent from '@/components/login/Login.component.vue';
-import OpenManageFeedsComponent from '@/components/OpenManageFeeds.component.vue';
 
 import { useAppData } from '@/use/app-data.use';
 import { useEvents } from '@/use/events.use';
@@ -54,6 +57,14 @@ onMounted(async () => {
         @media screen and (max-width: BREAKPOINT('mid')) {
             display: none;
         }
+    }
+
+    .open-configuration-container {
+        padding: 0.5rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        line-height: 1em;
     }
 }
 </style>
