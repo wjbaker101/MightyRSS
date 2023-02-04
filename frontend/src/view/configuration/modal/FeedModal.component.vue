@@ -7,8 +7,9 @@
                     <input type="text" placeholder="https://example.com/rss" v-model="form.websiteUrl">
                 </FormInputComponent>
             </FormSectionComponent>
-            <FormSectionComponent>
-                <button @click="onSubmit">{{ form.reference ? 'Update' : 'Create' }}</button>
+            <FormSectionComponent class="flex gap">
+                <button class="flex-auto" @click="onSubmit">{{ form.reference ? 'Update' : 'Create' }}</button>
+                <DeleteButtonComponent v-if="form.reference" class="flex-auto" @delete="onDelete" />
             </FormSectionComponent>
         </FormComponent>
     </div>
@@ -44,6 +45,15 @@ const onSubmit = async function (): Promise<void> {
         return;
 
     await rss.addSource(form.value.websiteUrl);
+
+    modal.hide();
+};
+
+const onDelete = async function (): Promise<void> {
+    if (!form.value.reference)
+        return;
+
+    await rss.deleteSource(form.value.reference);
 
     modal.hide();
 };
