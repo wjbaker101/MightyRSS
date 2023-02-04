@@ -23,7 +23,7 @@ import { onMounted } from 'vue';
 
 import AsideComponent from '@/components/aside/Aside.component.vue';
 import HeaderComponent from '@/components/Header.component.vue';
-import ArticlesFeedComponent from '@/view/feed/components/ArticlesFeed.component.vue';
+import ArticlesFeedComponent from '@/views/feed/components/ArticlesFeed.component.vue';
 import LoginComponent from '@/components/login/Login.component.vue';
 
 import { useAppData } from '@/use/app-data.use';

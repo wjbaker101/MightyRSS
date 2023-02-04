@@ -61,8 +61,8 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import HeaderComponent from '@/components/Header.component.vue';
-import CollectionModalComponent from '@/view/configuration/modal/CollectionModal.component.vue';
-import FeedModalComponent from '@/view/configuration/modal/FeedModal.component.vue';
+import CollectionModalComponent from '@/views/configuration/modal/CollectionModal.component.vue';
+import FeedModalComponent from '@/views/configuration/modal/FeedModal.component.vue';
 
 import { apiClient } from '@/api/api-client';
 import { useAppData } from '@/use/app-data.use';

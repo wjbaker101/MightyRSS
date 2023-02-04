@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-import ConfigurationView from '@/view/configuration/Configuration.view.vue';
-import FeedView from '@/view/feed/Feed.view.vue';
+import ConfigurationView from '@/views/configuration/Configuration.view.vue';
+import FeedView from '@/views/feed/Feed.view.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {

@@ -40,7 +40,7 @@
 import { computed, ref } from 'vue';
 import dayjs from 'dayjs';
 
-import ArticleComponent from '@/view/feed/components/Article.component.vue';
+import ArticleComponent from '@/views/feed/components/Article.component.vue';
 
 import { IFeedArticle } from '@/model/FeedArticle.model';
 import { useRss } from '@/use/rss.use';
