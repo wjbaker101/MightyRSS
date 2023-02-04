@@ -10,7 +10,6 @@
             </div>
             <div class="aside-placeholder flex-auto"></div>
         </div>
-        <SideModalComponent />
         <div class="open-configuration-container">
             <RouterLink to="/configuration">
                 <IconComponent icon="settings" />
@@ -25,7 +24,6 @@ import { onMounted } from 'vue';
 import AsideComponent from '@/components/aside/Aside.component.vue';
 import HeaderComponent from '@/components/Header.component.vue';
 import ArticlesFeedComponent from '@/components/articles/ArticlesFeed.component.vue';
-import SideModalComponent from '@/components/modal/SideModal.component.vue';
 import LoginComponent from '@/components/login/Login.component.vue';
 
 import { useAppData } from '@/use/app-data.use';
