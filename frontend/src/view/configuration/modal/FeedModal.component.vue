@@ -15,26 +15,38 @@
 </template>
 
 <script setup lang="ts">
-import { IFeedSource } from '@/model/FeedSource.model';
 import { ref } from 'vue';
+
+import { useRss } from '@/use/rss.use';
+import { useModal } from '@wjb/vue/use/modal.use';
+
+import { IFeedSource } from '@/model/FeedSource.model';
 
 const props = defineProps<{
     feedSource?: IFeedSource;
 }>();
 
+const rss = useRss();
+const modal = useModal();
+
 interface IForm {
     reference?: string;
-    title: string;
     websiteUrl: string;
 }
 
 const form = ref<IForm>({
     reference: props.feedSource?.reference,
-    title: props.feedSource?.title ?? '',
     websiteUrl: props.feedSource?.websiteUrl ?? '',
 });
 
-const onSubmit = function (): void {};
+const onSubmit = async function (): Promise<void> {
+    if (form.value.websiteUrl.length < 5)
+        return;
+
+    await rss.addSource(form.value.websiteUrl);
+
+    modal.hide();
+};
 </script>
 
 <style lang="scss">
