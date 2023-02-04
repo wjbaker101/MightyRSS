@@ -1,8 +1,8 @@
 ﻿using CodeHollow.FeedReader;
 using MightyRSS.Api.FeedSources.Types;
+using NetApiLibs.Extension;
 using NetApiLibs.Type;
 using System;
-using System.Linq;
 
 namespace MightyRSS.Api.FeedSources;
 
@@ -28,28 +28,26 @@ public sealed class FeedReaderService : IFeedReaderService
         }
     }
 
-    private static Result<FeedDetails> Read(string sourceUrl, string url, Guid? reference)
+    private static FeedDetails Read(string sourceUrl, string url, Guid? reference)
     {
-        var feed = FeedReader.ReadAsync(sourceUrl).Result;
+        var feed = FeedReader.ReadAsync(sourceUrl).ConfigureAwait(false).GetAwaiter().GetResult();
 
-        return Result<FeedDetails>.Of(new FeedDetails
+        return new FeedDetails
         {
             Reference = reference ?? Guid.NewGuid(),
             Title = feed.Title,
             Description = feed.Description,
             RssUrl = url,
             WebsiteUrl = feed.Link,
-            Articles = feed.Items
-                .Select(x => new FeedDetails.Article
-                {
-                    Url = x.Link,
-                    Title = x.Title,
-                    Summary = x.Description,
-                    Author = x.Author,
-                    PublishedAt = x.PublishingDate,
-                    PublishedAtAsString = x.PublishingDateString
-                })
-                .ToList()
-        });
+            Articles = feed.Items.ConvertAll(x => new FeedDetails.Article
+            {
+                Url = x.Link,
+                Title = x.Title,
+                Summary = x.Description,
+                Author = x.Author,
+                PublishedAt = x.PublishingDate,
+                PublishedAtAsString = x.PublishingDateString
+            })
+        };
     }
 }
