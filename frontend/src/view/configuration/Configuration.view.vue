@@ -11,10 +11,23 @@
                     <button @click="onLogOut">Log Out</button>
                 </div>
             </div>
-            <div class="flex gap align-items-center">
-                <h1>Collections</h1>
+            <div class="collections-title flex gap">
+                <h1 class="flex-auto">Collections</h1>
                 <div class="flex-auto">
-                    <strong class="feed-count">{{ collections.feedSourceCount }}</strong> feeds
+                    (<strong class="feed-count">{{ collections.feedSourceCount }}</strong> feeds)
+                </div>
+                <div></div>
+                <div class="flex-auto">
+                    <button @click="onNewFeed()">
+                        <IconComponent icon="plus" gap="right" />
+                        <span>Feed</span>
+                    </button>
+                </div>
+                <div class="flex-auto">
+                    <button @click="onCollection()">
+                        <IconComponent icon="plus" gap="right" />
+                        <span>Collection</span>
+                    </button>
                 </div>
             </div>
             <div class="collections-details">
@@ -39,16 +52,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="controls-container flex flex-vertical gap">
-            <button @click="onNewFeed()">
-                <IconComponent icon="plus" gap="right" />
-                <span>New Feed</span>
-            </button>
-            <button @click="onCollection()">
-                <IconComponent icon="plus" gap="right" />
-                <span>New Collection</span>
-            </button>
         </div>
     </div>
 </template>
@@ -116,6 +119,16 @@ onMounted(async () => {
         box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2), 2px 3px 30px rgba(0, 0, 0, 0.2), inset 0 0 3px rgba(0, 0, 0, 0.2);
     }
 
+    .collections-title {
+        padding-top: 1rem;
+        align-items: flex-end;
+
+        h1 {
+            margin: 0;
+            line-height: 1em;
+        }
+    }
+
     .feed-count {
         font-size: 2rem;
     }
@@ -155,13 +168,6 @@ onMounted(async () => {
         &:hover {
             opacity: 1;
         }
-    }
-
-    .controls-container {
-        position: fixed;
-        top: 50%;
-        right: 1rem;
-        transform: translateY(-50%);
     }
 }
 </style>
