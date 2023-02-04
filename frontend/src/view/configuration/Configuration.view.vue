@@ -45,8 +45,8 @@
                             </a>
                         </strong>
                         <div class="flex-auto">
-                            <div class="delete-feed-source">
-                                <IconComponent icon="cross" />
+                            <div class="delete-feed-source" @click="onFeedSourceClick(feedSource)">
+                                <IconComponent icon="menu" />
                             </div>
                         </div>
                     </div>
@@ -69,8 +69,9 @@ import { useAppData } from '@/use/app-data.use';
 import { useModal } from '@wjb/vue/use/modal.use';
 
 import { IUser } from '@/model/User.model';
-import { IGetCollectionsDto } from '@/api/dtos/GetCollections.dto';
 import { ICollection } from '@/model/Collection.model';
+import { IFeedSource } from '@/model/FeedSource.model';
+import { IGetCollectionsDto } from '@/api/dtos/GetCollections.dto';
 
 const appData = useAppData();
 const modal = useModal();
@@ -98,6 +99,15 @@ const onCollection = function (collection?: ICollection): void {
 const onLogOut = function (): void {
     appData.auth.logOut();
     router.push({ path: '/' });
+};
+
+const onFeedSourceClick = function (feedSource: IFeedSource): void {
+    modal.show({
+        component: FeedModalComponent,
+        componentProps: {
+            feedSource,
+        },
+    });
 };
 
 onMounted(async () => {
