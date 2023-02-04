@@ -1,8 +1,8 @@
-export interface LogInRequest {
+export interface ILogInRequest {
     username: string;
     password: string;
 }
 
-export interface LogInResponse {
+export interface ILogInResponse {
     jwtToken: string;
 }

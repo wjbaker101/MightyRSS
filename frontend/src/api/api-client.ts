@@ -16,7 +16,7 @@ import { IUpdateCollectionRequest, IUpdateCollectionResponse } from './types/Upd
 import { IGetFeedResponse } from './types/GetFeed.type';
 import { IAddFeedSourceRequest, IAddFeedSourceResponse } from './types/AddFeedSource.type';
 import { IUpdateFeedSourceRequest, IUpdateFeedSourceResponse } from './types/UpdateFeedSource.type';
-import { LogInRequest, LogInResponse } from './types/LogIn.type';
+import { ILogInRequest, ILogInResponse } from './types/LogIn.type';
 
 const appData = useAppData();
 

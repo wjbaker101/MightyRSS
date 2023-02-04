@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { ApiResultResponse, responseHelper } from './ResponseHelper';
 
-import { LogInRequest, LogInResponse } from './types/LogIn.type';
+import { ILogInRequest, ILogInResponse } from './types/LogIn.type';
 
 const api = axios.create({
     baseURL: '/api',
@@ -10,9 +10,9 @@ const api = axios.create({
 
 export const authClient = {
 
-    async logIn(request: LogInRequest): Promise<LogInResponse | Error> {
+    async logIn(request: ILogInRequest): Promise<ILogInResponse | Error> {
         try {
-            const response = await api.post<ApiResultResponse<LogInResponse>>('/auth/login', request);
+            const response = await api.post<ApiResultResponse<ILogInResponse>>('/auth/login', request);
 
             return response.data.result;
         }
