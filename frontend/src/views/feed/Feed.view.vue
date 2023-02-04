@@ -27,7 +27,7 @@ import ArticlesFeedComponent from '@/views/feed/components/ArticlesFeed.componen
 import LoginComponent from '@/components/login/Login.component.vue';
 
 import { useAppData } from '@/use/app-data.use';
-import { useEvents } from '@/use/events.use';
+import { useEvents } from '@/use/events/events.use';
 import { useRss } from '@/use/rss.use';
 
 const appData = useAppData();

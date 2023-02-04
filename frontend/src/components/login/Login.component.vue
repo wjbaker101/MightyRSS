@@ -35,7 +35,7 @@ import UserMessageComponent from '@/components/UserMessage.component.vue';
 
 import { UseUserMessage } from '@/use/UserMessage.use';
 import { useAppData } from '@/use/app-data.use';
-import { useEvents } from '@/use/events.use';
+import { useEvents } from '@/use/events/events.use';
 
 const appData = useAppData();
 const events = useEvents();

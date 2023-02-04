@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { useEvents } from '@/use/events.use';
+import { useEvents } from '@/use/events/events.use';
 
 const events = useEvents();
 

@@ -1,1 +1,1 @@
-import '@/events/logout.event';
+import '@/use/events/subscriptions/logout.event';
