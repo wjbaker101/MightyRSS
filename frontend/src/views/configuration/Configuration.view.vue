@@ -57,14 +57,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
-import HeaderComponent from '@/components/Header.component.vue';
 import CollectionModalComponent from '@/views/configuration/modals/CollectionModal.component.vue';
 import FeedModalComponent from '@/views/configuration/modals/FeedModal.component.vue';
 
 import { apiClient } from '@/api/api-client';
-import { useAppData } from '@/use/app-data.use';
+import { useEvents } from '@/use/events/events.use';
 import { useModal } from '@wjb/vue/use/modal.use';
 
 import { IUser } from '@/model/User.model';
@@ -72,9 +70,8 @@ import { ICollection } from '@/model/Collection.model';
 import { IFeedSource } from '@/model/FeedSource.model';
 import { IGetCollectionsDto } from '@/api/dtos/GetCollections.dto';
 
-const appData = useAppData();
+const events = useEvents();
 const modal = useModal();
-const router = useRouter();
 
 const user = ref<IUser | null>(null);
 const collections = ref<IGetCollectionsDto | null>(null);
@@ -96,8 +93,7 @@ const onCollection = function (collection?: ICollection): void {
 };
 
 const onLogOut = function (): void {
-    appData.auth.logOut();
-    router.push({ path: '/' });
+    events.publish('TRIGGER_LOG_OUT', {});
 };
 
 const onFeedSourceClick = function (feedSource: IFeedSource): void {
