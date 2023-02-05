@@ -4,7 +4,7 @@
         <article>
             <h3>{{ article.title }}</h3>
             <p class="published-at">
-                <span>{{ (article.source.titleAlias ?? article.source.title) }} &mdash; </span>
+                <span>{{ article.source.title }} &mdash; </span>
                 <small>{{ displayPublishedAt }}</small>
             </p>
         </article>

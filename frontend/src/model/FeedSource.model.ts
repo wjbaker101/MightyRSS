@@ -5,5 +5,4 @@ export interface IFeedSource {
     rssUrl: string;
     websiteUrl: string;
     collection: string | null;
-    titleAlias: string | null;
 }

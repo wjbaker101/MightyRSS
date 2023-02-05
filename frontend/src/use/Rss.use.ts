@@ -35,7 +35,6 @@ export const useRss = function () {
                         rssUrl: source.feedSource.rssUrl,
                         websiteUrl: source.feedSource.websiteUrl,
                         collection: source.feedSource.collection,
-                        titleAlias: source.feedSource.titleAlias,
                     },
                 })))
                 .flat();
@@ -48,9 +47,8 @@ export const useRss = function () {
                     rssUrl: x.feedSource.rssUrl,
                     websiteUrl: x.feedSource.websiteUrl,
                     collection: x.feedSource.collection,
-                    titleAlias: x.feedSource.titleAlias,
                 }))
-                .sort((a, b) => (a.titleAlias ?? a.title).localeCompare(b.titleAlias ?? b.title));
+                .sort((a, b) => a.title.localeCompare(b.title));
         },
 
         async addSource(url: string): Promise<void> {
@@ -73,7 +71,6 @@ export const useRss = function () {
                     rssUrl: result.feedSource.rssUrl,
                     websiteUrl: result.feedSource.websiteUrl,
                     collection: result.feedSource.collection,
-                    titleAlias: null,
                 },
             }));
 

@@ -2,7 +2,7 @@
     <div class="feed-source-component flex flex-vertical">
         <div>
             <a :href="feedSource.websiteUrl" rel="noopener noreferrer" target="_blank">
-                {{ (feedSource.titleAlias ?? feedSource.title) }}
+                {{ feedSource.title }}
             </a>
         </div>
     </div>

@@ -11,7 +11,6 @@ export const feedSourceMapper = {
             rssUrl: feedSource.rssUrl,
             websiteUrl: feedSource.websiteUrl,
             collection: feedSource.collection,
-            titleAlias: feedSource.titleAlias,
         };
     },
 

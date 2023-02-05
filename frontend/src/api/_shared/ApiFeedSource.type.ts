@@ -5,5 +5,4 @@ export interface IApiFeedSource {
     readonly rssUrl: string;
     readonly websiteUrl: string;
     readonly collection: string | null;
-    readonly titleAlias: string | null;
 }
