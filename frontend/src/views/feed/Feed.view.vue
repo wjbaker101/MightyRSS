@@ -22,17 +22,12 @@ import { onMounted } from 'vue';
 import AsideComponent from '@/components/aside/Aside.component.vue';
 import ArticlesFeedComponent from '@/views/feed/components/ArticlesFeed.component.vue';
 
-import { useAppData } from '@/use/app-data.use';
 import { useRss } from '@/use/rss.use';
 
-const appData = useAppData();
 const rss = useRss();
 
-const loginToken = appData.auth.loginToken;
-
 onMounted(async () => {
-    if (loginToken.value !== null)
-        rss.refresh();
+    rss.refresh();
 });
 </script>
 
