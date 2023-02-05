@@ -111,7 +111,8 @@ onMounted(async () => {
         user.value = _user;
 
     const _collections = await apiClient.collections.get();
-    collections.value = _collections;
+    if (!(_collections instanceof Error))
+        collections.value = _collections;
 });
 </script>
 

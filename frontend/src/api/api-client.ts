@@ -59,18 +59,23 @@ export const apiClient = {
 
     collections: {
 
-        async get(): Promise<IGetCollectionsDto> {
-            const response = await api.get<ApiResultResponse<IGetCollectionsResponse>>('/collections');
+        async get(): Promise<IGetCollectionsDto | Error> {
+            try {
+                const response = await api.get<ApiResultResponse<IGetCollectionsResponse>>('/collections');
 
-            const result = response.data.result;
+                const result = response.data.result;
 
-            return {
-                feedSourceCount: result.feedSourceCount,
-                collections: result.collections.map(x => ({
-                    collection: x.collection === null ? null : collectionMapper.map(x.collection),
-                    feedSources: x.feedSources.map(feedSourceMapper.map),
-                })),
-            };
+                return {
+                    feedSourceCount: result.feedSourceCount,
+                    collections: result.collections.map(x => ({
+                        collection: x.collection === null ? null : collectionMapper.map(x.collection),
+                        feedSources: x.feedSources.map(feedSourceMapper.map),
+                    })),
+                };
+            }
+            catch (error) {
+                return responseHelper.handleError(error);
+            }
         },
 
         async add(request: ICreateCollectionRequest): Promise<ICollection> {
