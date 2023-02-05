@@ -1,7 +1,12 @@
 <template>
     <div class="configuration-view" v-if="collections !== null">
         <div class="content-width">
-            <div v-if="user !== null" class="user-details content-container flex align-items-center">
+            <div v-if="user !== null" class="user-details content-container flex align-items-center gap">
+                <div class="flex-auto">
+                    <div class="return-button" title="Return to feed" @click="$router.push({ path: '/' })">
+                        <IconComponent icon="arrow-left" />
+                    </div>
+                </div>
                 <div class="flex-2">
                     <h2>Currently logged in as:</h2>
                     <p>{{ user.username }}</p>
@@ -123,6 +128,16 @@ onMounted(async () => {
         padding: 1rem;
         border-radius: 0.5rem;
         box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2), 2px 3px 30px rgba(0, 0, 0, 0.2), inset 0 0 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .return-button {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
     }
 
     .collections-title {
