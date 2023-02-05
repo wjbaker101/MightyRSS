@@ -34,15 +34,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import UserMessageComponent from '@/components/UserMessage.component.vue';
 
 import { UseUserMessage } from '@/use/UserMessage.use';
 import { useAppData } from '@/use/app-data.use';
-import { useEvents } from '@/use/events/events.use';
 
 const appData = useAppData();
-const events = useEvents();
+const router = useRouter();
 
 const useUserMessage = UseUserMessage();
 
@@ -64,7 +64,7 @@ const logIn = async function (): Promise<void> {
     }
 
     await appData.auth.logIn(username.value, password.value);
-    events.publish('ON_LOG_IN', {});
+    router.push({ path: '/' });
 };
 
 const onLogIn = async function (): Promise<void> {
