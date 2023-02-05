@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import dayjs from 'dayjs';
 
 import { useAuth } from '@/use/auth.use';
-import { ApiResultResponse, responseHelper } from '@/api/ResponseHelper';
+import { IApiResultResponse, responseHelper } from '@/api/ResponseHelper';
 
 import { IUser } from '@/model/User.model';
 import { ICollection } from '@/model/Collection.model';
@@ -40,7 +40,7 @@ export const apiClient = {
 
         async getSelf(): Promise<IUser | Error> {
             try {
-                const response = await api.get<ApiResultResponse<IGetSelfResponse>>('/users');
+                const response = await api.get<IApiResultResponse<IGetSelfResponse>>('/users');
 
                 const user = response.data.result.user;
 
@@ -61,7 +61,7 @@ export const apiClient = {
 
         async get(): Promise<IGetCollectionsDto | Error> {
             try {
-                const response = await api.get<ApiResultResponse<IGetCollectionsResponse>>('/collections');
+                const response = await api.get<IApiResultResponse<IGetCollectionsResponse>>('/collections');
 
                 const result = response.data.result;
 
@@ -80,7 +80,7 @@ export const apiClient = {
 
         async add(request: ICreateCollectionRequest): Promise<ICollection | Error> {
             try {
-                const response = await api.post<ApiResultResponse<ICreateCollectionResponse>>('/collections', request);
+                const response = await api.post<IApiResultResponse<ICreateCollectionResponse>>('/collections', request);
 
                 const collection = response.data.result.collection;
 
@@ -97,7 +97,7 @@ export const apiClient = {
 
         async update(collectionReference: string, request: IUpdateCollectionRequest): Promise<ICollection | Error> {
             try {
-                const response = await api.put<ApiResultResponse<IUpdateCollectionResponse>>(`/collections/${collectionReference}`, request);
+                const response = await api.put<IApiResultResponse<IUpdateCollectionResponse>>(`/collections/${collectionReference}`, request);
 
                 const collection = response.data.result.collection;
 
@@ -118,7 +118,7 @@ export const apiClient = {
 
         async get(): Promise<IGetFeedResponse | Error> {
             try {
-                const response = await api.get<ApiResultResponse<IGetFeedResponse>>('/feed');
+                const response = await api.get<IApiResultResponse<IGetFeedResponse>>('/feed');
 
                 return response.data.result;
             }
@@ -129,7 +129,7 @@ export const apiClient = {
 
         async addSource(request: IAddFeedSourceRequest): Promise<IAddFeedSourceResponse | Error> {
             try {
-                const response = await api.post<ApiResultResponse<IAddFeedSourceResponse>>('/feed', request);
+                const response = await api.post<IApiResultResponse<IAddFeedSourceResponse>>('/feed', request);
 
                 return response.data.result;
             }
@@ -140,7 +140,7 @@ export const apiClient = {
 
         async updateSource(reference: string, request: IUpdateFeedSourceRequest): Promise<IUpdateFeedSourceResponse | Error> {
             try {
-                const response = await api.put<ApiResultResponse<IAddFeedSourceResponse>>(`/feed/source/${reference}`, request);
+                const response = await api.put<IApiResultResponse<IAddFeedSourceResponse>>(`/feed/source/${reference}`, request);
 
                 return response.data.result;
             }
@@ -151,7 +151,7 @@ export const apiClient = {
 
         async deleteSource(reference: string): Promise<void | Error> {
             try {
-                await api.delete<ApiResultResponse<void>>(`/feed/source/${reference}`);
+                await api.delete<IApiResultResponse<void>>(`/feed/source/${reference}`);
             }
             catch (error) {
                 return responseHelper.handleError(error);

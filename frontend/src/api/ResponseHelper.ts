@@ -6,7 +6,7 @@ const events = useEvents();
 
 const UNAUTHORISED = 401;
 
-export interface ApiResultResponse<T> {
+export interface IApiResultResponse<T> {
     result: T;
     responseAt: string;
 }
