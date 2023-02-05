@@ -6,5 +6,5 @@ const events = useEvents();
 
 events.subscribe('TRIGGER_LOG_OUT', () => {
     appData.auth.logOut();
-    window.location.href = '/';
+    window.location.href = '/login';
 });
