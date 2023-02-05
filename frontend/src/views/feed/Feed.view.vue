@@ -4,7 +4,6 @@
         <div class="flex flex-columns">
             <div class="aside-placeholder flex-auto"></div>
             <div class="content-width">
-                <HeaderComponent />
                 <LoginComponent v-if="loginToken === null" />
                 <ArticlesFeedComponent v-else />
             </div>
@@ -22,7 +21,6 @@
 import { onMounted } from 'vue';
 
 import AsideComponent from '@/components/aside/Aside.component.vue';
-import HeaderComponent from '@/components/Header.component.vue';
 import ArticlesFeedComponent from '@/views/feed/components/ArticlesFeed.component.vue';
 import LoginComponent from '@/components/login/Login.component.vue';
 

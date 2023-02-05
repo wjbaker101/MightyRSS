@@ -1,6 +1,5 @@
 <template>
     <div class="configuration-view" v-if="collections !== null">
-        <HeaderComponent />
         <div class="content-width">
             <div v-if="user !== null" class="user-details content-container flex align-items-center">
                 <div class="flex-2">

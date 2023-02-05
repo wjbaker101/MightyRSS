@@ -1,36 +1,28 @@
 <template>
-    <div class="header-component text-centered">
+    <header class="header-component text-centered">
         <h1>
-            <span class="refresh-container" @click="refreshFeed">
-                <img class="swords" width="48" height="48" src="@/assets/swords.svg">
-                <span class="text">Mighty RSS</span>
-            </span>
+            <img width="48" height="48" src="@/assets/swords.svg">
+            <span>Mighty RSS</span>
         </h1>
-    </div>
+    </header>
 </template>
 
 <script setup lang="ts">
-import { useRss } from '@/use/rss.use';
-
-const rss = useRss();
-
-const refreshFeed = async function (): Promise<void> {
-    await rss.refresh();
-};
 </script>
 
 <style lang="scss">
 .header-component {
-    .refresh-container {
-        cursor: pointer;
-        user-select: none;
-
-        & > * {
-            vertical-align: middle;
-        }
+    h1 {
+        margin: 0;
+        padding: 1rem 0;
     }
 
-    .swords {
+    img,
+    span {
+        vertical-align: middle;
+    }
+
+    img {
         margin-right: 1rem;
     }
 }
