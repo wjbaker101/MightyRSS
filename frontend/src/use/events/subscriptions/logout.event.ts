@@ -4,6 +4,6 @@ import { useEvents } from '@/use/events/events.use';
 const appData = useAppData();
 const events = useEvents();
 
-events.subscribe('ON_LOG_OUT', () => {
+events.subscribe('TRIGGER_LOG_OUT', () => {
     appData.auth.logOut();
 });

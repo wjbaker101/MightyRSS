@@ -16,7 +16,7 @@ export const responseHelper = {
     handleError(error: any): Error {
         if (axios.isAxiosError(error)) {
             if (error.response?.status === UNAUTHORISED)
-                events.publish('ON_LOG_OUT', {});
+                events.publish('TRIGGER_LOG_OUT', {});
 
             return new Error(error.message);
         }
