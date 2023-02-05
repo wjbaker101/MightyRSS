@@ -26,7 +26,7 @@
                 <button @click="onLogIn">Log In</button>
             </section>
             <section>
-                <UserMessageComponent :message="userMessage" />
+                <UserMessageComponent />
             </section>
         </div>
     </div>
@@ -36,30 +36,27 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import UserMessageComponent from '@/components/UserMessage.component.vue';
+import UserMessageComponent, { useUserMessage } from '@/components/UserMessage.component.vue';
 
-import { UseUserMessage } from '@/use/UserMessage.use';
 import { useAppData } from '@/use/app-data.use';
 
 const appData = useAppData();
 const router = useRouter();
-
-const useUserMessage = UseUserMessage();
+const userMessage = useUserMessage();
 
 const usernameInput = ref<HTMLInputElement | null>(null);
 const passwordInput = ref<HTMLInputElement | null>(null);
 
 const username = ref<string>('');
 const password = ref<string>('');
-const userMessage = ref<string>('');
 
 const logIn = async function (): Promise<void> {
     if (username.value.length < 3) {
-        useUserMessage.set(userMessage, 'Username is not valid, please try again.');
+        userMessage.show('Username is not valid, please try again.');
         return;
     }
     if (password.value.length < 3) {
-        useUserMessage.set(userMessage, 'Password is not valid, please try again.');
+        userMessage.show('Password is not valid, please try again.');
         return;
     }
 

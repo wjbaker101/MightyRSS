@@ -1,13 +1,31 @@
 <template>
-    <div class="user-message-component" v-if="message !== ''">
+    <div class="user-message-component" v-if="message !== null">
         {{ message }}
     </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
-    message: string;
-}>();
+//
+</script>
+
+<script lang="ts">
+import { ref } from 'vue';
+
+const message = ref<string | null>(null);
+
+export const useUserMessage = function () {
+    return {
+
+        show(value: string): void {
+            message.value = value;
+
+            setTimeout(() => {
+                message.value = null;
+            }, 6000);
+        },
+
+    };
+};
 </script>
 
 <style lang="scss">
