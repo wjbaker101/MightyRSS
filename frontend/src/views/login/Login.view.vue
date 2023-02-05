@@ -60,7 +60,12 @@ const logIn = async function (): Promise<void> {
         return;
     }
 
-    await auth.logIn(username.value, password.value);
+    const result = await auth.logIn(username.value, password.value);
+    if (result instanceof Error) {
+        userMessage.show(result.message);
+        return;
+    }
+
     router.push({ path: '/' });
 };
 

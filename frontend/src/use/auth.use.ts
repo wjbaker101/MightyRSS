@@ -17,13 +17,13 @@ export const useAuth = function () {
             return loginToken.value !== null;
         },
 
-        async logIn(username: string, password: string): Promise<void> {
+        async logIn(username: string, password: string): Promise<void | Error> {
             const result = await authClient.logIn({
                 username,
                 password,
             });
             if (result instanceof Error)
-                return;
+                return result;
 
             loginToken.value = result.jwtToken;
 
