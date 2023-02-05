@@ -9,19 +9,26 @@
             </FormSectionComponent>
             <FormSectionComponent>
                 <button @click="onSubmit">{{ form.reference ? 'Update' : 'Create' }}</button>
+                <UserMessageComponent />
             </FormSectionComponent>
         </FormComponent>
     </div>
 </template>
 
 <script setup lang="ts">
-import { apiClient } from '@/api/api-client';
-import { ICollection } from '@/model/Collection.model';
 import { ref } from 'vue';
+
+import UserMessageComponent, { useUserMessage } from '@/components/UserMessage.component.vue';
+
+import { apiClient } from '@/api/api-client';
+
+import { ICollection } from '@/model/Collection.model';
 
 const props = defineProps<{
     collection?: ICollection;
 }>();
+
+const userMessage = useUserMessage();
 
 interface IForm {
     reference?: string;
@@ -46,6 +53,10 @@ const onSubmit = async function (): Promise<void> {
         const result = await apiClient.collections.add({
             name: form.value.name,
         });
+        if (result instanceof Error) {
+            userMessage.show(result.message);
+            return;
+        }
 
         form.value.reference = result.reference;
         form.value.name = result.name;

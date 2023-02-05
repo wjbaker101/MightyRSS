@@ -78,16 +78,21 @@ export const apiClient = {
             }
         },
 
-        async add(request: ICreateCollectionRequest): Promise<ICollection> {
-            const response = await api.post<ApiResultResponse<ICreateCollectionResponse>>('/collections', request);
+        async add(request: ICreateCollectionRequest): Promise<ICollection | Error> {
+            try {
+                const response = await api.post<ApiResultResponse<ICreateCollectionResponse>>('/collections', request);
 
-            const collection = response.data.result.collection;
+                const collection = response.data.result.collection;
 
-            return {
-                reference: collection.reference,
-                createdAt: dayjs(collection.createdAt),
-                name: collection.name,
-            };
+                return {
+                    reference: collection.reference,
+                    createdAt: dayjs(collection.createdAt),
+                    name: collection.name,
+                };
+            }
+            catch (error) {
+                return responseHelper.handleError(error);
+            }
         },
 
         async update(collectionReference: string, request: IUpdateCollectionRequest): Promise<ICollection> {
