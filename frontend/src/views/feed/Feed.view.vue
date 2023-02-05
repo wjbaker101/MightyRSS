@@ -4,8 +4,7 @@
         <div class="flex flex-columns">
             <div class="aside-placeholder flex-auto"></div>
             <div class="content-width">
-                <LoginComponent v-if="loginToken === null" />
-                <ArticlesFeedComponent v-else />
+                <ArticlesFeedComponent />
             </div>
             <div class="aside-placeholder flex-auto"></div>
         </div>
@@ -22,21 +21,14 @@ import { onMounted } from 'vue';
 
 import AsideComponent from '@/components/aside/Aside.component.vue';
 import ArticlesFeedComponent from '@/views/feed/components/ArticlesFeed.component.vue';
-import LoginComponent from '@/components/login/Login.component.vue';
 
 import { useAppData } from '@/use/app-data.use';
-import { useEvents } from '@/use/events/events.use';
 import { useRss } from '@/use/rss.use';
 
 const appData = useAppData();
 const rss = useRss();
-const events = useEvents();
 
 const loginToken = appData.auth.loginToken;
-
-events.subscribe('ON_LOG_IN', async () => {
-    rss.refresh();
-});
 
 onMounted(async () => {
     if (loginToken.value !== null)
