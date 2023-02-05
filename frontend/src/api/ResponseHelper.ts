@@ -11,14 +11,25 @@ export interface IApiResultResponse<T> {
     responseAt: string;
 }
 
+export interface IApiErrorResponse {
+    errorMessage: string;
+    responseAt: string;
+}
+
 export const responseHelper = {
 
     handleError(error: any): Error {
-        if (axios.isAxiosError(error)) {
-            if (error.response?.status === UNAUTHORISED)
+        if (axios.isAxiosError<IApiErrorResponse>(error)) {
+            if (error.response?.status === UNAUTHORISED) {
                 events.publish('TRIGGER_LOG_OUT', {});
+                return new Error('You are unauthorised, redirecting to the login page.');
+            }
 
-            return new Error(error.message);
+            const response = error.response?.data;
+            if (!response)
+                return new Error(error.message);
+
+            return new Error(response.errorMessage);
         }
 
         return new Error('Something went wrong.');
