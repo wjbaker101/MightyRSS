@@ -95,16 +95,21 @@ export const apiClient = {
             }
         },
 
-        async update(collectionReference: string, request: IUpdateCollectionRequest): Promise<ICollection> {
-            const response = await api.put<ApiResultResponse<IUpdateCollectionResponse>>(`/collections/${collectionReference}`, request);
+        async update(collectionReference: string, request: IUpdateCollectionRequest): Promise<ICollection | Error> {
+            try {
+                const response = await api.put<ApiResultResponse<IUpdateCollectionResponse>>(`/collections/${collectionReference}`, request);
 
-            const collection = response.data.result.collection;
+                const collection = response.data.result.collection;
 
-            return {
-                reference: collection.reference,
-                createdAt: dayjs(collection.createdAt),
-                name: collection.name,
-            };
+                return {
+                    reference: collection.reference,
+                    createdAt: dayjs(collection.createdAt),
+                    name: collection.name,
+                };
+            }
+            catch (error) {
+                return responseHelper.handleError(error);
+            }
         },
 
     },

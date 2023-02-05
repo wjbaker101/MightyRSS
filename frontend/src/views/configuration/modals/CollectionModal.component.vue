@@ -45,6 +45,10 @@ const onSubmit = async function (): Promise<void> {
         const result = await apiClient.collections.update(form.value.reference, {
             name: form.value.name,
         });
+        if (result instanceof Error) {
+            userMessage.show(result.message);
+            return;
+        }
 
         form.value.reference = result.reference;
         form.value.name = result.name;
