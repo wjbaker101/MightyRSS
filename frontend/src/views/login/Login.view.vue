@@ -38,9 +38,9 @@ import { useRouter } from 'vue-router';
 
 import UserMessageComponent, { useUserMessage } from '@/components/UserMessage.component.vue';
 
-import { useAppData } from '@/use/app-data.use';
+import { useAuth } from '@/use/auth.use';
 
-const appData = useAppData();
+const auth = useAuth();
 const router = useRouter();
 const userMessage = useUserMessage();
 
@@ -60,7 +60,7 @@ const logIn = async function (): Promise<void> {
         return;
     }
 
-    await appData.auth.logIn(username.value, password.value);
+    await auth.logIn(username.value, password.value);
     router.push({ path: '/' });
 };
 

@@ -4,12 +4,12 @@ import ConfigurationView from '@/views/configuration/Configuration.view.vue';
 import LoginView from '@/views/login/Login.view.vue';
 import FeedView from '@/views/feed/Feed.view.vue';
 
-import { useAppData } from '@/use/app-data.use';
+import { useAuth } from '@/use/auth.use';
 
-const appData = useAppData();
+const auth = useAuth();
 
 const requireAuth: NavigationGuardWithThis<void> = function (to, from, next): void {
-    if (appData.auth.loginToken.value === null)
+    if (auth.isLoggedIn() === null)
         next('/login');
     else
         next();

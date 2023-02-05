@@ -1,10 +1,10 @@
-import { useAppData } from '@/use/app-data.use';
+import { useAuth } from '@/use/auth.use';
 import { useEvents } from '@/use/events/events.use';
 
-const appData = useAppData();
+const auth = useAuth();
 const events = useEvents();
 
 events.subscribe('TRIGGER_LOG_OUT', () => {
-    appData.auth.logOut();
+    auth.logOut();
     window.location.href = '/login';
 });

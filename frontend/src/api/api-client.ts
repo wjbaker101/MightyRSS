@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import dayjs from 'dayjs';
 
-import { useAppData } from '@/use/app-data.use';
+import { useAuth } from '@/use/auth.use';
 import { ApiResultResponse, responseHelper } from '@/api/ResponseHelper';
 
 import { IUser } from '@/model/User.model';
@@ -20,7 +20,7 @@ import { IGetFeedResponse } from '@/api/types/GetFeed.type';
 import { IAddFeedSourceRequest, IAddFeedSourceResponse } from '@/api/types/AddFeedSource.type';
 import { IUpdateFeedSourceRequest, IUpdateFeedSourceResponse } from '@/api/types/UpdateFeedSource.type';
 
-const appData = useAppData();
+const auth = useAuth();
 
 const api = axios.create({
     baseURL: '/api',
@@ -28,7 +28,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config: AxiosRequestConfig) => {
     config.headers = {
-        'Authorisation': appData.auth.loginToken.value,
+        'Authorisation': auth.loginToken.value,
     };
 
     return config;
