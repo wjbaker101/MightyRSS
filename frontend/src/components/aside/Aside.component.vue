@@ -1,5 +1,5 @@
 <template>
-    <aside class="aside-component flex flex-vertical">
+    <CardComponent class="aside-component flex flex-vertical">
         <div class="flex-auto">
             <section class="flex flex-bottom">
                 <h2 class="flex-auto">Feeds</h2>
@@ -15,7 +15,7 @@
                 />
             </section>
         </div>
-    </aside>
+    </CardComponent>
 </template>
 
 <script setup lang="ts">
@@ -34,9 +34,9 @@ const feeds = rss.sources;
     max-width: 100%;
     padding: 1rem 0.5rem;
     position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
+    top: 50%;
+    left: 0.25rem;
+    transform: translateY(-50%);
 
     @media screen and (max-width: var(--breakpoint-mid)) {
         .flex {
