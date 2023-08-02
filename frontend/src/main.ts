@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 
 import '@/setup/dayjs.setup';
-import '@/setup/service-worker';
+import '@/setup/service-worker.setup';
 import '@/setup/events';
 
 import App from '@/App.vue';
