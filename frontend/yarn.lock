@@ -1652,17 +1652,17 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
-"@wjb/styling@^1.0.13":
-  version "1.0.13"
-  resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/@wjb/styling/-/styling-1.0.13.tgz#cfb91285b1cc8611b859e72747200aa2f8cb4064"
-  integrity sha512-b+nYkJT/a8sTLc+Ec0QwScEZASeC1MAmkdA2Gbz9r2x7f37dTovPAnka9w9mA8FnZ7sEEsnXIx7/ezmYg3gazQ==
+"@wjb/styling@^1.0.75":
+  version "1.0.75"
+  resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com/npm/npm-libs/@wjb/styling/-/styling-1.0.75.tgz#e71d6fde5e7f0df4287979c0df49749d8668f3e7"
+  integrity sha512-A8alqJJ3MNLxrG9MogIlS3luQ84OByikgaQnOLY4f/Un5464WokcHMe03D3TPVk34dKoGMOZFjxGD/78Cs2Kmg==
 
-"@wjb/vue@^1.0.50":
-  version "1.0.50"
-  resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com:443/npm/npm-libs/@wjb/vue/-/vue-1.0.50.tgz#8930c6c9e991ced2e5b66aa0f30a101bb8fe0614"
-  integrity sha512-UXhw8I3FePjVLTTjaYT0oDCWCcjo8WLcIAjLhF+iOv5ARxAa7Jn0dm/vEi0eSYn4KNJcVr4f1aMlBki1KBMDGw==
+"@wjb/vue@^1.0.76":
+  version "1.0.76"
+  resolved "https://wjb-144953083930.d.codeartifact.eu-west-2.amazonaws.com/npm/npm-libs/@wjb/vue/-/vue-1.0.76.tgz#016a646d4ebe7fbacb8f0e60d776202d49eb6a47"
+  integrity sha512-w5P8RDhpktm4URtEfKvDWtcMYaq1I7PpFTgg23/npFjp+p2zrbfzXhBmit0g79xRqVssaSVdOwcn0UN5XBXLqg==
   dependencies:
-    "@wjb/styling" "^1.0.13"
+    "@wjb/styling" "^1.0.75"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"

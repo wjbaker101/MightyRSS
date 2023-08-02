@@ -8,8 +8,8 @@
         "build": "vue-cli-service build"
     },
     "dependencies": {
-        "@wjb/styling": "^1.0.13",
-        "@wjb/vue": "^1.0.50",
+        "@wjb/styling": "^1.0.75",
+        "@wjb/vue": "^1.0.76",
         "axios": "^1.1.3",
         "core-js": "^3.26.0",
         "dayjs": "^1.11.6",
