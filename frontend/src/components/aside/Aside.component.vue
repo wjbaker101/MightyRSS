@@ -38,7 +38,7 @@ const feeds = rss.sources;
     left: 0;
     bottom: 0;
 
-    @media screen and (max-width: BREAKPOINT('mid')) {
+    @media screen and (max-width: var(--breakpoint-mid)) {
         .flex {
             display: none;
         }

@@ -37,7 +37,7 @@ onMounted(async () => {
     .aside-placeholder {
         width: 350px;
 
-        @media screen and (max-width: BREAKPOINT('mid')) {
+        @media screen and (max-width: var(--breakpoint-mid)) {
             display: none;
         }
     }
