@@ -3,16 +3,6 @@ const { defineConfig } = require('@vue/cli-service');
 module.exports = defineConfig({
     outputDir: '../backend/MightyRSS/wwwroot',
 
-    css: {
-        loaderOptions: {
-            sass: {
-                sassOptions: {
-                    additionalData: `@import 'src/style/global-inject.scss';`,
-                }
-            },
-        },
-    },
-
     devServer: {
         proxy: {
             '/api': {
