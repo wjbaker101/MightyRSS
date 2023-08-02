@@ -1,4 +1,29 @@
 @use '~@wjb/styling/setup-variables' as *;
+@use '~@wjb/styling/main' as *;
+
+@use 'main/body' as *;
+
+@use 'main/content/content' as *;
+@use 'main/content/theme' as *;
+
+@use 'main/elements/anchor' as *;
+@use 'main/elements/button' as *;
+@use 'main/elements/headings' as *;
+@use 'main/elements/inputs' as *;
+@use 'main/elements/section' as *;
+
+.flex-vertical {
+    flex-direction: row;
+}
+
+.\@wjb-form-section-component {
+    --wjb-background-colour-dark: transparent;
+    padding: 0 !important;
+}
+
+.\@wjb-form-section-component + .form-section-component {
+    margin-top: 1rem;
+}
 
 :root {
     @include setup-variables();
