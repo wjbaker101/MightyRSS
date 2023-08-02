@@ -5,7 +5,7 @@ import '@/setup/service-worker.setup';
 import '@/setup/events';
 
 import App from '@/App.vue';
-import { router } from '@/router';
+import { router } from '@/setup/router.setup';
 import { components } from '@/setup/components.setup';
 
 const app = createApp(App);
