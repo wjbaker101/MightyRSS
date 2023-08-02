@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 
-import '@/setup/dayjs-extends';
+import '@/setup/dayjs.setup';
 import '@/setup/service-worker';
 import '@/setup/events';
 
