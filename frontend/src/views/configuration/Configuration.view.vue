@@ -1,7 +1,7 @@
 <template>
     <div class="configuration-view" v-if="collections !== null">
         <div class="content-width">
-            <div v-if="user !== null" class="user-details content-container flex align-items-center gap">
+            <CardComponent v-if="user !== null" class="user-details flex align-items-center gap">
                 <div class="flex-auto">
                     <div class="return-button" title="Return to feed" @click="$router.push({ path: '/' })">
                         <IconComponent icon="arrow-left" />
@@ -14,7 +14,7 @@
                 <div class="text-centered">
                     <button @click="onLogOut">Log Out</button>
                 </div>
-            </div>
+            </CardComponent>
             <div class="collections-title flex gap">
                 <h1 class="flex-auto">Collections</h1>
                 <div class="flex-auto">
@@ -123,12 +123,6 @@ onMounted(async () => {
 
 <style lang="scss">
 .configuration-view {
-
-    .content-container {
-        padding: 1rem;
-        border-radius: 0.5rem;
-        box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2), 2px 3px 30px rgba(0, 0, 0, 0.2), inset 0 0 3px rgba(0, 0, 0, 0.2);
-    }
 
     .return-button {
         padding: 1rem;
