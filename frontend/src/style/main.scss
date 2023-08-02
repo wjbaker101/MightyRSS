@@ -15,11 +15,11 @@
     flex-direction: row;
 }
 
-.form-section-component {
+.\@wjb-form-section-component {
     --wjb-background-colour-dark: transparent;
     padding: 0 !important;
 }
 
-.form-section-component + .form-section-component {
+.\@wjb-form-section-component + .form-section-component {
     margin-top: 1rem;
 }
