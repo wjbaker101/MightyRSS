@@ -10,7 +10,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.2" />
 		<PackageReference Include="NetApiLibs" Version="230117.2001.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
