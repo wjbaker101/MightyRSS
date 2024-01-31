@@ -1,4 +1,4 @@
-﻿using Core.Models;
+﻿using MightyRSS.Models;
 using System;
 using System.Collections.Generic;
 

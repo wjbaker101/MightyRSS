@@ -1,4 +1,4 @@
-﻿using Core.Models;
+﻿using MightyRSS.Models;
 
 namespace MightyRSS.Api.Collections.Types;
 

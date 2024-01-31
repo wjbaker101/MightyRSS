@@ -14,8 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Core\Core.csproj" />
-		<ProjectReference Include="..\Data.Records\Data.Records.csproj" />
+	  <ProjectReference Include="..\Core.Settings\Core.Settings.csproj" />
 	</ItemGroup>
 
 </Project>

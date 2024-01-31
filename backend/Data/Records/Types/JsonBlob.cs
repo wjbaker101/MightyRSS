@@ -1,11 +1,11 @@
-﻿using NHibernate.Engine;
+﻿using Newtonsoft.Json;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Npgsql;
 using NpgsqlTypes;
 using System.Data;
 using System.Data.Common;
-using Utf8Json;
 
 namespace Data.Records.Types;
 
@@ -27,8 +27,8 @@ public class JsonBlob<T> : IUserType where T : class
         if (x == null || y == null)
             return false;
 
-        var jsonX = JsonSerializer.Serialize(x);
-        var jsonY = JsonSerializer.Serialize(y);
+        var jsonX = JsonConvert.SerializeObject(x);
+        var jsonY = JsonConvert.SerializeObject(y);
 
         return jsonX == jsonY;
     }
@@ -44,7 +44,7 @@ public class JsonBlob<T> : IUserType where T : class
             throw new InvalidOperationException("Only expected 1 column.");
 
         if (rs[names[0]] is string value && !string.IsNullOrWhiteSpace(value))
-            return JsonSerializer.Deserialize<T>(value);
+            return JsonConvert.DeserializeObject<T>(value);
 
         return null;
     }
@@ -57,7 +57,7 @@ public class JsonBlob<T> : IUserType where T : class
         if (value == null)
             parameter.Value = DBNull.Value;
         else
-            parameter.Value = JsonSerializer.Serialize(value);
+            parameter.Value = JsonConvert.SerializeObject(value);
     }
 
     public object? DeepCopy(object? value)
@@ -65,9 +65,9 @@ public class JsonBlob<T> : IUserType where T : class
         if (value == null)
             return null;
 
-        var json = JsonSerializer.Serialize(value);
+        var json = JsonConvert.SerializeObject(value);
 
-        return JsonSerializer.Deserialize<T>(json);
+        return JsonConvert.DeserializeObject<T>(json);
     }
 
     public object Replace(object original, object target, object owner)
@@ -78,13 +78,13 @@ public class JsonBlob<T> : IUserType where T : class
     public object? Assemble(object cached, object owner)
     {
         if (cached is string json && !string.IsNullOrWhiteSpace(json))
-            return JsonSerializer.Deserialize<T>(json);
+            return JsonConvert.DeserializeObject<T>(json);
 
         return null;
     }
 
     public object? Disassemble(object? value)
     {
-        return value == null ? null : JsonSerializer.Serialize(value);
+        return value == null ? null : JsonConvert.SerializeObject(value);
     }
 }

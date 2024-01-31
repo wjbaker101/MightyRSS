@@ -8,7 +8,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Core.Settings\Core.Settings.csproj" />
-		<ProjectReference Include="..\Data.Records\Data.Records.csproj" />
 	</ItemGroup>
 
 </Project>

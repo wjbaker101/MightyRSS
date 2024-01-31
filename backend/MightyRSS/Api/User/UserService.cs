@@ -1,8 +1,8 @@
-﻿using Core.Models.Mappers;
-using Data.Records;
+﻿using Data.Records;
 using Data.UoW;
 using MightyRSS.Api.Auth;
 using MightyRSS.Api.User.Types;
+using MightyRSS.Models.Mappers;
 using MightyRSS.Types;
 using NetApiLibs.Type;
 using System;
