@@ -33,3 +33,9 @@
 
     --breakpoint-mid: 800px;
 }
+
+*,
+*::before,
+*::after {
+    margin: 0;
+}

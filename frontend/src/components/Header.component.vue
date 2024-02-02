@@ -13,7 +13,6 @@
 <style lang="scss">
 .header-component {
     h1 {
-        margin: 0;
         padding: 2rem 0 1rem 0;
     }
 

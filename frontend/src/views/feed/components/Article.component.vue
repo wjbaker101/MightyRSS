@@ -53,6 +53,10 @@ const displayPublishedAt = computed<string>(() => {
         color: #666;
     }
 
+    & + .article-component {
+        margin-top: 1rem;
+    }
+
     .sword-indicator {
         position: absolute;
         left: -1rem;
@@ -65,10 +69,6 @@ const displayPublishedAt = computed<string>(() => {
     &:hover .sword-indicator {
         opacity: 1;
         transform: translate(-100%, -50%);
-    }
-
-    .published-at {
-        margin-top: -1rem;
     }
 }
 </style>
