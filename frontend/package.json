@@ -4,28 +4,24 @@
     "private": true,
     "scripts": {
         "co:login": "aws codeartifact login --tool npm --repository npm-libs --domain wjb --domain-owner 144953083930",
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build"
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview"
     },
     "dependencies": {
-        "@wjb/styling": "^1.0.75",
-        "@wjb/vue": "^1.0.76",
-        "axios": "^1.1.3",
-        "core-js": "^3.26.0",
-        "dayjs": "^1.11.6",
-        "register-service-worker": "^1.7.1",
-        "vue": "^3.2.44",
-        "vue-router": "^4.0.3"
+        "@wjb/styling": "^1.0.82",
+        "@wjb/vue": "^1.0.91",
+        "axios": "^1.6.7",
+        "dayjs": "^1.11.10",
+        "vue": "^3.4.15",
+        "vue-router": "^4.2.5"
     },
     "devDependencies": {
-        "@vue/cli-plugin-pwa": "~5.0.8",
-        "@vue/cli-plugin-router": "~5.0.0",
-        "@vue/cli-plugin-typescript": "^5.0.8",
-        "@vue/cli-service": "^5.0.8",
-        "@vue/compiler-sfc": "^3.2.44",
-        "sass": "^1.56.1",
-        "sass-loader": "^13.2.0",
-        "typescript": "^4.8.4"
+        "@types/node": "^20.11.5",
+        "@vitejs/plugin-vue": "^5.0.3",
+        "sass": "^1.70.0",
+        "typescript": "^5.3.3",
+        "vite": "^5.0.12"
     },
     "browserslist": [
         "> 1%",
