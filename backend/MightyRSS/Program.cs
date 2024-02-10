@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MightyRSS.BackgroundServices;
 
 namespace MightyRSS;
 
@@ -17,9 +15,5 @@ public sealed class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
-            })
-            .ConfigureServices(services =>
-            {
-                services.AddHostedService<FeedBackgroundService>();
             });
 }

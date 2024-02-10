@@ -12,6 +12,7 @@ using MightyRSS.Api.Collections;
 using MightyRSS.Api.Feed;
 using MightyRSS.Api.FeedSources;
 using MightyRSS.Api.User;
+using MightyRSS.BackgroundServices;
 using MightyRSS.Types;
 
 namespace MightyRSS;
@@ -56,6 +57,8 @@ public sealed class Startup
         services.AddSingleton<IUserService, UserService>();
 
         services.AddControllers();
+
+        services.AddHostedService<FeedBackgroundService>();
 
         services.AddSpaStaticFiles(configuration =>
         {
