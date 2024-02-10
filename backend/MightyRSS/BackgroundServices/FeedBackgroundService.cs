@@ -26,21 +26,21 @@ public sealed class FeedBackgroundService : BackgroundService
         _feedSettings = feedSettings.Value;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
-            await Handle();
+            await Handle(cancellationToken);
 
-            await Task.Delay(TimeSpan.FromSeconds(_feedSettings.RefreshPeriod), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(_feedSettings.RefreshPeriod), cancellationToken);
         }
     }
 
-    private async Task Handle()
+    private async Task Handle(CancellationToken cancellationToken)
     {
         try
         {
-            await UpdateFeeds();
+            await UpdateFeeds(cancellationToken);
         }
         catch
         {
@@ -48,16 +48,16 @@ public sealed class FeedBackgroundService : BackgroundService
         }
     }
 
-    private async Task UpdateFeeds()
+    private async Task UpdateFeeds(CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var userFeedSources = unitOfWork.UserFeedSources.GetAll();
+        var userFeedSources = await unitOfWork.UserFeedSources.GetAll();
 
         foreach (var feedSource in userFeedSources)
             await UpdateFeedSource(unitOfWork, feedSource.FeedSource);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
     }
 
     private async Task UpdateFeedSource(IMightyUnitOfWork unitOfWork, FeedSourceRecord feedSource)
@@ -83,6 +83,6 @@ public sealed class FeedBackgroundService : BackgroundService
         });
         feedSource.ArticlesUpdatedAt = DateTime.UtcNow;
 
-        unitOfWork.FeedSources.Update(feedSource);
+        await unitOfWork.FeedSources.Update(feedSource);
     }
 }

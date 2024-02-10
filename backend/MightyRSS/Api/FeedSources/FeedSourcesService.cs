@@ -4,15 +4,16 @@ using MightyRSS.Api.FeedSources.Types;
 using MightyRSS.Models.Mappers;
 using NetApiLibs.Type;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MightyRSS.Api.FeedSources;
 
 public interface IFeedSourcesService
 {
-    Task<Result<AddFeedSourceResponse>> AddFeedSource(UserRecord user, AddFeedSourceRequest request);
-    Result<UpdateFeedSourceResponse> UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request);
-    Result<DeleteFeedSourceResponse> DeleteFeedSource(UserRecord user, Guid reference);
+    Task<Result<AddFeedSourceResponse>> AddFeedSource(UserRecord user, AddFeedSourceRequest request, CancellationToken cancellationToken);
+    Task<Result<UpdateFeedSourceResponse>> UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request, CancellationToken cancellationToken);
+    Task<Result<DeleteFeedSourceResponse>> DeleteFeedSource(UserRecord user, Guid reference, CancellationToken cancellationToken);
 }
 
 public sealed class FeedSourcesService : IFeedSourcesService
@@ -26,11 +27,11 @@ public sealed class FeedSourcesService : IFeedSourcesService
         _feedReaderService = feedReaderService;
     }
 
-    public async Task<Result<AddFeedSourceResponse>> AddFeedSource(UserRecord user, AddFeedSourceRequest request)
+    public async Task<Result<AddFeedSourceResponse>> AddFeedSource(UserRecord user, AddFeedSourceRequest request, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var feedSourceResult = unitOfWork.FeedSources.GetByRssUrl(request.Url);
+        var feedSourceResult = await unitOfWork.FeedSources.GetByRssUrl(request.Url);
         if (!feedSourceResult.TrySuccess(out var feedSource))
         {
             var feedDetailsResult = await _feedReaderService.Read(request.Url, null);
@@ -58,10 +59,10 @@ public sealed class FeedSourcesService : IFeedSourcesService
                 ArticlesUpdatedAt = DateTime.UtcNow
             };
 
-            unitOfWork.FeedSources.Save(feedSource);
+            await unitOfWork.FeedSources.Save(feedSource);
         }
 
-        var existingUserFeedSource = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedSource.Reference);
+        var existingUserFeedSource = await unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedSource.Reference);
         if (existingUserFeedSource.IsSuccess)
             return Result<AddFeedSourceResponse>.Failure("Feed source could not be added as it already exists.");
 
@@ -74,9 +75,9 @@ public sealed class FeedSourcesService : IFeedSourcesService
             CollectionRecord = null
         };
 
-        unitOfWork.UserFeedSources.Save(userFeedSource);
+        await unitOfWork.UserFeedSources.Save(userFeedSource);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new AddFeedSourceResponse
         {
@@ -93,35 +94,35 @@ public sealed class FeedSourcesService : IFeedSourcesService
         };
     }
 
-    public Result<UpdateFeedSourceResponse> UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request)
+    public async Task<Result<UpdateFeedSourceResponse>> UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
+        var userFeedSourceResult = await unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, feedReference);
         if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
             return Result<UpdateFeedSourceResponse>.FromFailure(userFeedSourceResult);
 
         userFeedSource.Collection = request.Collection;
         userFeedSource.Title = request.Title;
 
-        unitOfWork.UserFeedSources.Update(userFeedSource);
+        await unitOfWork.UserFeedSources.Update(userFeedSource);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new UpdateFeedSourceResponse();
     }
 
-    public Result<DeleteFeedSourceResponse> DeleteFeedSource(UserRecord user, Guid reference)
+    public async Task<Result<DeleteFeedSourceResponse>> DeleteFeedSource(UserRecord user, Guid reference, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var userFeedSourceResult = unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, reference);
+        var userFeedSourceResult = await unitOfWork.UserFeedSources.GetByUserAndFeedSourceReference(user, reference);
         if (!userFeedSourceResult.TrySuccess(out var userFeedSource))
             return Result<DeleteFeedSourceResponse>.FromFailure(userFeedSourceResult);
 
-        unitOfWork.UserFeedSources.Delete(userFeedSource);
+        await unitOfWork.UserFeedSources.Delete(userFeedSource);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new DeleteFeedSourceResponse();
     }

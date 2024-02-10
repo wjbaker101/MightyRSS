@@ -9,14 +9,16 @@ using NetApiLibs.Type;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Collections;
 
 public interface ICollectionsService
 {
-    Result<CreateCollectionResponse> CreateCollection(IRequestContext requestContext, CreateCollectionRequest request);
-    Result<UpdateCollectionResponse> UpdateCollection(IRequestContext requestContext, Guid collectionReference, UpdateCollectionRequest request);
-    Result<GetCollectionsResponse> GetCollections(IRequestContext requestContext);
+    Task<Result<CreateCollectionResponse>> CreateCollection(IRequestContext requestContext, CreateCollectionRequest request, CancellationToken cancellationToken);
+    Task<Result<UpdateCollectionResponse>> UpdateCollection(IRequestContext requestContext, Guid collectionReference, UpdateCollectionRequest request, CancellationToken cancellationToken);
+    Task<Result<GetCollectionsResponse>> GetCollections(IRequestContext requestContext, CancellationToken cancellationToken);
 }
 
 public sealed class CollectionsService : ICollectionsService
@@ -28,11 +30,11 @@ public sealed class CollectionsService : ICollectionsService
         _mightyUnitOfWorkFactory = mightyUnitOfWorkFactory;
     }
 
-    public Result<CreateCollectionResponse> CreateCollection(IRequestContext requestContext, CreateCollectionRequest request)
+    public async Task<Result<CreateCollectionResponse>> CreateCollection(IRequestContext requestContext, CreateCollectionRequest request, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var collection = unitOfWork.Collections.Save(new CollectionRecord
+        var collection = await unitOfWork.Collections.Save(new CollectionRecord
         {
             Reference = Guid.NewGuid(),
             CreatedAt = DateTime.UtcNow,
@@ -40,7 +42,7 @@ public sealed class CollectionsService : ICollectionsService
             Name = request.Name
         });
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new CreateCollectionResponse
         {
@@ -48,11 +50,11 @@ public sealed class CollectionsService : ICollectionsService
         };
     }
 
-    public Result<UpdateCollectionResponse> UpdateCollection(IRequestContext requestContext, Guid collectionReference, UpdateCollectionRequest request)
+    public async Task<Result<UpdateCollectionResponse>> UpdateCollection(IRequestContext requestContext, Guid collectionReference, UpdateCollectionRequest request, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var collectionResult = unitOfWork.Collections.GetByReference(collectionReference);
+        var collectionResult = await unitOfWork.Collections.GetByReference(collectionReference);
         if (!collectionResult.TrySuccess(out var collection))
             return Result<UpdateCollectionResponse>.FromFailure(collectionResult);
 
@@ -61,9 +63,9 @@ public sealed class CollectionsService : ICollectionsService
 
         collection.Name = request.Name;
 
-        unitOfWork.Collections.Update(collection);
+        await unitOfWork.Collections.Update(collection);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new UpdateCollectionResponse
         {
@@ -71,14 +73,14 @@ public sealed class CollectionsService : ICollectionsService
         };
     }
 
-    public Result<GetCollectionsResponse> GetCollections(IRequestContext requestContext)
+    public async Task<Result<GetCollectionsResponse>> GetCollections(IRequestContext requestContext, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var collections = unitOfWork.Collections.GetByUser(requestContext.User);
-        var feedSources = unitOfWork.UserFeedSources.GetFeedSources(requestContext.User);
+        var collections = await unitOfWork.Collections.GetByUser(requestContext.User);
+        var feedSources = await unitOfWork.UserFeedSources.GetFeedSources(requestContext.User);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         var lookup = feedSources.ToLookup(x => x.CollectionRecord);
 

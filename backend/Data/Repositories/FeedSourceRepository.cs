@@ -2,26 +2,27 @@
 using Data.UoW;
 using NetApiLibs.Type;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace Data.Repositories;
 
 public interface IFeedSourceRepository : IRepository<FeedSourceRecord>
 {
-    Result<FeedSourceRecord> GetByReference(Guid reference);
-    Result<FeedSourceRecord> GetByRssUrl(string url);
+    Task<Result<FeedSourceRecord>> GetByReference(Guid reference);
+    Task<Result<FeedSourceRecord>> GetByRssUrl(string url);
 }
 
 public sealed class FeedSourceRepository : Repository<FeedSourceRecord>, IFeedSourceRepository
 {
-    public FeedSourceRepository(ISession session) : base(session)
+    public FeedSourceRepository(ISession session, CancellationToken cancellationToken) : base(session, cancellationToken)
     {
     }
 
-    public Result<FeedSourceRecord> GetByReference(Guid reference)
+    public async Task<Result<FeedSourceRecord>> GetByReference(Guid reference)
     {
-        var feedSource = Session
+        var feedSource = await Session
             .Query<FeedSourceRecord>()
-            .SingleOrDefault(x => x.Reference == reference);
+            .SingleOrDefaultAsync(x => x.Reference == reference, CancellationToken);
 
         if (feedSource == null)
             return Result<FeedSourceRecord>.Failure($"Unable to find feed source with reference: {reference}.");
@@ -29,11 +30,11 @@ public sealed class FeedSourceRepository : Repository<FeedSourceRecord>, IFeedSo
         return feedSource;
     }
 
-    public Result<FeedSourceRecord> GetByRssUrl(string url)
+    public async Task<Result<FeedSourceRecord>> GetByRssUrl(string url)
     {
-        var feedSource = Session
+        var feedSource = await Session
             .Query<FeedSourceRecord>()
-            .SingleOrDefault(x => x.RssUrl.ToLower() == url.ToLower());
+            .SingleOrDefaultAsync(x => x.RssUrl.ToLower() == url.ToLower(), CancellationToken);
 
         if (feedSource == null)
             return Result<FeedSourceRecord>.Failure($"Unable to find feed source with url: {url}.");

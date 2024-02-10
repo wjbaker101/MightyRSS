@@ -4,6 +4,8 @@ using MightyRSS.Api.User.Types;
 using MightyRSS.Types;
 using NetApiLibs.Api;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.User;
 
@@ -30,18 +32,18 @@ public sealed class UserController : ApiController
 
     [HttpGet]
     [Route("{reference:guid}")]
-    public IActionResult GetUser([FromRoute] Guid reference)
+    public async Task<IActionResult> GetUser([FromRoute] Guid reference, CancellationToken cancellationToken)
     {
-        var result = _userService.GetUser(reference);
+        var result = await _userService.GetUser(reference, cancellationToken);
 
         return ToApiResponse(result);
     }
 
     [HttpPost]
     [Route("")]
-    public IActionResult CreateUser([FromBody] CreateUserRequest request)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
     {
-        var result = _userService.CreateUser(request);
+        var result = await _userService.CreateUser(request, cancellationToken);
 
         return ToApiResponse(result);
     }

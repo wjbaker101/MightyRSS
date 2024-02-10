@@ -2,7 +2,7 @@
 
 public interface IUnitOfWorkFactory<out T>
 {
-    T Create();
+    T Create(CancellationToken cancellationToken);
 }
 
 public sealed class MightyUnitOfWorkFactory : IUnitOfWorkFactory<IMightyUnitOfWork>
@@ -14,8 +14,8 @@ public sealed class MightyUnitOfWorkFactory : IUnitOfWorkFactory<IMightyUnitOfWo
         _database = database;
     }
 
-    public IMightyUnitOfWork Create()
+    public IMightyUnitOfWork Create(CancellationToken cancellationToken)
     {
-        return new MightyUnitOfWork(_database);
+        return new MightyUnitOfWork(_database, cancellationToken);
     }
 }

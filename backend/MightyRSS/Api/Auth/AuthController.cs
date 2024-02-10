@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MightyRSS.Api.Auth.Types;
 using NetApiLibs.Api;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Auth;
 
@@ -17,9 +19,9 @@ public sealed class AuthController : ApiController
 
     [HttpPost]
     [Route("login")]
-    public IActionResult LogIn([FromBody] LogInRequest request)
+    public async Task<IActionResult> LogIn([FromBody] LogInRequest request, CancellationToken cancellationToken)
     {
-        var result = _authService.LogIn(request);
+        var result = await _authService.LogIn(request, cancellationToken);
 
         return ToApiResponse(result);
     }

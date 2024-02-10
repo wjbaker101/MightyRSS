@@ -4,6 +4,8 @@ using MightyRSS.Api.Collections.Types;
 using MightyRSS.Types;
 using NetApiLibs.Api;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Collections;
 
@@ -21,9 +23,9 @@ public sealed class CollectionsController : ApiController
     [HttpPost]
     [Route("")]
     [Authorisation]
-    public IActionResult CreateCollection([FromServices] IRequestContext requestContext, [FromBody] CreateCollectionRequest request)
+    public async Task<IActionResult> CreateCollection([FromServices] IRequestContext requestContext, [FromBody] CreateCollectionRequest request, CancellationToken cancellationToken)
     {
-        var result = _collectionsService.CreateCollection(requestContext, request);
+        var result = await _collectionsService.CreateCollection(requestContext, request, cancellationToken);
 
         return ToApiResponse(result);
     }
@@ -31,9 +33,9 @@ public sealed class CollectionsController : ApiController
     [HttpPut]
     [Route("{collectionReference:guid}")]
     [Authorisation]
-    public IActionResult UpdateCollection([FromServices] IRequestContext requestContext, [FromRoute] Guid collectionReference, [FromBody] UpdateCollectionRequest request)
+    public async Task<IActionResult> UpdateCollection([FromServices] IRequestContext requestContext, [FromRoute] Guid collectionReference, [FromBody] UpdateCollectionRequest request, CancellationToken cancellationToken)
     {
-        var result = _collectionsService.UpdateCollection(requestContext, collectionReference, request);
+        var result = await _collectionsService.UpdateCollection(requestContext, collectionReference, request, cancellationToken);
 
         return ToApiResponse(result);
     }
@@ -41,9 +43,9 @@ public sealed class CollectionsController : ApiController
     [HttpGet]
     [Route("")]
     [Authorisation]
-    public IActionResult GetCollections([FromServices] IRequestContext requestContext)
+    public async Task<IActionResult> GetCollections([FromServices] IRequestContext requestContext, CancellationToken cancellationToken)
     {
-        var result = _collectionsService.GetCollections(requestContext);
+        var result = await _collectionsService.GetCollections(requestContext, cancellationToken);
 
         return ToApiResponse(result);
     }

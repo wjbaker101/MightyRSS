@@ -1,12 +1,14 @@
 ﻿using Data.UoW;
 using MightyRSS.Api.Auth.Types;
 using NetApiLibs.Type;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Auth;
 
 public interface IAuthService
 {
-    Result<LogInResponse> LogIn(LogInRequest request);
+    Task<Result<LogInResponse>> LogIn(LogInRequest request, CancellationToken cancellationToken);
 }
 
 public sealed class AuthService : IAuthService
@@ -25,11 +27,11 @@ public sealed class AuthService : IAuthService
         _loginTokenService = loginTokenService;
     }
 
-    public Result<LogInResponse> LogIn(LogInRequest request)
+    public async Task<Result<LogInResponse>> LogIn(LogInRequest request, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWork.Create();
+        using var unitOfWork = _mightyUnitOfWork.Create(cancellationToken);
 
-        var userResult = unitOfWork.Users.GetByUsername(request.Username);
+        var userResult = await unitOfWork.Users.GetByUsername(request.Username);
         if (!userResult.TrySuccess(out var user))
             return Result<LogInResponse>.FromFailure(userResult);
 
@@ -38,7 +40,7 @@ public sealed class AuthService : IAuthService
 
         var jwtToken = _loginTokenService.CreateToken(user.Reference);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new LogInResponse
         {

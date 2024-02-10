@@ -2,26 +2,27 @@
 using Data.UoW;
 using NetApiLibs.Type;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace Data.Repositories;
 
 public interface ICollectionRepository : IRepository<CollectionRecord>
 {
-    Result<CollectionRecord> GetByReference(Guid collectionReference);
-    List<CollectionRecord> GetByUser(UserRecord user);
+    Task<Result<CollectionRecord>> GetByReference(Guid collectionReference);
+    Task<List<CollectionRecord>> GetByUser(UserRecord user);
 }
 
 public sealed class CollectionRepository : Repository<CollectionRecord>, ICollectionRepository
 {
-    public CollectionRepository(ISession session) : base(session)
+    public CollectionRepository(ISession session, CancellationToken cancellationToken) : base(session, cancellationToken)
     {
     }
 
-    public Result<CollectionRecord> GetByReference(Guid collectionReference)
+    public async Task<Result<CollectionRecord>> GetByReference(Guid collectionReference)
     {
-        var collection = Session
+        var collection = await Session
             .Query<CollectionRecord>()
-            .SingleOrDefault(x => x.Reference == collectionReference);
+            .SingleOrDefaultAsync(x => x.Reference == collectionReference, CancellationToken);
 
         if (collection == null)
             return Result<CollectionRecord>.Failure($"Unable to find collection with reference: {collectionReference}.");
@@ -29,11 +30,11 @@ public sealed class CollectionRepository : Repository<CollectionRecord>, ICollec
         return collection;
     }
 
-    public List<CollectionRecord> GetByUser(UserRecord user)
+    public async Task<List<CollectionRecord>> GetByUser(UserRecord user)
     {
-        return Session
+        return await Session
             .Query<CollectionRecord>()
             .Where(x => x.User == user)
-            .ToList();
+            .ToListAsync(CancellationToken);
     }
 }

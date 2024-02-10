@@ -2,26 +2,27 @@
 using Data.UoW;
 using NetApiLibs.Type;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace Data.Repositories;
 
 public interface IUserRepository : IRepository<UserRecord>
 {
-    Result<UserRecord> GetByReference(Guid reference);
-    Result<UserRecord> GetByUsername(string username);
+    Task<Result<UserRecord>> GetByReference(Guid reference);
+    Task<Result<UserRecord>> GetByUsername(string username);
 }
 
 public sealed class UserRepository : Repository<UserRecord>, IUserRepository
 {
-    public UserRepository(ISession session) : base(session)
+    public UserRepository(ISession session, CancellationToken cancellationToken) : base(session, cancellationToken)
     {
     }
 
-    public Result<UserRecord> GetByReference(Guid reference)
+    public async Task<Result<UserRecord>> GetByReference(Guid reference)
     {
-        var user = Session
+        var user = await Session
             .Query<UserRecord>()
-            .SingleOrDefault(x => x.Reference == reference);
+            .SingleOrDefaultAsync(x => x.Reference == reference, CancellationToken);
 
         if (user == null)
             return Result<UserRecord>.Failure($"Unable to find user with reference: {reference}.");
@@ -29,11 +30,11 @@ public sealed class UserRepository : Repository<UserRecord>, IUserRepository
         return user;
     }
 
-    public Result<UserRecord> GetByUsername(string username)
+    public async Task<Result<UserRecord>> GetByUsername(string username)
     {
-        var user = Session
+        var user = await Session
             .Query<UserRecord>()
-            .SingleOrDefault(x => x.Username.ToLower() == username.ToLower());
+            .SingleOrDefaultAsync(x => x.Username.ToLower() == username.ToLower(), CancellationToken);
 
         if (user == null)
             return Result<UserRecord>.Failure($"Unable to find user with username: {username}.");

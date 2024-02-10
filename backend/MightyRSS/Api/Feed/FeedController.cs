@@ -2,6 +2,8 @@
 using MightyRSS.Api.Auth.Attributes;
 using MightyRSS.Types;
 using NetApiLibs.Api;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Feed;
 
@@ -19,9 +21,9 @@ public sealed class FeedController : ApiController
     [HttpGet]
     [Route("")]
     [Authorisation]
-    public IActionResult GetFeed([FromServices] IRequestContext requestContext)
+    public async Task<IActionResult> GetFeed([FromServices] IRequestContext requestContext, CancellationToken cancellationToken)
     {
-        var result = _feedService.GetFeed(requestContext.User);
+        var result = await _feedService.GetFeed(requestContext.User, cancellationToken);
 
         return ToApiResponse(result);
     }

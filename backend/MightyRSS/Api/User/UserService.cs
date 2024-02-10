@@ -6,14 +6,16 @@ using MightyRSS.Models.Mappers;
 using MightyRSS.Types;
 using NetApiLibs.Type;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.User;
 
 public interface IUserService
 {
     Result<GetSelfResponse> GetSelf(IRequestContext requestContext);
-    Result<GetUserResponse> GetUser(Guid reference);
-    Result<CreateUserResponse> CreateUser(CreateUserRequest request);
+    Task<Result<GetUserResponse>> GetUser(Guid reference, CancellationToken cancellationToken);
+    Task<Result<CreateUserResponse>> CreateUser(CreateUserRequest request, CancellationToken cancellationToken);
 }
 
 public sealed class UserService : IUserService
@@ -37,15 +39,15 @@ public sealed class UserService : IUserService
         };
     }
 
-    public Result<GetUserResponse> GetUser(Guid reference)
+    public async Task<Result<GetUserResponse>> GetUser(Guid reference, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var userResult = unitOfWork.Users.GetByReference(reference);
+        var userResult = await unitOfWork.Users.GetByReference(reference);
         if (!userResult.TrySuccess(out var user))
             return Result<GetUserResponse>.FromFailure(userResult);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new GetUserResponse
         {
@@ -54,13 +56,13 @@ public sealed class UserService : IUserService
         };
     }
 
-    public Result<CreateUserResponse> CreateUser(CreateUserRequest request)
+    public async Task<Result<CreateUserResponse>> CreateUser(CreateUserRequest request, CancellationToken cancellationToken)
     {
         var userReference = Guid.NewGuid();
         var passwordSalt = Guid.NewGuid();
         var hashedPassword = _passwordService.HashPassword(request.Password, passwordSalt);
 
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
         var user = new UserRecord
         {
@@ -71,9 +73,9 @@ public sealed class UserService : IUserService
             PasswordSalt = passwordSalt
         };
 
-        unitOfWork.Users.Save(user);
+        await unitOfWork.Users.Save(user);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new CreateUserResponse
         {

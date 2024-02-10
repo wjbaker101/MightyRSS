@@ -17,11 +17,11 @@ public sealed class MightyUnitOfWork : UnitOfWork, IMightyUnitOfWork
     public IUserRepository Users { get; }
     public ICollectionRepository Collections { get; }
 
-    public MightyUnitOfWork(IApiDatabase database) : base(database)
+    public MightyUnitOfWork(IApiDatabase database, CancellationToken cancellationToken) : base(database, cancellationToken)
     {
-        FeedSources = new FeedSourceRepository(Session);
-        UserFeedSources = new UserFeedSourceRepository(Session);
-        Users = new UserRepository(Session);
-        Collections = new CollectionRepository(Session);
+        FeedSources = new FeedSourceRepository(Session, cancellationToken);
+        UserFeedSources = new UserFeedSourceRepository(Session, cancellationToken);
+        Users = new UserRepository(Session, cancellationToken);
+        Collections = new CollectionRepository(Session, cancellationToken);
     }
 }

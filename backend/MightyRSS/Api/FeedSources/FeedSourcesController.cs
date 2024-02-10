@@ -4,6 +4,7 @@ using MightyRSS.Api.FeedSources.Types;
 using MightyRSS.Types;
 using NetApiLibs.Api;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MightyRSS.Api.FeedSources;
@@ -22,9 +23,9 @@ public sealed class FeedSourcesController : ApiController
     [HttpPost]
     [Route("")]
     [Authorisation]
-    public async Task<IActionResult> AddFeedSource([FromServices] IRequestContext requestContext, [FromBody] AddFeedSourceRequest request)
+    public async Task<IActionResult> AddFeedSource([FromServices] IRequestContext requestContext, [FromBody] AddFeedSourceRequest request, CancellationToken cancellationToken)
     {
-        var result = await _feedSourcesService.AddFeedSource(requestContext.User, request);
+        var result = await _feedSourcesService.AddFeedSource(requestContext.User, request, cancellationToken);
 
         return ToApiResponse(result);
     }
@@ -32,9 +33,9 @@ public sealed class FeedSourcesController : ApiController
     [HttpPut]
     [Route("source/{reference:guid}")]
     [Authorisation]
-    public IActionResult UpdateFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] UpdateFeedSourceRequest request)
+    public async Task<IActionResult> UpdateFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, [FromBody] UpdateFeedSourceRequest request, CancellationToken cancellationToken)
     {
-        var result = _feedSourcesService.UpdateFeedSource(requestContext.User, reference, request);
+        var result = await _feedSourcesService.UpdateFeedSource(requestContext.User, reference, request, cancellationToken);
 
         return ToApiResponse(result);
     }
@@ -42,9 +43,9 @@ public sealed class FeedSourcesController : ApiController
     [HttpDelete]
     [Route("source/{reference:guid}")]
     [Authorisation]
-    public IActionResult DeleteFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference)
+    public async Task<IActionResult> DeleteFeedSource([FromServices] IRequestContext requestContext, [FromRoute] Guid reference, CancellationToken cancellationToken)
     {
-        var result = _feedSourcesService.DeleteFeedSource(requestContext.User, reference);
+        var result = await _feedSourcesService.DeleteFeedSource(requestContext.User, reference, cancellationToken);
 
         return ToApiResponse(result);
     }

@@ -1,11 +1,11 @@
-﻿using System.Data;
-using NHibernate;
+﻿using NHibernate;
+using System.Data;
 
 namespace Data.UoW;
 
 public interface IUnitOfWork : IDisposable
 {
-    void Commit();
+    Task Commit();
 }
 
 public abstract class UnitOfWork : IUnitOfWork
@@ -13,24 +13,28 @@ public abstract class UnitOfWork : IUnitOfWork
     protected ISession Session { get; }
     protected ITransaction Transaction { get; }
 
+    private readonly CancellationToken _cancellationToken;
+
     private bool _isDisposed;
     private bool _isSaved;
 
-    protected UnitOfWork(IApiDatabase database)
+    protected UnitOfWork(IApiDatabase database, CancellationToken cancellationToken)
     {
         Session = database.SessionFactory().OpenSession();
         Transaction = Session.BeginTransaction(IsolationLevel.ReadCommitted);
+
+        _cancellationToken = cancellationToken;
 
         _isDisposed = false;
         _isSaved = false;
     }
 
-    public void Commit()
+    public async Task Commit()
     {
         if (_isSaved)
             throw new InvalidOperationException("Unable to save the transaction since it has already been saved.");
 
-        Transaction.Commit();
+        await Transaction.CommitAsync(_cancellationToken);
 
         _isSaved = true;
     }

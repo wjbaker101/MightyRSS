@@ -1,65 +1,68 @@
 ﻿using NHibernate;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Data.UoW;
 
 public interface IRepository<TRecord>
 {
-    TRecord Save(TRecord record);
-    IEnumerable<TRecord> SaveMany(IEnumerable<TRecord> records);
-    TRecord Update(TRecord record);
-    IEnumerable<TRecord> UpdateMany(IEnumerable<TRecord> records);
-    void Delete(TRecord record);
-    void DeleteMany(IEnumerable<TRecord> records);
+    Task<TRecord> Save(TRecord record);
+    Task<List<TRecord>> SaveMany(IEnumerable<TRecord> records);
+    Task<TRecord> Update(TRecord record);
+    Task<List<TRecord>> UpdateMany(IEnumerable<TRecord> records);
+    Task Delete(TRecord record);
+    Task DeleteMany(IEnumerable<TRecord> records);
 }
 
 public abstract class Repository<TRecord>
 {
     protected readonly ISession Session;
+    protected readonly CancellationToken CancellationToken;
 
-    protected Repository(ISession session)
+    protected Repository(ISession session, CancellationToken cancellationToken)
     {
         Session = session;
+        CancellationToken = cancellationToken;
     }
 
-    public TRecord Save(TRecord record)
+    public async Task<TRecord> Save(TRecord record)
     {
-        Session.Save(record);
+        await Session.SaveAsync(record, CancellationToken);
         return record;
     }
 
-    [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public IEnumerable<TRecord> SaveMany(IEnumerable<TRecord> records)
+    public async Task<List<TRecord>> SaveMany(IEnumerable<TRecord> records)
     {
-        foreach (var record in records)
-            Save(record);
+        var toSave = records.ToList();
 
-        return records;
+        foreach (var record in toSave)
+            await Save(record);
+
+        return toSave;
     }
 
-    public TRecord Update(TRecord record)
+    public async Task<TRecord> Update(TRecord record)
     {
-        Session.Update(record);
+        await Session.UpdateAsync(record, CancellationToken);
         return record;
     }
 
-    [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public IEnumerable<TRecord> UpdateMany(IEnumerable<TRecord> records)
+    public async Task<List<TRecord>> UpdateMany(IEnumerable<TRecord> records)
     {
-        foreach (var record in records)
-            Update(record);
+        var toUpdate = records.ToList();
 
-        return records;
+        foreach (var record in toUpdate)
+            await Update(record);
+
+        return toUpdate;
     }
 
-    public void Delete(TRecord record)
+    public async Task Delete(TRecord record)
     {
-        Session.Delete(record);
+        await Session.DeleteAsync(record, CancellationToken);
     }
 
-    public void DeleteMany(IEnumerable<TRecord> records)
+    public async Task DeleteMany(IEnumerable<TRecord> records)
     {
         foreach (var record in records)
-            Delete(record);
+            await Delete(record);
     }
 }

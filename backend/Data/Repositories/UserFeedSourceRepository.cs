@@ -9,30 +9,30 @@ namespace Data.Repositories;
 
 public interface IUserFeedSourceRepository : IRepository<UserFeedSourceRecord>
 {
-    List<UserFeedSourceRecord> GetAll();
-    Result<UserFeedSourceRecord> GetByUserAndFeedSourceReference(UserRecord user, Guid reference);
-    List<UserFeedSourceRecord> GetFeedSources(UserRecord user);
+    Task<List<UserFeedSourceRecord>> GetAll();
+    Task<Result<UserFeedSourceRecord>> GetByUserAndFeedSourceReference(UserRecord user, Guid reference);
+    Task<List<UserFeedSourceRecord>> GetFeedSources(UserRecord user);
 }
 
 public sealed class UserFeedSourceRepository : Repository<UserFeedSourceRecord>, IUserFeedSourceRepository
 {
-    public UserFeedSourceRepository(ISession session) : base(session)
+    public UserFeedSourceRepository(ISession session, CancellationToken cancellationToken) : base(session, cancellationToken)
     {
     }
 
-    public List<UserFeedSourceRecord> GetAll()
+    public async Task<List<UserFeedSourceRecord>> GetAll()
     {
-        return Session
+        return await Session
             .Query<UserFeedSourceRecord>()
             .Fetch(x => x.FeedSource)
-            .ToList();
+            .ToListAsync(CancellationToken);
     }
 
-    public Result<UserFeedSourceRecord> GetByUserAndFeedSourceReference(UserRecord user, Guid reference)
+    public async Task<Result<UserFeedSourceRecord>> GetByUserAndFeedSourceReference(UserRecord user, Guid reference)
     {
-        var userFeedSource = Session
+        var userFeedSource = await Session
             .Query<UserFeedSourceRecord>()
-            .SingleOrDefault(x => x.User == user && x.FeedSource.Reference == reference);
+            .SingleOrDefaultAsync(x => x.User == user && x.FeedSource.Reference == reference, CancellationToken);
 
         if (userFeedSource == null)
             return Result<UserFeedSourceRecord>.Failure("The feed source could not be found in your feed.", HttpStatusCode.NotFound);
@@ -40,12 +40,12 @@ public sealed class UserFeedSourceRepository : Repository<UserFeedSourceRecord>,
         return userFeedSource;
     }
 
-    public List<UserFeedSourceRecord> GetFeedSources(UserRecord user)
+    public async Task<List<UserFeedSourceRecord>> GetFeedSources(UserRecord user)
     {
-        return Session
+        return await Session
             .Query<UserFeedSourceRecord>()
             .Fetch(x => x.FeedSource)
             .Where(x => x.User == user)
-            .ToList();
+            .ToListAsync(CancellationToken);
     }
 }

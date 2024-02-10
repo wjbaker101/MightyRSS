@@ -3,12 +3,14 @@ using Data.UoW;
 using MightyRSS.Api.Feed.Types;
 using MightyRSS.Models.Mappers;
 using NetApiLibs.Type;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Feed;
 
 public interface IFeedService
 {
-    Result<GetFeedResponse> GetFeed(UserRecord user);
+    Task<Result<GetFeedResponse>> GetFeed(UserRecord user, CancellationToken cancellationToken);
 }
 
 public sealed class FeedService : IFeedService
@@ -20,13 +22,13 @@ public sealed class FeedService : IFeedService
         _mightyUnitOfWorkFactory = mightyUnitOfWorkFactory;
     }
 
-    public Result<GetFeedResponse> GetFeed(UserRecord user)
+    public async Task<Result<GetFeedResponse>> GetFeed(UserRecord user, CancellationToken cancellationToken)
     {
-        using var unitOfWork = _mightyUnitOfWorkFactory.Create();
+        using var unitOfWork = _mightyUnitOfWorkFactory.Create(cancellationToken);
 
-        var userFeedSources = unitOfWork.UserFeedSources.GetFeedSources(user);
+        var userFeedSources = await unitOfWork.UserFeedSources.GetFeedSources(user);
 
-        unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new GetFeedResponse
         {
