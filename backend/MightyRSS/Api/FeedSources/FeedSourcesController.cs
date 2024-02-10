@@ -4,6 +4,7 @@ using MightyRSS.Api.FeedSources.Types;
 using MightyRSS.Types;
 using NetApiLibs.Api;
 using System;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.FeedSources;
 
@@ -21,9 +22,9 @@ public sealed class FeedSourcesController : ApiController
     [HttpPost]
     [Route("")]
     [Authorisation]
-    public IActionResult AddFeedSource([FromServices] IRequestContext requestContext, [FromBody] AddFeedSourceRequest request)
+    public async Task<IActionResult> AddFeedSource([FromServices] IRequestContext requestContext, [FromBody] AddFeedSourceRequest request)
     {
-        var result = _feedSourcesService.AddFeedSource(requestContext.User, request);
+        var result = await _feedSourcesService.AddFeedSource(requestContext.User, request);
 
         return ToApiResponse(result);
     }

@@ -1,26 +1,32 @@
-﻿using CodeHollow.FeedReader;
-using MightyRSS.Api.FeedSources.Types;
+﻿using MightyRSS.Api.FeedSources.Types;
 using NetApiLibs.Extension;
 using NetApiLibs.Type;
 using System;
+using System.Linq;
+using System.Net.Http;
+using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
+using System.Xml;
 
 namespace MightyRSS.Api.FeedSources;
 
 public interface IFeedReaderService
 {
-    Result<FeedDetails> Read(string url, Guid? reference);
+    Task<Result<FeedDetails>> Read(string url, Guid? reference);
 }
 
 public sealed class FeedReaderService : IFeedReaderService
 {
-    public Result<FeedDetails> Read(string url, Guid? reference)
+    private static readonly HttpClient _httpClient = new();
+
+    public async Task<Result<FeedDetails>> Read(string url, Guid? reference)
     {
         if (!Uri.TryCreate(url, UriKind.Absolute, out var sourceUrl))
             return Result<FeedDetails>.Failure("The given URL was formatted incorrectly please try again.");
 
         try
         {
-            return Read(sourceUrl.ToString(), url, reference);
+            return await Read(sourceUrl.ToString(), url, reference);
         }
         catch
         {
@@ -28,25 +34,32 @@ public sealed class FeedReaderService : IFeedReaderService
         }
     }
 
-    private static FeedDetails Read(string sourceUrl, string url, Guid? reference)
+    private static async Task<FeedDetails> Read(string sourceUrl, string url, Guid? reference)
     {
-        var feed = FeedReader.ReadAsync(sourceUrl).ConfigureAwait(false).GetAwaiter().GetResult();
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, sourceUrl);
+        httpRequestMessage.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.3");
+
+        var response = await _httpClient.SendAsync(httpRequestMessage);
+
+        var reader = XmlReader.Create(await response.Content.ReadAsStreamAsync());
+        var feed = SyndicationFeed.Load(reader);
+        reader.Close();
 
         return new FeedDetails
         {
             Reference = reference ?? Guid.NewGuid(),
-            Title = feed.Title,
-            Description = feed.Description,
+            Title = feed.Title.Text,
+            Description = feed.Description.Text,
             RssUrl = url,
-            WebsiteUrl = feed.Link,
+            WebsiteUrl = feed.Links.FirstOrDefault()?.Uri.ToString() ?? "Unknown Website",
             Articles = feed.Items.ConvertAll(x => new FeedDetails.Article
             {
-                Url = x.Link,
-                Title = x.Title,
-                Summary = x.Description,
-                Author = x.Author,
-                PublishedAt = x.PublishingDate,
-                PublishedAtAsString = x.PublishingDateString
+                Url = x.Links.FirstOrDefault()?.Uri.ToString() ?? "Unknown Post Link",
+                Title = x.Title.Text,
+                Summary = x.Summary.Text,
+                Author = x.Authors.FirstOrDefault()?.Name ?? "Unknown Author",
+                PublishedAt = x.PublishDate.DateTime,
+                PublishedAtAsString = x.PublishDate.DateTime.ToLongDateString()
             })
         };
     }

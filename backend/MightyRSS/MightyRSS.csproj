@@ -6,20 +6,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CodeHollow.FeedReader" Version="1.2.6" />
 		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.1" />
 		<PackageReference Include="NetApiLibs" Version="230117.2001.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.3.0" />
+		<PackageReference Include="System.ServiceModel.Syndication" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Core.Settings\Core.Settings.csproj" />
 	  <ProjectReference Include="..\Data\Data.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Api\Collections\Types\" />
 	</ItemGroup>
 
 </Project>

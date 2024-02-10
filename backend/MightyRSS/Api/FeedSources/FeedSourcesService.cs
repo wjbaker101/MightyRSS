@@ -4,12 +4,13 @@ using MightyRSS.Api.FeedSources.Types;
 using MightyRSS.Models.Mappers;
 using NetApiLibs.Type;
 using System;
+using System.Threading.Tasks;
 
 namespace MightyRSS.Api.FeedSources;
 
 public interface IFeedSourcesService
 {
-    Result<AddFeedSourceResponse> AddFeedSource(UserRecord user, AddFeedSourceRequest request);
+    Task<Result<AddFeedSourceResponse>> AddFeedSource(UserRecord user, AddFeedSourceRequest request);
     Result<UpdateFeedSourceResponse> UpdateFeedSource(UserRecord user, Guid feedReference, UpdateFeedSourceRequest request);
     Result<DeleteFeedSourceResponse> DeleteFeedSource(UserRecord user, Guid reference);
 }
@@ -25,14 +26,14 @@ public sealed class FeedSourcesService : IFeedSourcesService
         _feedReaderService = feedReaderService;
     }
 
-    public Result<AddFeedSourceResponse> AddFeedSource(UserRecord user, AddFeedSourceRequest request)
+    public async Task<Result<AddFeedSourceResponse>> AddFeedSource(UserRecord user, AddFeedSourceRequest request)
     {
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
         var feedSourceResult = unitOfWork.FeedSources.GetByRssUrl(request.Url);
         if (!feedSourceResult.TrySuccess(out var feedSource))
         {
-            var feedDetailsResult = _feedReaderService.Read(request.Url, null);
+            var feedDetailsResult = await _feedReaderService.Read(request.Url, null);
             if (feedDetailsResult.IsFailure)
                 return Result<AddFeedSourceResponse>.FromFailure(feedDetailsResult);
 

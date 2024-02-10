@@ -30,17 +30,17 @@ public sealed class FeedBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            Handle();
+            await Handle();
 
             await Task.Delay(TimeSpan.FromSeconds(_feedSettings.RefreshPeriod), stoppingToken);
         }
     }
 
-    private void Handle()
+    private async Task Handle()
     {
         try
         {
-            UpdateFeeds();
+            await UpdateFeeds();
         }
         catch
         {
@@ -48,21 +48,21 @@ public sealed class FeedBackgroundService : BackgroundService
         }
     }
 
-    private void UpdateFeeds()
+    private async Task UpdateFeeds()
     {
         using var unitOfWork = _mightyUnitOfWorkFactory.Create();
 
         var userFeedSources = unitOfWork.UserFeedSources.GetAll();
 
         foreach (var feedSource in userFeedSources)
-            UpdateFeedSource(unitOfWork, feedSource.FeedSource);
+            await UpdateFeedSource(unitOfWork, feedSource.FeedSource);
 
         unitOfWork.Commit();
     }
 
-    private void UpdateFeedSource(IMightyUnitOfWork unitOfWork, FeedSourceRecord feedSource)
+    private async Task UpdateFeedSource(IMightyUnitOfWork unitOfWork, FeedSourceRecord feedSource)
     {
-        var feedDetailsResult = _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
+        var feedDetailsResult = await _feedReaderService.Read(feedSource.RssUrl, feedSource.Reference);
         if (feedDetailsResult.IsFailure)
             return;
 
