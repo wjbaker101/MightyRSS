@@ -28,6 +28,11 @@ export default defineConfig({
         ],
     },
 
+    build: {
+        outDir: '../backend/MightyRSS/wwwroot',
+        emptyOutDir: true,
+    },
+
     server: {
         proxy: {
             '/api': {
