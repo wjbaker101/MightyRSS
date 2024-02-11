@@ -2,8 +2,6 @@
 using MightyRSS.Api.Auth.Attributes;
 using MightyRSS.Types;
 using NetApiLibs.Api;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Feed;
 

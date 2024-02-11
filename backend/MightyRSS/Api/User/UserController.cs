@@ -3,9 +3,6 @@ using MightyRSS.Api.Auth.Attributes;
 using MightyRSS.Api.User.Types;
 using MightyRSS.Types;
 using NetApiLibs.Api;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MightyRSS.Api.User;
 

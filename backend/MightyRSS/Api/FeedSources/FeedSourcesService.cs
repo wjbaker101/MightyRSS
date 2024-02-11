@@ -3,9 +3,6 @@ using Data.UoW;
 using MightyRSS.Api.FeedSources.Types;
 using MightyRSS.Models.Mappers;
 using NetApiLibs.Type;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MightyRSS.Api.FeedSources;
 

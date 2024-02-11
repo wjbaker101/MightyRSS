@@ -1,10 +1,7 @@
 ﻿using Data.UoW;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using MightyRSS.Types;
-using System;
-using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Auth.Attributes;
 

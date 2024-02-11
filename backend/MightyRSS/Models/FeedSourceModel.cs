@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MightyRSS.Models;
+﻿namespace MightyRSS.Models;
 
 public sealed class FeedSourceModel
 {

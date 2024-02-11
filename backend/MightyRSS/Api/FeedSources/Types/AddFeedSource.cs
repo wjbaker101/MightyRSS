@@ -1,6 +1,4 @@
 ﻿using MightyRSS.Models;
-using System;
-using System.Collections.Generic;
 
 namespace MightyRSS.Api.FeedSources.Types;
 

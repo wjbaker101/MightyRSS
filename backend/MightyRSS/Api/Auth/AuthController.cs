@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MightyRSS.Api.Auth.Types;
 using NetApiLibs.Api;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Auth;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MightyRSS.Api.User.Types;
+﻿namespace MightyRSS.Api.User.Types;
 
 public sealed class CreateUserRequest
 {

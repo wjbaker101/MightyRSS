@@ -1,8 +1,6 @@
 ﻿using Data.UoW;
 using MightyRSS.Api.Auth.Types;
 using NetApiLibs.Type;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MightyRSS.Api.Auth;
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MightyRSS.Api.FeedSources.Types;
+﻿namespace MightyRSS.Api.FeedSources.Types;
 
 public sealed class FeedDetails
 {

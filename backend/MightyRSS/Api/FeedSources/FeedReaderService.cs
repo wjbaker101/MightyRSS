@@ -1,11 +1,7 @@
 ﻿using MightyRSS.Api.FeedSources.Types;
 using NetApiLibs.Extension;
 using NetApiLibs.Type;
-using System;
-using System.Linq;
-using System.Net.Http;
 using System.ServiceModel.Syndication;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace MightyRSS.Api.FeedSources;
