@@ -1,19 +1,21 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using MightyRSS.Setup;
 
-namespace MightyRSS;
+var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-public sealed class Program
-{
-    public static void Main(string[] args)
-    {
-        CreateHostBuilder(args).Build().Run();
-    }
+builder.AddSettings();
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
-}
+services.AddDependencies();
+services.AddHostedServices();
+services.AddControllers();
+services.AddFrontend();
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapControllers();
+app.UseFrontend();
+
+app.Run();
